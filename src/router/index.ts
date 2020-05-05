@@ -52,6 +52,24 @@ const routes: Array<RouteConfig> = [
       hideBasicComponents: false,
     },
   },
+  {
+    path: "/profile",
+    name: "Profile",
+    // component: Home,
+    meta: {
+      requiresAuth: true,
+      hideBasicComponents: false,
+    },
+  },
+  {
+    path: "/discounts",
+    name: "Discounts",
+    // component: Home,
+    meta: {
+      requiresAuth: true,
+      hideBasicComponents: false,
+    },
+  },
 ];
 
 const router = new VueRouter({

@@ -22,7 +22,7 @@
         filled
         single-line
         label="Search your tracking id"
-        v-model="searchText"
+        v-model="trackingID"
       ></v-text-field
     ></v-responsive>
     <v-spacer></v-spacer>
@@ -43,7 +43,7 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    <v-menu height="40">
+    <v-menu height="40" v-if="activeUser == null">
       <template v-slot:activator="{ on }">
         <v-icon class="mr-1 hidden-md-and-up" color="black" v-on="on"
           >mdi-account-circle-outline</v-icon
@@ -64,6 +64,24 @@
       <v-list>
         <v-list-item @click="changePage('LogIn')">
           <v-list-item-title>Log In</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    <v-menu height="40" v-else>
+      <template v-slot:activator="{ on }">
+        <v-btn text small class="option font-weight-light mx-2" v-on="on">
+          <v-icon class="mr-1">mdi-account-circle-outline</v-icon>
+          <p class="hidden-sm-and-down ma-0">{{ activeUser }}</p>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item @click="changePage('Profile')">
+          <v-list-item-title>Profile</v-list-item-title>
+        </v-list-item>
+      </v-list>
+      <v-list>
+        <v-list-item @click="changePage('Discounts')">
+          <v-list-item-title>Discounts</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -99,20 +117,31 @@ export default class Navbar extends Vue {
     { name: "Create a Shipping", link: "NewShipment" },
     { name: "My Shipments", link: "Shipments" },
   ];
+  trackingID = "";
+  get activeUser() {
+    if (localStorage.getItem("Email") !== null) {
+      return localStorage.getItem("Email").split("@")[0];
+    } else {
+      return null;
+    }
+  }
   get languages() {
-    //Get languages on BD
+    //Or get languages on BD
     return ["English", "Español"];
   }
   get selectedLanguage() {
-    //If language on localStorage
-    //Else
-    return "English";
+    if (localStorage.getItem("Language") !== null) {
+      return localStorage.getItem("Language");
+    } else {
+      return "English";
+    }
   }
   changePage(link: string) {
     this.$router.push({ name: link });
   }
   changeLanguage(language: string) {
-    console.log("Language changed to " + language);
+    localStorage.setItem("Language", language);
+    location.reload();
   }
 }
 </script>
