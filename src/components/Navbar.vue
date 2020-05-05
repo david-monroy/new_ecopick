@@ -61,8 +61,6 @@
         <v-list-item @click="changePage('SignUp')">
           <v-list-item-title>Sign Up</v-list-item-title>
         </v-list-item>
-      </v-list>
-      <v-list>
         <v-list-item @click="changePage('LogIn')">
           <v-list-item-title>Log In</v-list-item-title>
         </v-list-item>
@@ -120,8 +118,9 @@ export default class Navbar extends Vue {
   ];
   trackingID = "";
   get activeUser() {
-    if (localStorage.getItem("Email") !== null) {
-      return localStorage.getItem("Email").split("@")[0];
+    const userEmail = localStorage.getItem("Email");
+    if (userEmail !== null) {
+      return userEmail.split("@")[0];
     } else {
       return null;
     }

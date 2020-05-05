@@ -50,7 +50,7 @@ const routes: Array<RouteConfig> = [
     name: "DetailShipment",
     // component: Home,
     meta: {
-      requiresAuth: true,
+      requiresAuth: false,
       hideBasicComponents: false,
     },
   },
