@@ -2,7 +2,7 @@
   <v-footer dark padless>
     <v-card class="flex" flat tile>
       <v-card-title class="teal pa-1 justify-center">
-        <strong class="subtitle-1 font-weight-medium mr-4"
+        <strong class="subtitle-1 font-weight-medium mr-4 hidden-sm-and-down"
           >Get connected with us on social networks!</strong
         >
         <v-btn

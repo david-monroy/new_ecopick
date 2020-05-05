@@ -1,27 +1,88 @@
 <template>
   <v-app-bar elevation="1" app color="white">
     <v-img
-      class="mx-2"
+      class="mx-2 clickable"
       src="../assets/page-logo.png"
       max-height="40"
       max-width="150"
       contain
+      @click="changePage('Home')"
     ></v-img>
     <v-spacer></v-spacer>
-    <v-menu height="40" v-for="(button, index) in buttons" :key="index">
+    <v-responsive
+      class="mr-auto mr-md-4 transition-swing"
+      max-width="450"
+      max-height="38"
+      ><v-text-field
+        class="hidden-sm-and-down"
+        prepend-inner-icon="mdi-magnify"
+        clearable
+        dense
+        rounded
+        filled
+        single-line
+        label="Search your tracking id"
+        v-model="searchText"
+      ></v-text-field
+    ></v-responsive>
+    <v-spacer></v-spacer>
+    <v-menu height="40">
       <template v-slot:activator="{ on }">
-        <v-btn text small class="options font-weight-light" v-on="on">
-          <v-icon class="mr-1">{{ button.icon }}</v-icon
-          >{{ button.name }}
+        <v-btn text small class="option font-weight-light mx-2" v-on="on">
+          <v-icon class="mr-1">mdi-package-variant</v-icon>
+          <p class="hidden-sm-and-down ma-0">shipping</p>
         </v-btn>
       </template>
       <v-list>
         <v-list-item
-          v-for="(option, index) in button.options"
+          v-for="(option, index) in shippingOptions"
           :key="index"
           @click="changePage(option.link)"
         >
           <v-list-item-title>{{ option.name }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    <v-menu height="40">
+      <template v-slot:activator="{ on }">
+        <v-icon class="mr-1 hidden-md-and-up" color="black" v-on="on"
+          >mdi-account-circle-outline</v-icon
+        >
+        <p class="text-option font-weight-light my-0 mx-2 hidden-sm-and-down">
+          <v-icon class="mr-1" color="black">mdi-account-circle-outline</v-icon>
+          <span>
+            <a class="icon mr-1" @click="changePage('SignUp')">SIGN UP</a> OR
+            <a class="icon ml-1" @click="changePage('LogIn')">LOG IN</a>
+          </span>
+        </p>
+      </template>
+      <v-list>
+        <v-list-item @click="changePage('SignUp')">
+          <v-list-item-title>Sign Up</v-list-item-title>
+        </v-list-item>
+      </v-list>
+      <v-list>
+        <v-list-item @click="changePage('LogIn')">
+          <v-list-item-title>Log In</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    <v-menu height="40">
+      <template v-slot:activator="{ on }">
+        <v-btn text small class="option font-weight-light mx-2" v-on="on">
+          <v-icon class="mr-1">mdi-translate</v-icon>
+          <p class="hidden-sm-and-down ma-0">
+            {{ selectedLanguage }}
+          </p>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item
+          v-for="(language, index) in languages"
+          :key="index"
+          @click="changeLanguage(language)"
+        >
+          <v-list-item-title>{{ language }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -34,48 +95,42 @@ import Component from "vue-class-component";
 
 @Component({})
 export default class Navbar extends Vue {
-  get buttons() {
-    return [
-      {
-        icon: "mdi-package-variant",
-        name: "shipping",
-        options: [
-          { name: "Create a Shipping", link: "NewShipment" },
-          { name: "My Shipments", link: "Shipments" },
-        ],
-      },
-      {
-        icon: "mdi-account-circle-outline",
-        name: "sign up or log in",
-        options: [
-          { name: "Sign Up", link: "SignUp" },
-          { name: "Log In", link: "LogIn" },
-        ],
-      },
-      {
-        icon: "mdi-translate",
-        name: "English",
-        options: [
-          { name: "English", link: "English" },
-          { name: "Spanish", link: "Spanish" },
-        ],
-      },
-    ];
+  shippingOptions: {}[] = [
+    { name: "Create a Shipping", link: "NewShipment" },
+    { name: "My Shipments", link: "Shipments" },
+  ];
+  get languages() {
+    //Get languages on BD
+    return ["English", "Español"];
+  }
+  get selectedLanguage() {
+    //If language on localStorage
+    //Else
+    return "English";
   }
   changePage(link: string) {
-    if (link == "English") {
-      //Traslate page to English
-    } else if (link == "Spanish") {
-      //Traslate page to Spanish
-    } else {
-      this.$router.push({ name: link });
-    }
+    this.$router.push({ name: link });
+  }
+  changeLanguage(language: string) {
+    console.log("Language changed to " + language);
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.options:hover {
+.icon,
+.option:hover {
   color: rgb(103, 176, 49);
+}
+.icon:hover {
+  text-decoration: underline;
+}
+.text-option {
+  font-size: 0.75rem;
+  letter-spacing: 0.0892857143em;
+  text-transform: uppercase;
+}
+.clickable {
+  cursor: pointer;
 }
 </style>
