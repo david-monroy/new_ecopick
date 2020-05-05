@@ -44,6 +44,15 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
+    path: "/shipments/:id",
+    name: "DetailShipment",
+    // component: Home,
+    meta: {
+      requiresAuth: true,
+      hideBasicComponents: false,
+    },
+  },
+  {
     path: "/shipments/new",
     name: "NewShipment",
     // component: Home,

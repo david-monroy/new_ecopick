@@ -23,6 +23,7 @@
         single-line
         label="Search your tracking id"
         v-model="trackingID"
+        @keyup.enter="searchShipment()"
       ></v-text-field
     ></v-responsive>
     <v-spacer></v-spacer>
@@ -142,6 +143,12 @@ export default class Navbar extends Vue {
   changeLanguage(language: string) {
     localStorage.setItem("Language", language);
     location.reload();
+  }
+  searchShipment() {
+    this.$router.push({
+      name: "DetailShipment",
+      params: { id: this.trackingID },
+    });
   }
 }
 </script>
