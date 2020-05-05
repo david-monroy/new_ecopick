@@ -7,7 +7,7 @@
 1. Clonar también el repositorio MrPostel-API
 2. Crear un archivo .env en el root del proyecto con los siguientes campos:
 
-- VUE_APP_API_URL =  http://localhost:3000/mrPostel/api/
+- VUE_APP_API_URL = http://localhost:3000/mrPostel/api/
 - NODE_ENV = development
 
 ## Correr el proyecto
@@ -23,6 +23,7 @@
 - Vuetify
 - Vue-class-component
 - axios
+- vue-easy-jwt
 
 ### Dependencias de desarrollo
 
