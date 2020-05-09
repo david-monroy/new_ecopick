@@ -6,6 +6,9 @@ import VueRouter, { RouteConfig } from "vue-router";
 //Componentes
 import Home from "../views/Home.vue";
 
+
+import recoverPassword from "../views/recoverPassword.vue";
+
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
@@ -79,6 +82,15 @@ const routes: Array<RouteConfig> = [
     meta: {
       requiresAuth: true,
       hideBasicComponents: false,
+    },
+  },
+  {
+    path: "/recover",
+    name: "recoverPassword",
+    component: recoverPassword,
+    meta: {
+      requiresAuth: false,
+      hideBasicComponents: true,
     },
   },
 ];
