@@ -6,6 +6,8 @@ import VueRouter, { RouteConfig } from "vue-router";
 //Componentes
 import Home from "../views/Home.vue";
 
+import Login from "../views/Login.vue";
+
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
@@ -20,8 +22,8 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: "/login",
-    name: "LogIn",
-    // component: Home,
+    name: "Login",
+    component: Login,
     meta: {
       requiresAuth: false,
       hideBasicComponents: true,
