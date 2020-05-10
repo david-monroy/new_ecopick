@@ -35,7 +35,7 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                v-model="name"
+                                v-model="user.firstName"
                                 :rules="[() => !!name || 'This field is required']"
                                 :error-messages="errorMessages"
                                 label="First name"
@@ -46,7 +46,7 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                v-model="name"
+                                v-model="user.secondName"
                                 :rules="[() => !!name || 'This field is required']"
                                 :error-messages="errorMessages"
                                 label="Second name"
@@ -60,7 +60,7 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                v-model="name"
+                                v-model="user.lastName"
                                 :rules="[() => !!name || 'This field is required']"
                                 :error-messages="errorMessages"
                                 label="Last name"
@@ -71,7 +71,7 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                v-model="name"
+                                v-model="user.secondLastName"
                                 :rules="[() => !!name || 'This field is required']"
                                 :error-messages="errorMessages"
                                 label="Second last name"
@@ -85,7 +85,7 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                v-model="name"
+                                v-model="user.identification"
                                 :rules="[() => !!name || 'This field is required']"
                                 :error-messages="errorMessages"
                                 label="Identification"
@@ -96,7 +96,7 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                v-model="name"
+                                v-model="user.phoneNumber"
                                 :rules="[() => !!name || 'This field is required']"
                                 :error-messages="errorMessages"
                                 label="Phone number"
@@ -111,7 +111,7 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                v-model="name"
+                                v-model="user.email"
                                 :rules="[() => !!name || 'This field is required']"
                                 :error-messages="errorMessages"
                                 label="E-mail"
@@ -133,7 +133,7 @@
                                 <template v-slot:activator="{ on }">
                                    
                                     <v-text-field
-                                    v-model="dateFormatted"
+                                    v-model="user.birthday"
                                     label="Date"
                                     hint="MM/DD/YYYY format"
                                     persistent-hint
@@ -150,7 +150,7 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                v-model="name"
+                                v-model="user.password"
                                 :rules="[() => !!name || 'This field is required']"
                                 :error-messages="errorMessages"
                                 label="Password"
@@ -162,7 +162,7 @@
                             <v-select
                             :items="items"
                             label="Language"
-                            ></v-select>
+                            v-model="id_language"></v-select>
                         </v-col>  
                     </v-row> 
 
@@ -170,7 +170,7 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                v-model="name"
+                                v-model="password2"
                                 :rules="[() => !!name || 'This field is required']"
                                 :error-messages="errorMessages"
                                 label="Confirm password"
@@ -200,7 +200,7 @@
                         <v-col> 
                         </v-col>  
                         <v-col cols="12" sm="6"> 
-                           <v-btn rounded color="#a9ff4d" dark >Sign up</v-btn>
+                           <v-btn rounded color="#a9ff4d" dark @click="searchRoute()">Sign up</v-btn>
                         </v-col>  
                     </v-row> 
 
@@ -218,21 +218,79 @@
     </v-container>
 </template>
 
-<script>
-export default {
-data: vm => ({
+
+<script lang="ts">
+
+import Vue from "vue";
+import Component from "vue-class-component";
+
+@Component({})
+export default class SignUp extends Vue {
+
+    user: {} = {
+                identification: "",
+                firstName: "",
+                secondName: "",
+                lastName: "",
+                secondLastName: "",
+                birthday: "",
+                email: "",
+                password: "",
+                phoneNumber: "",
+                charge:  "Client",
+                idLanguage: "1",
+                idStatus: "4",
+            }
+
+     searchRoute (){ 
+            console.log(this.user);
+            this.$store
+            .dispatch("user/createUserRoute", this.user)
+            .then(() => {
+                //this.cosasdelaBD = this.$store.state.example.route;
+                console.log(this.user);
+      }); }
+
+   /*data: vm => ({
       date: new Date().toISOString().substr(0, 10),
       dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
       menu1: false,
       menu2: false,
       items: ['English', 'Spanish'],
-    }),
+      /*user: {
+          identification: '',
+            first_name: '',
+            second_name: '',
+            last_name: '',
+            second_last_name: '',
+            birthday: '',
+            email: '',
+            password: '',
+            phone_number: '',
+            charge: 'Client',
+            id_language: '',
+            id_status: 4
+     // }, */
+     /*user: {} = {
+                user.identification: this.identification,
+                user.first_name: this.first_name,
+                user.second_name: this.second_name,
+                user.last_name: this.last_name,
+                user.second_last_name: this.second_last_name,
+                user.birthday: this.birthday,
+                user.email: this.email,
+                user.password: this.password,
+                user.phone_number: this.phone_number,
+                user.charge: this.charge,
+                user.id_language: this.id_language,
+                user.id_status: this.id_status,
+            }
+    }), 
 
-    computed: {
-      computedDateFormatted () {
+    
+      get computedDateFormatted (): String {
         return this.formatDate(this.date)
-      },
-    },
+     
 
     watch: {
       date (val) {
@@ -240,20 +298,22 @@ data: vm => ({
       },
     },
 
-    methods: {
-      formatDate (date) {
+    
+      public formatDate (date: String): String {
         if (!date) return null
 
         const [year, month, day] = date.split('-')
         return `${month}/${day}/${year}`
-      },
-      parseDate (date) {
+      }
+      public parseDate (date): String {
         if (!date) return null
 
         const [month, day, year] = date.split('/')
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-      },
-    },
+      }, */
+     
+      
+    
 }
 </script>
 
