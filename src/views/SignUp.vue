@@ -106,7 +106,7 @@
                             <v-text-field
                                 ref="name"
                                 v-model="user.email"
-                                :rules="[rules.emailRules]"
+                                :rules="rules.emailRules"
                                 :error-messages="errorMessages"
                                 label="E-mail"
                                 placeholder="E-mail"
@@ -215,6 +215,15 @@
             <v-col> 
             </v-col>     
         </v-row> 
+
+        <v-snackbar v-model="snackbar" top:timeout="timeout" color="success">
+            User registered successfully
+            <v-btn dark text @click="snackbar=false">Close</v-btn>
+        </v-snackbar>
+        <v-snackbar v-model="snackbarError" top:timeout="timeout" color="error">
+            User registration error. Try again.
+             <v-btn dark text @click="snackbarError=false">Close</v-btn>
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -243,6 +252,9 @@ export default class SignUp extends Vue {
             }
     
     items: Array<string> = ['English', 'Spanish'];
+    snackbar = false;
+    snackbarError = false;
+    timeout =7000;
 
      searchRoute (){ 
             console.log(this.user);
@@ -280,9 +292,11 @@ export default class SignUp extends Vue {
             .then(() => {
                 //this.cosasdelaBD = this.$store.state.example.route;
                 console.log(this.user);
+                this.snackbar=true;
       });}
             else {
             console.log("Datos no validos");
+            this.snackbarError=true;
             }
         }
     }
