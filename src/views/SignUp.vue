@@ -2,7 +2,7 @@
   <v-container fluid class="bg" >
 
         <v-row no gutters class="hidden-sm-and-down"> 
-            <v-col cols="12" sm="1"> <v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon> <h4>Go back</h4></v-col> 
+            <v-col cols="12" sm="1"> <a style="color: gray;" @click="changePage('Home')"><v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon> <h4>Go back</h4></a></v-col> 
              <v-col ></v-col>
              
 
@@ -21,8 +21,8 @@
                 <v-col justify="center" align="center"> 
                     
                     <v-row> 
-                        <v-col>
-                            <v-icon class="hidden-md-and-up" style="float: left;">mdi-arrow-left</v-icon> 
+                        <v-col >
+                            <a style="color: gray;" @click="changePage('Home')"><v-icon class="hidden-md-and-up" style="float: left;">mdi-arrow-left</v-icon> </a>
                         </v-col>
                         <v-col> 
                              <h3>Sign up</h3>
@@ -30,13 +30,13 @@
                         <v-col> 
                         </v-col>  
                     </v-row> 
-
+                <v-form ref="form">
                     <v-row> 
                         <v-col> 
                             <v-text-field
                                 ref="name"
                                 v-model="user.firstName"
-                                :rules="[() => !!name || 'This field is required']"
+                                :rules="[rules.required]"
                                 :error-messages="errorMessages"
                                 label="First name"
                                 placeholder="First name"
@@ -47,11 +47,8 @@
                             <v-text-field
                                 ref="name"
                                 v-model="user.secondName"
-                                :rules="[() => !!name || 'This field is required']"
-                                :error-messages="errorMessages"
                                 label="Second name"
-                                placeholder="Second name"
-                                required
+                                placeholder="Second name (optional)"
                             ></v-text-field>
                         </v-col>  
                     </v-row> 
@@ -61,8 +58,7 @@
                             <v-text-field
                                 ref="name"
                                 v-model="user.lastName"
-                                :rules="[() => !!name || 'This field is required']"
-                                :error-messages="errorMessages"
+                                :rules="[rules.required]"
                                 label="Last name"
                                 placeholder="Last name"
                                 required
@@ -72,8 +68,6 @@
                             <v-text-field
                                 ref="name"
                                 v-model="user.secondLastName"
-                                :rules="[() => !!name || 'This field is required']"
-                                :error-messages="errorMessages"
                                 label="Second last name"
                                 placeholder="Second last name (optional)"
                                 required
@@ -86,7 +80,7 @@
                             <v-text-field
                                 ref="name"
                                 v-model="user.identification"
-                                :rules="[() => !!name || 'This field is required']"
+                                :rules="[rules.required]"
                                 :error-messages="errorMessages"
                                 label="Identification"
                                 placeholder="Identification"
@@ -97,7 +91,7 @@
                             <v-text-field
                                 ref="name"
                                 v-model="user.phoneNumber"
-                                :rules="[() => !!name || 'This field is required']"
+                                :rules="[rules.required]"
                                 :error-messages="errorMessages"
                                 label="Phone number"
                                 placeholder="Ex: +1 (555) 555 5555"
@@ -112,7 +106,7 @@
                             <v-text-field
                                 ref="name"
                                 v-model="user.email"
-                                :rules="[() => !!name || 'This field is required']"
+                                :rules="[rules.emailRules]"
                                 :error-messages="errorMessages"
                                 label="E-mail"
                                 placeholder="E-mail"
@@ -120,7 +114,7 @@
                             ></v-text-field>
                         </v-col>
                         <v-col> 
-                             <v-icon class="mt-5 mr-2" style="float: left;">mdi-calendar</v-icon>
+                            <v-icon class="mt-5 mr-2" style="float: left;">mdi-calendar</v-icon>
                             <v-menu
                                 ref="menu1"
                                 v-model="menu1"
@@ -151,11 +145,14 @@
                             <v-text-field
                                 ref="name"
                                 v-model="user.password"
-                                :rules="[() => !!name || 'This field is required']"
+                                :rules="[rules.required]"
                                 :error-messages="errorMessages"
                                 label="Password"
                                 placeholder="Password"
                                 required
+                                :type="show2 ? 'text' : 'password'"
+                                name="input-10-2"
+                                class="input-group--focused"
                             ></v-text-field>
                         </v-col>
                         <v-col> 
@@ -171,11 +168,14 @@
                             <v-text-field
                                 ref="name"
                                 v-model="password2"
-                                :rules="[() => !!name || 'This field is required']"
+                                :rules="[rules.required]"
                                 :error-messages="errorMessages"
                                 label="Confirm password"
                                 placeholder="Confirm password"
                                 required
+                                :type="show2 ? 'text' : 'password'"
+                                name="input-10-2"
+                                class="input-group--focused"
                             ></v-text-field>
                         
                         </v-col>  
@@ -195,15 +195,15 @@
                                     
                                 </v-col>  
                     </v-row> 
-
+                
                      <v-row> 
                         <v-col> 
                         </v-col>  
                         <v-col cols="12" sm="6"> 
-                           <v-btn rounded color="#a9ff4d" dark @click="searchRoute()">Sign up</v-btn>
+                           <v-btn rounded color="#a9ff4d" dark @click="searchRoute2()">Sign up</v-btn>
                         </v-col>  
                     </v-row> 
-
+                </v-form>
 
                 </v-col> 
             </v-card>
@@ -241,6 +241,8 @@ export default class SignUp extends Vue {
                 idLanguage: "1",
                 idStatus: "4",
             }
+    
+    items: Array<string> = ['English', 'Spanish'];
 
      searchRoute (){ 
             console.log(this.user);
@@ -249,72 +251,85 @@ export default class SignUp extends Vue {
             .then(() => {
                 //this.cosasdelaBD = this.$store.state.example.route;
                 console.log(this.user);
-      }); }
+      }); } 
 
-   /*data: vm => ({
-      date: new Date().toISOString().substr(0, 10),
-      dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
-      menu1: false,
-      menu2: false,
-      items: ['English', 'Spanish'],
-      /*user: {
-          identification: '',
-            first_name: '',
-            second_name: '',
-            last_name: '',
-            second_last_name: '',
-            birthday: '',
-            email: '',
-            password: '',
-            phone_number: '',
-            charge: 'Client',
-            id_language: '',
-            id_status: 4
-     // }, */
-     /*user: {} = {
-                user.identification: this.identification,
-                user.first_name: this.first_name,
-                user.second_name: this.second_name,
-                user.last_name: this.last_name,
-                user.second_last_name: this.second_last_name,
-                user.birthday: this.birthday,
-                user.email: this.email,
-                user.password: this.password,
-                user.phone_number: this.phone_number,
-                user.charge: this.charge,
-                user.id_language: this.id_language,
-                user.id_status: this.id_status,
-            }
-    }), 
+      changePage(link: string) {
+         this.$router.push({ name: link });
+  }
 
-    
-      get computedDateFormatted (): String {
-        return this.formatDate(this.date)
+    rules: {} = {
+        required: (value: string) =>
+        (!!value && value !== "" && value !== undefined) || "Required",
+        passwordRules: [(v: string) =>!!v || "Password is required"],
+        emailRules: [ 
+            (v:string) => !!v || "E-mail is required",
+            (v:string) => /.+@.+\..+/.test(v) || "E-mail is required",
+        ],
      
+    };
 
-    watch: {
+    $refs!: {
+        form:any;
+    };
+
+    searchRoute2() {
+        if (this.$refs.form.validate()) {
+             console.log(this.user);
+            this.$store
+            .dispatch("user/createUserRoute", this.user)
+            .then(() => {
+                //this.cosasdelaBD = this.$store.state.example.route;
+                console.log(this.user);
+      });}
+            else {
+            console.log("Datos no validos");
+            }
+        }
+    }
+  
+    
+    ////
+    /*data*/
+/*
+    date: string = new Date().toISOString().substr(0, 10);
+    dateFormatted: String = this.date.formatDate(new Date().toISOString().substr(0, 10));
+    menu1: boolean =false;
+    menu2: boolean =false;
+    */
+
+    /*computed*/
+
+     /*get computedDateFormatted (): string {
+        return this.formatDate(this.date)
+      } */
+
+    /*watch*/
+
+   /*  watch: {
       date (val) {
         this.dateFormatted = this.formatDate(this.date)
       },
-    },
+    }*/
 
-    
-      public formatDate (date: String): String {
-        if (!date) return null
+    /*Methods*/
 
+   /* public formatDate (date: string): string {
+        if (!date) return ''
         const [year, month, day] = date.split('-')
         return `${month}/${day}/${year}`
-      }
-      public parseDate (date): String {
-        if (!date) return null
+      };
+    public parseDate (date: string): string {
+        if (!date) return ''
 
         const [month, day, year] = date.split('/')
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-      }, */
+      };
      
-      
+    //
+*/
     
-}
+     
+
 </script>
 
 <style>
@@ -323,4 +338,7 @@ export default class SignUp extends Vue {
          min-height:100%;
          background-size:cover;
     }
+.clickable {
+  cursor: pointer;
+}
 </style>
