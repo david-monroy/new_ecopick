@@ -85,10 +85,12 @@ export default class Home extends Vue {
   $router: any;
 
   trackingID = "";
-  search = "Tracking ID";
-  banner = "Welcome to Mr.Postel";
-  noticeTitle = "Thank you for shipping with us!";
-  noticeText = "We are here to help you";
+  search = "Search your tracking ID";
+  banner =
+    "Try our new bot, download Telegram and with your tracking ID, you will be able to know your package's delivery history anywhere!";
+  noticeTitle = "Here to deliver for you!";
+  noticeText =
+    "In these uncertain times, it's important for businesses to help you stay safe! At Mr.Postel we are still delivering to support you in this situation";
 
   searchShipment() {
     this.$router.push({

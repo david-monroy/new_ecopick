@@ -31,6 +31,7 @@ export default class Translate extends Vue {
   ];
   // // Traducción
   changeLanguage(language: { name: string; value: string }) {
+    localStorage.setItem("lan", language.value);
     this.getTranslate(language.value);
   }
   getTranslate(lan: string) {
@@ -38,7 +39,12 @@ export default class Translate extends Vue {
   }
   // // Metodos del componente
   created() {
-    this.getTranslate(this.$store.state.translate.language);
+    const lan = localStorage.getItem("lan");
+    if (lan === null) {
+      this.getTranslate(this.$store.state.translate.language);
+    } else {
+      this.getTranslate(lan);
+    }
   }
 }
 </script>

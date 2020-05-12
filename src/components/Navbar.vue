@@ -101,7 +101,7 @@ export default class Navbar extends Vue {
   $store: any;
   // Atributos
   // // Textos fijos
-  search = "Tracking ID";
+  search = "Search your tracking ID";
   buttonShipping = "Shipping";
   buttonProfile = "Profile";
   buttonDiscounts = "Discounts";
