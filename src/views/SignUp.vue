@@ -2,7 +2,7 @@
   <v-container fluid class="bg" >
 
         <v-row no gutters class="hidden-sm-and-down"> 
-            <v-col cols="12" sm="1"> <a style="color: gray;" @click="changePage('Home')"><v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon> <h4>Go back</h4></a></v-col> 
+            <v-col cols="12" sm="1"> <a style="color: gray;" @click="changePage('Home')"><v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon> <h4>{{goBack}}</h4></a></v-col> 
              <v-col ></v-col>
              
 
@@ -25,7 +25,7 @@
                             <a style="color: gray;" @click="changePage('Home')"><v-icon class="hidden-md-and-up" style="float: left;">mdi-arrow-left</v-icon> </a>
                         </v-col>
                         <v-col> 
-                             <h3>Sign up</h3>
+                             <h3>{{titlePage}}</h3>
                         </v-col> 
                         <v-col> 
                         </v-col>  
@@ -38,8 +38,8 @@
                                 v-model="user.firstName"
                                 :rules="[rules.required]"
                                 :error-messages="errorMessages"
-                                label="First name"
-                                placeholder="First name"
+                                :label="firstName"
+                                :placeholder="firstName"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -47,8 +47,8 @@
                             <v-text-field
                                 ref="name"
                                 v-model="user.secondName"
-                                label="Second name"
-                                placeholder="Second name (optional)"
+                                :label="secondName"
+                                :placeholder="secondNameP"
                             ></v-text-field>
                         </v-col>  
                     </v-row> 
@@ -59,8 +59,8 @@
                                 ref="name"
                                 v-model="user.lastName"
                                 :rules="[rules.required]"
-                                label="Last name"
-                                placeholder="Last name"
+                                :label="lastName"
+                                :placeholder="lastName"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -68,8 +68,8 @@
                             <v-text-field
                                 ref="name"
                                 v-model="user.secondLastName"
-                                label="Second last name"
-                                placeholder="Second last name (optional)"
+                                :label="secondLastName"
+                                :placeholder="secondLastNameP"
                                 required
                             ></v-text-field>
                         </v-col>  
@@ -82,8 +82,8 @@
                                 v-model="user.identification"
                                 :rules="[rules.required]"
                                 :error-messages="errorMessages"
-                                label="Identification"
-                                placeholder="Identification"
+                                :label="identification"
+                                :placeholder="identification"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -93,8 +93,8 @@
                                 v-model="user.phoneNumber"
                                 :rules="[rules.required]"
                                 :error-messages="errorMessages"
-                                label="Phone number"
-                                placeholder="Ex: +1 (555) 555 5555"
+                                :label="phoneNumber"
+                                :placeholder="phoneNumber"
                                 required
                             ></v-text-field>
                             
@@ -108,8 +108,8 @@
                                 v-model="user.email"
                                 :rules="rules.emailRules"
                                 :error-messages="errorMessages"
-                                label="E-mail"
-                                placeholder="E-mail"
+                                :label="email"
+                                :placeholder="email"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -128,8 +128,8 @@
                                    
                                     <v-text-field
                                     v-model="user.birthday"
-                                    label="Date"
-                                    hint="MM/DD/YYYY format"
+                                    :label="birthday"
+                                    :hint="dateHint"
                                     persistent-hint
                                     @blur="date = parseDate(dateFormatted)"
                                     v-on="on"
@@ -147,8 +147,8 @@
                                 v-model="user.password"
                                 :rules="[rules.required]"
                                 :error-messages="errorMessages"
-                                label="Password"
-                                placeholder="Password"
+                                :label="password"
+                                :placeholder="password"
                                 required
                                 :type="show2 ? 'text' : 'password'"
                                 name="input-10-2"
@@ -158,7 +158,7 @@
                         <v-col> 
                             <v-select
                             :items="items"
-                            label="Language"
+                            :label="languageInput"
                             v-model="id_language"></v-select>
                         </v-col>  
                     </v-row> 
@@ -170,8 +170,8 @@
                                 v-model="password2"
                                 :rules="[rules.required]"
                                 :error-messages="errorMessages"
-                                label="Confirm password"
-                                placeholder="Confirm password"
+                                :label="passwordc"
+                                :placeholder="passwordc"
                                 required
                                 :type="show2 ? 'text' : 'password'"
                                 name="input-10-2"
@@ -185,10 +185,12 @@
                                         </v-col> 
                                         <v-col cols="12" sm="10"><v-checkbox
                                     v-model="ex4"
-                                    label="Accept the terms and conditions"
+                                    :label="termCondition"
                                     color="success"
                                     value="success"
                                     hide-details
+                                    :rules="[rules.required]"
+                                     required
                                     ></v-checkbox>  
                                           </v-col> 
                                     </v-row>
@@ -200,7 +202,7 @@
                         <v-col> 
                         </v-col>  
                         <v-col cols="12" sm="6"> 
-                           <v-btn rounded color="#a9ff4d" dark @click="searchRoute2()">Sign up</v-btn>
+                           <v-btn rounded color="#a9ff4d" dark @click="searchRoute()">{{buttonSignup}}</v-btn>
                         </v-col>  
                     </v-row> 
                 </v-form>
@@ -217,12 +219,16 @@
         </v-row> 
 
         <v-snackbar v-model="snackbar" top:timeout="timeout" color="success">
-            User registered successfully
+            {{snack1}}
             <v-btn dark text @click="snackbar=false">Close</v-btn>
         </v-snackbar>
         <v-snackbar v-model="snackbarError" top:timeout="timeout" color="error">
-            User registration error. Try again.
+            {{snack2}}
              <v-btn dark text @click="snackbarError=false">Close</v-btn>
+        </v-snackbar>
+        <v-snackbar v-model="snackbarPassword" top:timeout="timeout" color="error">
+            {{snack3}}
+             <v-btn dark text @click="snackbarPassword=false">Close</v-btn>
         </v-snackbar>
     </v-container>
 </template>
@@ -232,11 +238,14 @@
 
 import Vue from "vue";
 import Component from "vue-class-component";
+import {Watch} from "vue-property-decorator";
 
 @Component({})
 export default class SignUp extends Vue {
 
-    user: {} = {
+    user: {identification: string, firstName: string, secondName: string,
+    lastName:string, secondLastName: string, birthday:string, email:string, password: string
+    phoneNumber:string, charge: string, idLanguage: number, idStatus: number} = {
                 identification: "",
                 firstName: "",
                 secondName: "",
@@ -247,23 +256,63 @@ export default class SignUp extends Vue {
                 password: "",
                 phoneNumber: "",
                 charge:  "Client",
-                idLanguage: "1",
-                idStatus: "4",
-            }
+                idLanguage: 1,
+                idStatus: 4,
+            };
+                
     
+    //////Variables estaticas/////
+
+                identification= "Identitificacion"
+                firstName= "First name"
+                secondName= "Second name"
+                secondNameP= "Second name (Optional)"
+                lastName= "Last name"
+                secondLastName= "Second last name"
+                secondLastNameP= "Second last name (Optional)"
+                birthday= "Birthday"
+                email= "E-mail"
+                password= "Password"
+                passwordc= "Confirm password"
+                phoneNumber= "Phone number"
+                languageInput= "Language"
+                dateInput= ""
+                goBack=  "Go back"
+                buttonSignup= "Sign up"
+                termCondition= "Accept the terms and conditions"
+                titlePage= "Sign up"
+                dateHint="MM/DD/YYYY format"
+                snack1 = "User registered successfully"
+                snack2 = "User registration error. Try again."
+                snack3 = "Please confirm password correctly"
+
+    //////Fin variables estaticas//////
+
+    password2= "";
     items: Array<string> = ['English', 'Spanish'];
     snackbar = false;
     snackbarError = false;
+    snackbarPassword = false;
     timeout =7000;
 
-     searchRoute (){ 
-            console.log(this.user);
+    searchRoute() {
+        if (this.$refs.form.validate()&&this.password2===this.user.password){
+             console.log(this.user);
             this.$store
             .dispatch("user/createUserRoute", this.user)
             .then(() => {
                 //this.cosasdelaBD = this.$store.state.example.route;
                 console.log(this.user);
-      }); } 
+                this.snackbar=true;
+        });}   else if (this.password2!==this.user.password){
+                    console.log("Datos no validos");
+                    this.snackbarPassword=true;
+                 }  else {
+                            console.log("Datos no validos");
+                            this.snackbarError=true;
+                         }
+                } 
+    
 
       changePage(link: string) {
          this.$router.push({ name: link });
@@ -284,50 +333,29 @@ export default class SignUp extends Vue {
         form:any;
     };
 
-    searchRoute2() {
-        if (this.$refs.form.validate()) {
-             console.log(this.user);
-            this.$store
-            .dispatch("user/createUserRoute", this.user)
-            .then(() => {
-                //this.cosasdelaBD = this.$store.state.example.route;
-                console.log(this.user);
-                this.snackbar=true;
-      });}
-            else {
-            console.log("Datos no validos");
-            this.snackbarError=true;
-            }
-        }
-    }
-  
-    
-    ////
+ 
+    ////// Date Picker //////
     /*data*/
-/*
     date: string = new Date().toISOString().substr(0, 10);
-    dateFormatted: String = this.date.formatDate(new Date().toISOString().substr(0, 10));
-    menu1: boolean =false;
-    menu2: boolean =false;
-    */
-
+    dateFormatted: string = this.formatDate(new Date().toISOString().substr(0, 10));
+    menu1 =false;
+    menu2 =false;
+    
     /*computed*/
-
-     /*get computedDateFormatted (): string {
+     get computedDateFormatted (): string {
         return this.formatDate(this.date)
-      } */
+      } 
 
     /*watch*/
-
-   /*  watch: {
-      date (val) {
+      @Watch('formatDate')
+        dateChanged(val: string){
         this.dateFormatted = this.formatDate(this.date)
-      },
-    }*/
+      }; 
+    
 
     /*Methods*/
 
-   /* public formatDate (date: string): string {
+    public formatDate (date: string): string {
         if (!date) return ''
         const [year, month, day] = date.split('-')
         return `${month}/${day}/${year}`
@@ -339,10 +367,44 @@ export default class SignUp extends Vue {
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
       };
      
-    //
-*/
-    
-     
+    ///// End Date Picker /////
+
+
+    //////Internationalization//////
+
+   /* get translator() {
+    return this.$store.state.translate.languageTexts;
+  }
+
+  @Watch("translator")
+  translate() {
+    this.translator
+      .filter(
+        (term: { context: string; name: string; translation: string }) => {
+          return term.context == "signup" || term.context == "general";
+        }
+      )
+      .forEach(
+        (term: { context: string; name: string; translation: string }) => {
+          if (term.name == "navbarButtonShipping") {
+            this.buttonShipping = term.translation;
+          } else if (term.name == "navbarButtonShippingCreate") {
+            this.shippingOptions[0].name = term.translation;
+          } else if (term.name == "navbarButtonShippingMy") {
+            this.shippingOptions[1].name = term.translation;
+          } else if (term.name == "generalSearch") {
+            this.search = term.translation;
+          } else if (term.name == "generalSignUp") {
+            this.signUp = term.translation;
+          } else if (term.name == "generalLogIn") {
+            this.logIn = term.translation;
+          }
+        }
+      );
+  } */
+
+
+    } 
 
 </script>
 
