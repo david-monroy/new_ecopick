@@ -303,6 +303,7 @@ export default class SignUp extends Vue {
                 //this.cosasdelaBD = this.$store.state.example.route;
                 console.log(this.user);
                 this.snackbar=true;
+                this.changePage('Home');
         });}   else if (this.password2!==this.user.password){
                     console.log("Datos no validos");
                     this.snackbarPassword=true;
