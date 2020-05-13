@@ -276,7 +276,6 @@ export default class SignUp extends Vue {
                 passwordc= "Confirm password"
                 phoneNumber= "Phone number"
                 languageInput= "Language"
-                dateInput= ""
                 goBack=  "Go back"
                 buttonSignup= "Sign up"
                 termCondition= "Accept the terms and conditions"
@@ -366,7 +365,7 @@ export default class SignUp extends Vue {
 
     //////Internationalization//////
 
-   /* get translator() {
+    get translator() {
     return this.$store.state.translate.languageTexts;
   }
 
@@ -380,22 +379,52 @@ export default class SignUp extends Vue {
       )
       .forEach(
         (term: { context: string; name: string; translation: string }) => {
-          if (term.name == "navbarButtonShipping") {
-            this.buttonShipping = term.translation;
-          } else if (term.name == "navbarButtonShippingCreate") {
-            this.shippingOptions[0].name = term.translation;
-          } else if (term.name == "navbarButtonShippingMy") {
-            this.shippingOptions[1].name = term.translation;
-          } else if (term.name == "generalSearch") {
-            this.search = term.translation;
-          } else if (term.name == "generalSignUp") {
-            this.signUp = term.translation;
-          } else if (term.name == "generalLogIn") {
-            this.logIn = term.translation;
+          if (term.name == "signupFirstName") {
+            this.firstName = term.translation;
+          } else if (term.name == "signupSecondName") {
+            this.secondName= term.translation;
+          } else if (term.name == "signupSecondNameP") {
+            this.secondNameP = term.translation;
+          } else if (term.name == "signupLastName") {
+            this.lastName = term.translation;
+          } else if (term.name == "signupSecondLastName") {
+            this.secondLastName = term.translation;
+          } else if (term.name == "signupSecondLastNameP") {
+            this.secondLastNameP = term.translation;
+          } else if (term.name == "signupIdentification") {
+            this.identification= term.translation;
+          } else if (term.name == "signupBirthday") {
+            this.birthday = term.translation;
+          } else if (term.name == "signupEmail") {
+            this.email = term.translation;
+          } else if (term.name == "signupPassword") {
+            this.password = term.translation;
+          } else if (term.name == "signupPasswordc") {
+            this.passwordc = term.translation;
+          } else if (term.name == "signupPhoneNumber") {
+            this.phoneNumber = term.translation;
+          } else if (term.name == "signupLanguageInput") {
+            this.languageInput = term.translation;
+          } else if (term.name == "signupGoBack") {
+            this.goBack= term.translation;
+          } else if (term.name == "signupButton") {
+            this.buttonSignup = term.translation;
+          } else if (term.name == "signupTermCondition") {
+            this.termCondition = term.translation;
+          } else if (term.name == "signupTitlePage") {
+            this.titlePage = term.translation;
+          } else if (term.name == "signupDateHint") {
+            this.dateHint = term.translation;
+          } else if (term.name == "signupSnack1") {
+            this.snack1 = term.translation;
+          } else if (term.name == "signupSnack2") {
+            this.snack2 = term.translation;
+          } else if (term.name == "signupSnack3") {
+            this.snack3 = term.translation;
           }
         }
       );
-  } */
+  } 
 
 
     } 
