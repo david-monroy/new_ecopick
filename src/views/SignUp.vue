@@ -337,19 +337,13 @@ export default class SignUp extends Vue {
     ////// Date Picker //////
     /*data*/
     date: string = new Date().toISOString().substr(0, 10);
-    dateFormatted: string = this.formatDate(new Date().toISOString().substr(0, 10));
     menu1 =false;
     menu2 =false;
-    
-    /*computed*/
-     get computedDateFormatted (): string {
-        return this.formatDate(this.date)
-      } 
 
     /*watch*/
-      @Watch('formatDate')
+      @Watch("date")
         dateChanged(val: string){
-        this.dateFormatted = this.formatDate(this.date)
+        this.user.birthday= this.formatDate(this.date);
       }; 
     
 
