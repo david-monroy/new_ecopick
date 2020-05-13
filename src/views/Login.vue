@@ -2,7 +2,7 @@
     <v-container fluid class="bg" >
 
         <v-row no gutters class="hidden-sm-and-down"> 
-            <v-col cols="12" sm="1"> <v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon> <h4>Go back</h4></v-col> 
+            <v-col cols="12" sm="1"><a style="color: gray;" @click="changePage('Home')"> <v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon> <h4>{{goBack}}</h4></a></v-col> 
              <v-col ></v-col>
              
 
@@ -22,7 +22,7 @@
                     
                     <v-row> 
                         <v-col> 
-                            <v-icon class="hidden-md-and-up" style="float: left;">mdi-arrow-left</v-icon> 
+                            <a style="color: gray;" @click="changePage('Home')"><v-icon class="hidden-md-and-up" style="float: left;">mdi-arrow-left</v-icon></a>
                         </v-col>
                         <v-col> 
                             <v-img
@@ -40,7 +40,7 @@
                         <v-col> 
                         </v-col>
                         <v-col> 
-                        <h3>Login</h3>
+                        <h3>{{titlePage}}</h3>
                         </v-col> 
                         <v-col> 
                         </v-col>  
@@ -53,9 +53,9 @@
 
                         <v-col> 
                         <v-text-field
-                            v-model="email"
+                            v-model="user.email"
                             :rules="emailRules"
-                            label="E-mail"
+                            :label="email"
                             required
                         ></v-text-field>
                         </v-col>
@@ -68,13 +68,9 @@
 
                         <v-col> 
                             <v-text-field 
-                            :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
-                            :rules="[rules.required, rules.min]"
-                            :type="show3 ? 'text' : 'password'"
+                            :rules="passwordRules"
                             name="input-10-2"
-                            label="Password"
-                            class="input-group--focused"
-                            @click:append="show3 = !show3"
+                            :label="password"
                         ></v-text-field>
                         </v-col>
                     </v-row> 
@@ -83,7 +79,7 @@
                         <v-col> 
                         </v-col>
                         <v-col> 
-                            <h4><a href="#" style="color:#454545;">Forgot password?</a></h4>
+                            <h4><a href="#" style="color:#454545;">{{forgotPassword}}</a></h4>
                         </v-col>  
                     </v-row> 
 
@@ -91,7 +87,7 @@
                         <v-col> 
                         </v-col>
                         <v-col> 
-                        <v-btn rounded color="#a9ff4d" dark>Login</v-btn>
+                        <v-btn rounded color="#a9ff4d" dark @click="searchRoute()" >{{buttonLogin}}</v-btn>
                         </v-col> 
                         <v-col> 
                         </v-col>  
@@ -101,7 +97,7 @@
                         <v-col> 
                         </v-col>
                         <v-col> 
-                            <h5>Or login with</h5>
+                            <h5>{{loginOr}}</h5>
                         </v-col> 
                         <v-col> 
                         </v-col>  
@@ -131,7 +127,7 @@
                         <v-col> 
                         </v-col>
                         <v-col cols="12" sm="8"> 
-                            <h5 ma-0>Don't have an account? <a href="#" style="color:#454545;">Sign up!</a></h5>
+                            <h5 ma-0>{{noAccount}}<a href="#" style="color:#454545;">{{loginRegister}}</a></h5>
                         </v-col> 
                         <v-col> 
                         </v-col>  
@@ -148,6 +144,20 @@
             <v-col> 
             </v-col>     
         </v-row> 
+
+        <v-snackbar v-model="snackbar" top:timeout="timeout" color="success">
+            {{snack1}}
+            <v-btn dark text @click="snackbar=false">{{close}}</v-btn>
+        </v-snackbar>
+        <v-snackbar v-model="snackbarError" top:timeout="timeout" color="error">
+            {{snack2}}
+             <v-btn dark text @click="snackbarError=false">{{close}}</v-btn>
+        </v-snackbar>
+        <v-snackbar v-model="snackbarError2" top:timeout="timeout" color="error">
+            {{snack3}}
+             <v-btn dark text @click="snackbarPassword=false">{{close}}</v-btn>
+        </v-snackbar>
+
     </v-container>
 
 
@@ -156,30 +166,129 @@
 
 
 
-<script>
+<script lang="ts">
+
 import Vue from "vue";
 import Component from "vue-class-component";
-export default {
-        data: () => ({
-      valid: false,
-      firstname: '',
-      lastname: '',
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => v.length <= 10 || 'Name must be less than 10 characters',
-      ],
-      email: '',
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid',
-      ],
-       password: 'Password',
-        rules: {
-          required: value => !!value || 'Password required.',
-          emailMatch: () => ('The email and password you entered don\'t match'),
-        },
-        show3: false,
-    }),
+import {Watch} from "vue-property-decorator";
+
+@Component({})
+export default class Login extends Vue{
+
+    user: {email:string, password: string} = {
+                email: "",
+                password: "",
+            };
+
+    //////Variables estaticas/////
+                
+                titlePage= "Login"
+                email= "E-mail"
+                password= "Password"
+                goBack= "Go back"
+                forgotPassword= "Forgot password?"
+                noAccount= "Don't have an account?"
+                loginRegister= " Sign up!"
+                loginOr=  "Or login with"
+                buttonLogin= "Login"
+                snack1 = "Welcome again!"
+                snack2 = "Email or password incorrect. Try again."
+                snack3 = "Your user is disabled"
+                snack4 = "Your user hasn't permission to access"
+                snack5 = "Your user is disabled"
+                close = "Close"
+
+    //////Fin variables estaticas//////
+
+    snackbar = false;
+    snackbarError = false;
+    snackbarError2 = false;
+    timeout =7000;
+
+    /* searchRoute() {
+        if (this.$refs.form.validate()){
+             console.log(this.user);
+            this.$store
+            .dispatch("user/createUserRoute", this.user)
+            .then(() => {
+                //this.cosasdelaBD = this.$store.state.example.route;
+                console.log(this.user);
+                this.snackbar=true;
+                this.changePage('Home');
+        });}   else if (this.password2!==this.user.password){
+                    console.log("Datos no validos");
+                    this.snackbarPassword=true;
+                 }  else {
+                            console.log("Datos no validos");
+                            this.snackbarError=true;
+                         }
+                }  */
+    
+
+      changePage(link: string) {
+         this.$router.push({ name: link });
+  }
+
+    rules: {} = {
+        required: (value: string) =>
+        (!!value && value !== "" && value !== undefined) || "Required",
+        passwordRules: [(v: string) =>!!v || "Password is required"],
+        emailRules: [ 
+            (v:string) => !!v || "E-mail is required",
+            (v:string) => /.+@.+\..+/.test(v) || "E-mail is required",
+        ],
+     
+    };
+
+    $refs!: {
+        form:any;
+    };
+
+    
+    //////Internationalization//////
+
+    get translator() {
+    return this.$store.state.translate.languageTexts;
+  }
+
+  @Watch("translator")
+  translate() {
+    this.translator
+      .filter(
+        (term: { context: string; name: string; translation: string }) => {
+          return term.context == "login" || term.context == "general";
+        }
+      )
+      .forEach(
+        (term: { context: string; name: string; translation: string }) => {
+          if (term.name == "loginEmail") {
+            this.email = term.translation;
+          } else if (term.name == "loginPassword") {
+            this.password= term.translation;
+          } else if (term.name == "loginTitle") {
+            this.titlePage = term.translation;
+          } else if (term.name == "loginForgotPassword") {
+            this.forgotPassword = term.translation;
+          } else if (term.name == "loginNoAccount") {
+            this.noAccount = term.translation;
+          } else if (term.name == "loginRegister") {
+            this.loginRegister = term.translation;
+          } else if (term.name == "loginOr") {
+            this.loginOr= term.translation;
+          } else if (term.name == "loginSnack1") {
+            this.snack1 = term.translation;
+          } else if (term.name == "loginSnack2") {
+            this.snack2 = term.translation;
+          } else if (term.name == "loginSnack3") {
+            this.snack3 = term.translation;
+          } 
+           else if (term.name == "generalClose") {
+            this.close = term.translation;
+          } 
+        }
+      );
+  } 
+       
 }
 </script>
 
