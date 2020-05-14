@@ -45,7 +45,7 @@
                         <v-col> 
                         </v-col>  
                     </v-row> 
-
+                <v-form ref="form">
                     <v-row> 
                         <v-col cols="12" sm="1">  
                         <v-icon class="mt-5" pa-0>mdi-account</v-icon> 
@@ -54,7 +54,7 @@
                         <v-col> 
                         <v-text-field
                             v-model="user.email"
-                            :rules="emailRules"
+                            :rules="rules.emailRules"
                             :label="email"
                             required
                         ></v-text-field>
@@ -68,9 +68,12 @@
 
                         <v-col> 
                             <v-text-field 
-                            :rules="passwordRules"
+                            v-model="user.password"
+                            :rules="rules.passwordRules"
                             name="input-10-2"
                             :label="password"
+                            :type="show2 ? 'text' : 'password'"
+                            class="input-group--focused"
                         ></v-text-field>
                         </v-col>
                     </v-row> 
@@ -92,7 +95,7 @@
                         <v-col> 
                         </v-col>  
                     </v-row> 
-
+                 </v-form>
                     <v-row> 
                         <v-col> 
                         </v-col>
@@ -127,7 +130,7 @@
                         <v-col> 
                         </v-col>
                         <v-col cols="12" sm="8"> 
-                            <h5 ma-0>{{noAccount}}<a href="#" style="color:#454545;">{{loginRegister}}</a></h5>
+                            <h5 ma-0>{{noAccount}}<a href="#" style="color:#454545;" @click="changePage('SignUp')">{{loginRegister}}</a></h5>
                         </v-col> 
                         <v-col> 
                         </v-col>  
@@ -205,7 +208,27 @@ export default class Login extends Vue{
     snackbarError2 = false;
     timeout =7000;
 
-    /* searchRoute() {
+    $refs!: {
+        form:any;
+    };
+
+   searchRoute() {
+        if (this.$refs.form.validate()){
+            console.log(this.user);
+            this.$store
+            .dispatch("user/validateUserRoute", this.user)
+            .then(() => {
+                //this.cosasdelaBD = this.$store.state.example.route;
+                console.log("hola");
+                this.snackbar=true;
+                this.changePage('Home');
+        });}    else {     console.log("Datos no validos");
+                            this.snackbarError=true;
+                         }
+                }  
+
+
+    /*searchRoute() {
         if (this.$refs.form.validate()){
              console.log(this.user);
             this.$store
@@ -240,14 +263,12 @@ export default class Login extends Vue{
      
     };
 
-    $refs!: {
-        form:any;
-    };
+    
 
     
     //////Internationalization//////
 
-    get translator() {
+  /*  get translator() {
     return this.$store.state.translate.languageTexts;
   }
 
@@ -287,7 +308,7 @@ export default class Login extends Vue{
           } 
         }
       );
-  } 
+  } */
        
 }
 </script>
