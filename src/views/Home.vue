@@ -99,6 +99,10 @@ export default class Home extends Vue {
     });
   }
 
+  mounted() {
+    this.translate();
+  }
+
   get translator() {
     return this.$store.state.translate.languageTexts;
   }
