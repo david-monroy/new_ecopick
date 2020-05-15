@@ -219,7 +219,6 @@ export default class Login extends Vue{
             .dispatch("user/validateUserRoute", this.user)
             .then(() => {
                 //this.cosasdelaBD = this.$store.state.example.route;
-                console.log("hola");
                 this.snackbar=true;
                 this.changePage('Home');
         });}    else {     console.log("Datos no validos");

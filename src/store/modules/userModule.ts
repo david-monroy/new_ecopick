@@ -36,9 +36,8 @@ export default {
         await userService
           .validateUserRoute(user)
           .then((response: any) => {
-            console.log(response.data.results);
-            console.log("Aqui");
-            context.commit("setLoginRoute", response.data.results);
+            console.log(response.data);
+            context.commit("setLoginRoute", response.data);
             localStorage.set("token",response.data.token)
           });
         // .catch((error: any) => {});
