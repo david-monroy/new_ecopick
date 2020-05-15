@@ -17,12 +17,7 @@
                     headline: $vuetify.breakpoint.smAndDown,
                     'display-1': $vuetify.breakpoint.mdAndUp,
                   }"
-                  >Try our new bot, download
-                  <strong class="blue--text">Telegram</strong> and with
-                  <br class="hidden-sm-and-down" />
-                  your tracking ID, you will be able to know your
-                  <br class="hidden-sm-and-down" />
-                  package's delivery history anywhere!</v-card-text
+                  >{{ banner }}</v-card-text
                 >
               </v-card>
             </v-col>
@@ -51,7 +46,7 @@
             dense
             outlined
             single-line
-            label="Search your tracking id"
+            :label="search"
             v-model="trackingID"
             @keyup.enter="searchShipment()"
           ></v-text-field
@@ -62,12 +57,8 @@
       <v-col class="hidden-sm-and-down" md="3"></v-col>
       <v-col md="3"
         ><v-card class="mx-auto" color="transparent" elevation="0">
-          <v-card-title>Here to deliver for you!</v-card-title>
-          <v-card-text class="body-1"
-            >In these uncertain times, it's important for businesses to help you
-            stay safe! At Mr.Postel we are still delivering to support you in
-            this situation</v-card-text
-          >
+          <v-card-title>{{ noticeTitle }}</v-card-title>
+          <v-card-text class="body-1">{{ noticeText }}</v-card-text>
         </v-card></v-col
       >
       <v-col md="3"
@@ -86,15 +77,52 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import { Watch } from "vue-property-decorator";
 
 @Component({})
 export default class Home extends Vue {
+  $store: any;
+  $router: any;
+
   trackingID = "";
+  search = "Search your tracking ID";
+  banner =
+    "Try our new bot, download Telegram and with your tracking ID, you will be able to know your package's delivery history anywhere!";
+  noticeTitle = "Here to deliver for you!";
+  noticeText =
+    "In these uncertain times, it's important for businesses to help you stay safe! At Mr.Postel we are still delivering to support you in this situation";
+
   searchShipment() {
     this.$router.push({
       name: "DetailShipment",
       params: { id: this.trackingID },
     });
+  }
+
+  get translator() {
+    return this.$store.state.translate.languageTexts;
+  }
+  @Watch("translator")
+  translate() {
+    this.translator
+      .filter(
+        (term: { context: string; name: string; translation: string }) => {
+          return term.context == "general" || term.context == "home";
+        }
+      )
+      .forEach(
+        (term: { context: string; name: string; translation: string }) => {
+          if (term.name == "generalSearch") {
+            this.search = term.translation;
+          } else if (term.name == "homeBanner") {
+            this.banner = term.translation;
+          } else if (term.name == "homeNoticeTitle") {
+            this.noticeTitle = term.translation;
+          } else if (term.name == "homeNoticeText") {
+            this.noticeText = term.translation;
+          }
+        }
+      );
   }
 }
 </script>
