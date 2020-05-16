@@ -239,9 +239,12 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import {Watch} from "vue-property-decorator";
+import Translate from "../components/Translate.vue";
 
-@Component({})
+@Component({ components: { Translate } })
 export default class SignUp extends Vue {
+    $store: any;
+    $router: any;
 
     user: {identification: string, firstName: string, secondName: string,
     lastName:string, secondLastName: string, birthday:string, email:string, password: string
@@ -365,6 +368,10 @@ export default class SignUp extends Vue {
 
 
     //////Internationalization//////
+
+     mounted() {
+    this.translate();
+  }
 
     get translator() {
     return this.$store.state.translate.languageTexts;
