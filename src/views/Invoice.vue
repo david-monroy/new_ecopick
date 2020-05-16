@@ -207,12 +207,19 @@ export default class Invoice extends Vue {
   discountName = "Discount";
 
   get total() {
-    return (
-      this.packages.reduce(
+    if (this.discount == 0) {
+      return this.packages.reduce(
         (acc, item: { pa_cost: number }) => acc + item.pa_cost,
         0
-      ) * this.discount
-    );
+      );
+    } else {
+      return (
+        this.packages.reduce(
+          (acc, item: { pa_cost: number }) => acc + item.pa_cost,
+          0
+        ) * this.discount
+      );
+    }
   }
   get packagesGrossWeight() {
     return this.packages

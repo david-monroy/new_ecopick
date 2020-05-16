@@ -47,6 +47,12 @@ export default {
             response.data.packages[i].characteristic = "";
           }
         }
+        let discounts;
+        if (response.data.discounts.length == 0) {
+          discounts = 0;
+        } else {
+          discounts = response.data.discounts[0].di_percentage;
+        }
         context.commit("setRoute", {
           origin: `${routeOrigin.of_name}. ${routeOrigin.di_primary_line} ${routeOrigin.di_secondary_line}. ${routeOrigin.di_city}, ${routeOrigin.di_state}, ${routeOrigin.di_country}. ${routeOrigin.di_zip_code}`,
           destination: `${routeDestination.di_primary_line} ${routeDestination.di_secondary_line}. ${routeDestination.di_city}, ${routeDestination.di_state}, ${routeDestination.di_country}. ${routeDestination.di_zip_code}`,
@@ -62,7 +68,7 @@ export default {
         });
         context.commit("setPackages", response.data.packages);
         context.commit("setOptions", options);
-        context.commit("setDiscount", response.data.discounts[0].di_percentage);
+        context.commit("setDiscount", discounts);
       });
     },
     sendInvoice: async (context: any, formData: FormData) => {
