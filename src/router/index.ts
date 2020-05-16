@@ -5,7 +5,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 
 //Componentes
 import Home from "../views/Home.vue";
-import INV from "../views/Invoice.vue";
+import DetailShipment from "../views/DetailShipment.vue";
 
 Vue.use(VueRouter);
 
@@ -22,7 +22,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/login",
     name: "LogIn",
-    component: INV,
+    // component: Home,
     meta: {
       requiresAuth: false,
       hideBasicComponents: true,
@@ -49,7 +49,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/shipments/:id",
     name: "DetailShipment",
-    // component: Home,
+    component: DetailShipment,
     meta: {
       requiresAuth: false,
       hideBasicComponents: false,

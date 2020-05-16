@@ -65,5 +65,8 @@ export default {
         context.commit("setDiscount", response.data.discounts[0].di_percentage);
       });
     },
+    sendInvoice: async (context: any, formData: FormData) => {
+      await invoiceService.sendInvoice(formData);
+    },
   },
 };

@@ -4,7 +4,9 @@
       <tr class="top">
         <td colspan="3">
           <img src="../assets/page-logo.png" class="logo" />
-          <p class="cell-title">{{ trackingName }} #{{ trackingId }}</p>
+          <p class="cell-title">
+            {{ trackingName }} #{{ this.$route.params.id }}
+          </p>
         </td>
         <td>
           <div class="qrCode">
@@ -92,7 +94,7 @@
       <tr class="item">
         <td>
           <p class="cell-title">{{ purpose }}</p>
-          <p class="cell-description">{{ shipment.purpose }}</p>
+          <!-- <p class="cell-description">{{ shipment.sh_purpose || "" }}</p> -->
         </td>
         <td>
           <p class="cell-title">{{ numberPackages }}</p>
@@ -147,7 +149,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { mapState } from "vuex";
 import { Watch } from "vue-property-decorator";
-import QRCode from "../components/QRCode.vue";
+import QRCode from "../components/invoice/QRCode.vue";
 
 @Component({
   components: {
@@ -162,10 +164,12 @@ import QRCode from "../components/QRCode.vue";
       "discount",
     ]),
     ...mapState("user", { shipper: "user" }),
+    // ...mapState("shipment", ["shipment"]),
   },
 })
 export default class Invoice extends Vue {
   $store: any;
+  $route: any;
   route!: {};
   receiver!: {};
   options!: string[];
@@ -180,11 +184,6 @@ export default class Invoice extends Vue {
   }[];
   discount!: number;
   shipper!: {};
-  trackingId = 99113;
-  userId = 2;
-  shipment = {
-    purpose: "Online shopping",
-  };
   // Keywords
   shipperInformation = "Shipper information";
   receiverInformation = "Receiver information";
@@ -232,17 +231,7 @@ export default class Invoice extends Vue {
     ).toFixed(2);
   }
 
-  getInvoice(trackingId: number) {
-    this.$store.dispatch("invoice/getInvoice", trackingId);
-  }
-
-  getUser(userID: number) {
-    this.$store.dispatch("user/getUser", userID);
-  }
-
   created() {
-    this.getInvoice(this.trackingId);
-    this.getUser(this.userId);
     this.translate();
   }
 
@@ -327,7 +316,7 @@ export default class Invoice extends Vue {
 }
 
 .invoice-box {
-  width: 595px;
+  width: 800px;
   margin: auto;
   padding: 30px;
   border: 1px solid #eee;
