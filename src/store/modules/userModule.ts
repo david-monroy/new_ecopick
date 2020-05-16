@@ -32,7 +32,7 @@ export default {
           });
         // .catch((error: any) => {});
       },
-     validateUserRoute: async function (context: any, user: {}) {
+     validateUserRoute2: async function (context: any, user: {}) {
         await userService
           .validateUserRoute(user)
           .then((response: any) => {
@@ -42,8 +42,18 @@ export default {
           });
         // .catch((error: any) => {});
       },
-
+      validateUserRoute: async function (context: any, user: {}) {
+        return new Promise((resolve, reject) => {
+         userService.validateUserRoute(user)
+          .then((response: any) => {
+            context.commit("setLoginRoute", response.data);
+            localStorage.setItem("token",response.data.token);
+            resolve(response.status);
+          });
+        // .catch((error: any) => {});
+     });
     },
+   },
     
 };
 

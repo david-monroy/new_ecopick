@@ -8,10 +8,6 @@ export default {
         Authorization: {"Content-Type":"application/json"},
       }, 
     })
-    .then(function (response){
-      console.log(response);
-    }) 
-    .catch((error) => console.log(error));
   },
   validateUserRoute(user: {}) {
     return API_URL.post(`/user/login`, user, {     
@@ -19,9 +15,5 @@ export default {
         Authorization: {"Content-Type":"application/json"},
       }, 
     })
-    .then(function (response){
-      console.log(response);
-    }) 
-    .catch((error) => console.log(error));
   },
 };

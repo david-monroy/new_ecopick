@@ -82,7 +82,7 @@
                         <v-col> 
                         </v-col>
                         <v-col> 
-                            <h4><a href="#" style="color:#454545;">{{forgotPassword}}</a></h4>
+                            <h4><a href="#" style="color:#454545;" @click="changePage('recoverPassword')">{{forgotPassword}}</a></h4>
                         </v-col>  
                     </v-row> 
 
@@ -160,6 +160,11 @@
             {{snack3}}
              <v-btn dark text @click="snackbarPassword=false">{{close}}</v-btn>
         </v-snackbar>
+        <v-snackbar v-model="snackbarError3" top:timeout="timeout" color="error">
+            {{snack4}}
+             <v-btn dark text @click="snackbarPassword=false">{{close}}</v-btn>
+        </v-snackbar>
+
 
     </v-container>
 
@@ -177,6 +182,9 @@ import {Watch} from "vue-property-decorator";
 
 @Component({})
 export default class Login extends Vue{
+    $store: any;
+    $router: any;
+
 
     user: {email:string, password: string} = {
                 email: "",
@@ -195,10 +203,9 @@ export default class Login extends Vue{
                 loginOr=  "Or login with"
                 buttonLogin= "Login"
                 snack1 = "Welcome again!"
-                snack2 = "Email or password incorrect. Try again."
-                snack3 = "Your user is disabled"
-                snack4 = "Your user hasn't permission to access"
-                snack5 = "Your user is disabled"
+                snack2 = "Please ingress your email and password-"
+                snack3 = "Invalid email or password. Try again."
+                snack4 = "Your user hasn't permission to access or it's disabled."
                 close = "Close"
 
     //////Fin variables estaticas//////
@@ -206,6 +213,7 @@ export default class Login extends Vue{
     snackbar = false;
     snackbarError = false;
     snackbarError2 = false;
+    snackbarError3 = false;
     timeout =7000;
 
     $refs!: {
@@ -217,41 +225,29 @@ export default class Login extends Vue{
             console.log(this.user);
             this.$store
             .dispatch("user/validateUserRoute", this.user)
-            .then(() => {
+            .then((status:any) => {
                 //this.cosasdelaBD = this.$store.state.example.route;
+                if (status==200) {
                 this.snackbar=true;
+                localStorage.setItem("Email", this.user.email)
                 this.changePage('Home');
-        });}    else {     console.log("Datos no validos");
-                            this.snackbarError=true;
-                         }
-                }  
-
-
-    /*searchRoute() {
-        if (this.$refs.form.validate()){
-             console.log(this.user);
-            this.$store
-            .dispatch("user/createUserRoute", this.user)
-            .then(() => {
-                //this.cosasdelaBD = this.$store.state.example.route;
-                console.log(this.user);
-                this.snackbar=true;
-                this.changePage('Home');
-        });}   else if (this.password2!==this.user.password){
-                    console.log("Datos no validos");
-                    this.snackbarPassword=true;
-                 }  else {
-                            console.log("Datos no validos");
-                            this.snackbarError=true;
-                         }
-                }  */
-    
+                } else if (status==401) {
+                  console.log("hola");
+                  this.snackbarError2=true;
+                } else if (status==204) {
+                  this.snackbarError3=true;
+                }
+            });
+                 } else {  console.log("Datos no validos");
+                           this.snackbarError=true;
+                            }
+     };
 
       changePage(link: string) {
          this.$router.push({ name: link });
-  }
+       }
 
-    rules: {} = {
+      rules: {} = {
         required: (value: string) =>
         (!!value && value !== "" && value !== undefined) || "Required",
         passwordRules: [(v: string) =>!!v || "Password is required"],
@@ -260,14 +256,20 @@ export default class Login extends Vue{
             (v:string) => /.+@.+\..+/.test(v) || "E-mail is required",
         ],
      
-    };
+       };
 
     
 
     
     //////Internationalization//////
 
-  /*  get translator() {
+
+  /* 
+  mounted() {
+    this.translate();
+  }
+  
+  get translator() {
     return this.$store.state.translate.languageTexts;
   }
 
