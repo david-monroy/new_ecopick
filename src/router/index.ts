@@ -5,6 +5,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 
 //Componentes
 import Home from "../views/Home.vue";
+import INV from "../views/Invoice.vue";
 
 Vue.use(VueRouter);
 
@@ -21,7 +22,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/login",
     name: "LogIn",
-    // component: Home,
+    component: INV,
     meta: {
       requiresAuth: false,
       hideBasicComponents: true,
