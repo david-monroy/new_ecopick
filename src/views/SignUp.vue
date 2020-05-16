@@ -3,7 +3,7 @@
 
         <v-row no gutters class="hidden-sm-and-down"> 
             <v-col cols="12" sm="1"> <a style="color: gray;" @click="changePage('Home')"><v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon> <h4>{{goBack}}</h4></a></v-col> 
-             <v-col ></v-col>
+             <v-col ><Translate /></v-col>
              
 
         </v-row> 
@@ -429,6 +429,8 @@ export default class SignUp extends Vue {
             this.snack2 = term.translation;
           } else if (term.name == "signupSnack3") {
             this.snack3 = term.translation;
+          } else if (term.name == "generalGoBack") {
+            this.goBack = term.translation;
           }
         }
       );
