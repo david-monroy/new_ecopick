@@ -1,9 +1,8 @@
 <template>
     <v-container fluid class="bg" >
-
         <v-row no gutters class="hidden-sm-and-down"> 
             <v-col cols="12" sm="1"><a style="color: gray;" @click="changePage('Home')"> <v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon> <h4>{{goBack}}</h4></a></v-col> 
-             <v-col ></v-col>
+             <v-col ><Translate /></v-col>
              
 
         </v-row> 
@@ -179,8 +178,9 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import {Watch} from "vue-property-decorator";
+import Translate from "../components/Translate.vue";
 
-@Component({})
+@Component({ components: { Translate } })
 export default class Login extends Vue{
     $store: any;
     $router: any;
@@ -263,8 +263,6 @@ export default class Login extends Vue{
     
     //////Internationalization//////
 
-
-  /* 
   mounted() {
     this.translate();
   }
@@ -303,13 +301,16 @@ export default class Login extends Vue{
             this.snack2 = term.translation;
           } else if (term.name == "loginSnack3") {
             this.snack3 = term.translation;
-          } 
-           else if (term.name == "generalClose") {
+          } else if (term.name == "generalClose") {
             this.close = term.translation;
+          } else if (term.name == "generalGoBack") {
+            this.goBack = term.translation;
+          } else if (term.name == "loginButton") {
+            this.buttonLogin = term.translation;
           } 
         }
       );
-  } */
+  } 
        
 }
 </script>
