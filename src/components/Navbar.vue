@@ -21,7 +21,7 @@
         rounded
         filled
         single-line
-        label="Search your tracking id"
+        :label="search"
         v-model="trackingID"
         @keyup.enter="searchShipment()"
       ></v-text-field
@@ -31,7 +31,7 @@
       <template v-slot:activator="{ on }">
         <v-btn text small class="option font-weight-light mx-2" v-on="on">
           <v-icon class="mr-1">mdi-package-variant</v-icon>
-          <p class="hidden-sm-and-down ma-0">shipping</p>
+          <p class="hidden-sm-and-down ma-0">{{ buttonShipping }}</p>
         </v-btn>
       </template>
       <v-list>
@@ -52,17 +52,18 @@
         <p class="text-option font-weight-light my-0 mx-2 hidden-sm-and-down">
           <v-icon class="mr-1" color="black">mdi-account-circle-outline</v-icon>
           <span>
-            <a class="icon mr-1" @click="changePage('SignUp')">SIGN UP</a> OR
-            <a class="icon ml-1" @click="changePage('LogIn')">LOG IN</a>
+            <a class="icon mr-1" @click="changePage('SignUp')">{{ signUp }}</a>
+            /
+            <a class="icon ml-1" @click="changePage('LogIn')">{{ logIn }}</a>
           </span>
         </p>
       </template>
       <v-list>
         <v-list-item @click="changePage('SignUp')">
-          <v-list-item-title>Sign Up</v-list-item-title>
+          <v-list-item-title>{{ signUp }}</v-list-item-title>
         </v-list-item>
         <v-list-item @click="changePage('LogIn')">
-          <v-list-item-title>Log In</v-list-item-title>
+          <v-list-item-title>{{ logIn }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -75,48 +76,46 @@
       </template>
       <v-list>
         <v-list-item @click="changePage('Profile')">
-          <v-list-item-title>Profile</v-list-item-title>
+          <v-list-item-title>{{ buttonProfile }}</v-list-item-title>
         </v-list-item>
       </v-list>
       <v-list>
         <v-list-item @click="changePage('Discounts')">
-          <v-list-item-title>Discounts</v-list-item-title>
+          <v-list-item-title>{{ buttonDiscounts }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
-    <v-menu height="40">
-      <template v-slot:activator="{ on }">
-        <v-btn text small class="option font-weight-light mx-2" v-on="on">
-          <v-icon class="mr-1">mdi-translate</v-icon>
-          <p class="hidden-sm-and-down ma-0">
-            {{ selectedLanguage }}
-          </p>
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-item
-          v-for="(language, index) in languages"
-          :key="index"
-          @click="changeLanguage(language)"
-        >
-          <v-list-item-title>{{ language }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+    <Translate />
   </v-app-bar>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import { Watch } from "vue-property-decorator";
+import Translate from "../components/Translate.vue";
 
-@Component({})
+@Component({ components: { Translate } })
 export default class Navbar extends Vue {
-  shippingOptions: {}[] = [
+  $router: any;
+  $store: any;
+  // Atributos
+  // // Textos fijos
+  search = "Search your tracking ID";
+  buttonShipping = "Shipping";
+  buttonProfile = "Profile";
+  buttonDiscounts = "Discounts";
+  signUp = "Sign Up";
+  logIn = "Log In";
+  // // Search
+  trackingID = "";
+  // // Opciones
+  shippingOptions: { name: string; link: string }[] = [
     { name: "Create a Shipping", link: "NewShipment" },
     { name: "My Shipments", link: "Shipments" },
   ];
-  trackingID = "";
+
+  // Computed properties
   get activeUser() {
     const userEmail = localStorage.getItem("Email");
     if (userEmail !== null) {
@@ -125,29 +124,47 @@ export default class Navbar extends Vue {
       return null;
     }
   }
-  get languages() {
-    //Or get languages on BD
-    return ["English", "Español"];
-  }
-  get selectedLanguage() {
-    if (localStorage.getItem("Language") !== null) {
-      return localStorage.getItem("Language");
-    } else {
-      return "English";
-    }
-  }
+
+  // Metodos
+  // // Redirección
   changePage(link: string) {
     this.$router.push({ name: link });
-  }
-  changeLanguage(language: string) {
-    localStorage.setItem("Language", language);
-    location.reload();
   }
   searchShipment() {
     this.$router.push({
       name: "DetailShipment",
       params: { id: this.trackingID },
     });
+  }
+  // // Traducción
+  get translator() {
+    return this.$store.state.translate.languageTexts;
+  }
+  @Watch("translator")
+  translate() {
+    this.translator
+      .filter(
+        (term: { context: string; name: string; translation: string }) => {
+          return term.context == "navbar" || term.context == "general";
+        }
+      )
+      .forEach(
+        (term: { context: string; name: string; translation: string }) => {
+          if (term.name == "navbarButtonShipping") {
+            this.buttonShipping = term.translation;
+          } else if (term.name == "navbarButtonShippingCreate") {
+            this.shippingOptions[0].name = term.translation;
+          } else if (term.name == "navbarButtonShippingMy") {
+            this.shippingOptions[1].name = term.translation;
+          } else if (term.name == "generalSearch") {
+            this.search = term.translation;
+          } else if (term.name == "generalSignUp") {
+            this.signUp = term.translation;
+          } else if (term.name == "generalLogIn") {
+            this.logIn = term.translation;
+          }
+        }
+      );
   }
 }
 </script>
