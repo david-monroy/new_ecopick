@@ -5,6 +5,8 @@
         <v-col cols="12" sm="1"> <a style="color: gray;" @click="changePage('Home')"><v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon> <h4>{{goBack}}</h4></a></v-col>              <v-col ></v-col>
         </v-row> 
         
+        <v-col ><Translate /></v-col>
+
         <v-row >
 
         <v-col class="hidden-sm-and-down">   </v-col> 
@@ -105,6 +107,10 @@
             {{snack2}}
              <v-btn dark text @click="snackbarError=false">{{close}}</v-btn>
         </v-snackbar>
+        <v-snackbar v-model="snackbarError2" top:timeout="timeout" color="error">
+            {{snack3}}
+             <v-btn dark text @click="snackbarError2=false">{{close}}</v-btn>
+        </v-snackbar>
 
     </v-container>
 </template>
@@ -114,11 +120,17 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import {Watch} from "vue-property-decorator";
+import Translate from "../components/Translate.vue";
 
-@Component({})
+@Component({ components: { Translate } })
 export default class recoverPassword extends Vue {
 
-    email = "";
+    $store: any;
+    $router: any;
+
+     user: {email:string} = {
+                email: "",
+            };
                 
     
     //////Variables estaticas/////
@@ -129,7 +141,7 @@ export default class recoverPassword extends Vue {
                 goBack= "Go back"
                 snack1 = "Your password has been sended."
                 snack2 = "Please fill in your email"
-                snack3 = "Please confirm password correctly"
+                snack3 = "This email isn't associated to an account"
                 close = "Close"
 
     //////Fin variables estaticas//////
@@ -137,27 +149,28 @@ export default class recoverPassword extends Vue {
   
     snackbar = false;
     snackbarError = false;
+    snackbarError2 = false;
     timeout =7000;
 
-    /*searchRoute() {
-        if (this.$refs.form.validate()&&this.password2===this.user.password){
-             console.log(this.user);
+    searchRoute() {
+        if (this.$refs.form.validate()){
             this.$store
-            .dispatch("user/createUserRoute", this.user)
-            .then(() => {
+            .dispatch("user/recoverPasswordRoute", this.user)
+            .then((status:any) => {
+                if (status==200) {
                 //this.cosasdelaBD = this.$store.state.example.route;
-                console.log(this.user);
                 this.snackbar=true;
-                this.changePage('Home');
-        });}   else if (this.password2!==this.user.password){
-                    console.log("Datos no validos");
-                    this.snackbarPassword=true;
-                 }  else {
+                //this.changePage('Home'); 
+                } else if (status==204) {
+                  this.snackbarError2=true;
+                }
+             });  
+                }  else {
                             console.log("Datos no validos");
                             this.snackbarError=true;
                          }
                 } 
-    */
+    
 
       changePage(link: string) {
          this.$router.push({ name: link });
@@ -179,6 +192,11 @@ export default class recoverPassword extends Vue {
     };
 
     //////Internationalization//////
+
+    
+    mounted() {
+    this.translate();
+  }
 
     get translator() {
     return this.$store.state.translate.languageTexts;
