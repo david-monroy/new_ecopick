@@ -17,7 +17,6 @@ export default {
   actions: {
     getUser: async (context: any, userId: any) => {
       await userService.getUser(userId).then((response: any) => {
-        console.log(response.data[0]);
         context.commit("setUser", {
           name:
             response.data[0].us_first_name +

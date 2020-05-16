@@ -4,10 +4,12 @@
       <tr class="top">
         <td colspan="3">
           <img src="../assets/page-logo.png" class="logo" />
-          <p class="cell-title">{{ trackingName }} {{ trackingNumber }}</p>
+          <p class="cell-title">{{ trackingName }} #{{ trackingId }}</p>
         </td>
         <td>
-          <div class="qrCode"></div>
+          <div class="qrCode">
+            <QRCode />
+          </div>
         </td>
       </tr>
 
@@ -145,8 +147,12 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { mapState } from "vuex";
 import { Watch } from "vue-property-decorator";
+import QRCode from "../components/QRCode.vue";
 
 @Component({
+  components: {
+    QRCode,
+  },
   computed: {
     ...mapState("invoice", [
       "route",
@@ -160,10 +166,10 @@ import { Watch } from "vue-property-decorator";
 })
 export default class Invoice extends Vue {
   $store: any;
-  route: {};
-  receiver: {};
-  options: string[];
-  packages: {
+  route!: {};
+  receiver!: {};
+  options!: string[];
+  packages!: {
     pa_width: number;
     pa_height: number;
     pa_length: number;
@@ -172,17 +178,17 @@ export default class Invoice extends Vue {
     pa_cost: number;
     characteristic: string;
   }[];
-  discount: number;
-  shipper: {};
+  discount!: number;
+  shipper!: {};
+  trackingId = 99113;
+  userId = 2;
   shipment = {
     purpose: "Online shopping",
   };
-  trackingNumber = "#877456";
-
+  // Keywords
   shipperInformation = "Shipper information";
   receiverInformation = "Receiver information";
   shipmentInformation = "Shipment information";
-  // Keywords
   trackingName = "Tracking ID";
   name = "Name";
   identification = "Identification";
@@ -230,16 +236,13 @@ export default class Invoice extends Vue {
     this.$store.dispatch("invoice/getInvoice", trackingId);
   }
 
-  getUser(userID: string) {
+  getUser(userID: number) {
     this.$store.dispatch("user/getUser", userID);
   }
 
   created() {
-    localStorage.clear();
-    localStorage.setItem("userID", "2");
-    const userID = localStorage.getItem("userID");
-    this.getInvoice(99113);
-    this.getUser(userID);
+    this.getInvoice(this.trackingId);
+    this.getUser(this.userId);
     this.translate();
   }
 
@@ -376,7 +379,6 @@ p {
 }
 
 .qrCode {
-  background-color: black;
   width: 100px;
   height: 100px;
 }
