@@ -2,11 +2,10 @@
   <v-container fluid class="bg" >
 
         <v-row no gutters class="hidden-sm-and-down"> 
-        <v-col cols="12" sm="1"> <a style="color: gray;" @click="changePage('Home')"><v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon> <h4>{{goBack}}</h4></a></v-col>              <v-col ></v-col>
+        <v-col cols="12" sm="10"> <a style="color: gray;" @click="changePage('Home')"><v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon> <h4>{{goBack}}</h4></a></v-col>              <v-col ></v-col>
+         <v-col ><Translate /></v-col>
         </v-row> 
         
-        <v-col ><Translate /></v-col>
-
         <v-row >
 
         <v-col class="hidden-sm-and-down">   </v-col> 
@@ -20,14 +19,16 @@
                 <v-col justify="center" align="center"> 
                     
                     <v-row> 
-                        <v-col> 
+                        <v-col cols="12" sm="2"> 
                             <a style="color: gray;" @click="changePage('Home')"><v-icon class="hidden-md-and-up" style="float: left;">mdi-arrow-left</v-icon> </a>
                         </v-col>
                         <v-col cols="12" sm="8"> 
                             <h3>{{titleRecover}}</h3>
                         </v-col> 
-                        <v-col> 
-                        </v-col>  
+                         
+                        <v-col cols="12" sm="2"></v-col>
+                        
+                        
                     </v-row> 
 
                     <v-row> 
@@ -45,8 +46,8 @@
 
                         <v-col> 
                         <v-text-field
-                            v-model="email"
-                            :rules="emailRules"
+                            v-model="user.email"
+                            :rules="rules.emailRules"
                             :label="emailForm"
                             required
                         ></v-text-field>
@@ -58,7 +59,7 @@
                         </v-col>
 
                         <v-col> 
-                            <v-btn rounded color="#a9ff4d" dark>{{titleRecover}}</v-btn>
+                            <v-btn rounded color="#a9ff4d" @click="searchRoute()" dark>{{titleRecover}}</v-btn>
                         </v-col>
 
                         <v-col> 
@@ -79,9 +80,14 @@
                         <v-col> 
                         </v-col>
                         <v-col> 
-                            <a href="#" style="color:#454545;">Log in</a>
+                            <a href="#" style="color:#454545;">{{loginLink}}</a>
                         </v-col> 
-                        <v-col> 
+                        <v-col > 
+                           <v-row class="hidden-md-and-up"> 
+                             <v-col cols="12" sm="2"> 
+                             <Translate />
+                              </v-col> 
+                          </v-row> 
                         </v-col>  
                     </v-row> 
 
@@ -123,7 +129,7 @@ import {Watch} from "vue-property-decorator";
 import Translate from "../components/Translate.vue";
 
 @Component({ components: { Translate } })
-export default class recoverPassword extends Vue {
+export default class RecoverPassword extends Vue {
 
     $store: any;
     $router: any;
@@ -143,6 +149,10 @@ export default class recoverPassword extends Vue {
                 snack2 = "Please fill in your email"
                 snack3 = "This email isn't associated to an account"
                 close = "Close"
+                emailRule = "E-mail is required"
+                passwordRule = "Password is required"
+                requiredRule = "Field required"
+                loginLink = "Login"
 
     //////Fin variables estaticas//////
 
@@ -176,13 +186,15 @@ export default class recoverPassword extends Vue {
          this.$router.push({ name: link });
   }
 
+
+
     rules: {} = {
         required: (value: string) =>
-        (!!value && value !== "" && value !== undefined) || "Required",
-        passwordRules: [(v: string) =>!!v || "Password is required"],
+        (!!value && value !== "" && value !== undefined) || this.requiredRule,
+        passwordRules: [(v: string) =>!!v || this.passwordRule],
         emailRules: [ 
-            (v:string) => !!v || "E-mail is required",
-            (v:string) => /.+@.+\..+/.test(v) || "E-mail is required",
+            (v:string) => !!v || this.emailRule,
+            (v:string) => /.+@.+\..+/.test(v) || this.emailRule,
         ],
      
     };
@@ -207,7 +219,7 @@ export default class recoverPassword extends Vue {
     this.translator
       .filter(
         (term: { context: string; name: string; translation: string }) => {
-          return term.context == "recoverPassword" || term.context == "general";
+          return term.context == "recoverPassword" || term.context == "general" || term.context == "login" ;
         }
       )
       .forEach(
@@ -222,14 +234,21 @@ export default class recoverPassword extends Vue {
             this.snack1 = term.translation;
           } else if (term.name == "recoverPasswordSnack2") {
             this.snack2 = term.translation;
-          } else if (term.name == "srecoverPasswordnack3") {
+          } else if (term.name == "recoverPasswordSnack3") {
             this.snack3 = term.translation;
           } else if (term.name == "generalGoBack") {
-            this.snack3 = term.translation;
+            this.goBack = term.translation;
           } else if (term.name == "generalClose") {
             this.close = term.translation;
+          } else if (term.name == "generalRequired") {
+            this.requiredRule = term.translation;
+          } else if (term.name == "generalEmailRule") {
+            this.emailRule = term.translation;
+          } else if (term.name == "generalPasswordRule") {
+            this.passwordRule = term.translation;
+          } else if (term.name == "loginButton") {
+            this.loginLink = term.translation;
           } 
-          
         }
       );
   } 
