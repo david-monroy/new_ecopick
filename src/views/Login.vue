@@ -1,8 +1,8 @@
 <template>
     <v-container fluid class="bg" >
         <v-row no gutters class="hidden-sm-and-down"> 
-            <v-col cols="12" sm="1"><a style="color: gray;" @click="changePage('Home')"> <v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon> <h4>{{goBack}}</h4></a></v-col> 
-             <v-col ><Translate /></v-col>
+            <v-col cols="12" sm="1"><a style="color: gray;" @click="changePage('Home')"> <v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon> <h4>{{goBack}}</h4></a></v-col> <v-col ></v-col>
+             <v-col cols="12" sm="1"><Translate /></v-col>
              
 
         </v-row> 
@@ -132,6 +132,11 @@
                             <h5 ma-0>{{noAccount}}<a href="#" style="color:#454545;" @click="changePage('SignUp')">{{loginRegister}}</a></h5>
                         </v-col> 
                         <v-col> 
+                          <v-row class="hidden-md-and-up"> 
+                             <v-col cols="12" sm="2"> 
+                             <Translate />
+                              </v-col> 
+                          </v-row> 
                         </v-col>  
                     </v-row> 
 
@@ -229,19 +234,23 @@ export default class Login extends Vue{
                 //this.cosasdelaBD = this.$store.state.example.route;
                 if (status==200) {
                 this.snackbar=true;
-                localStorage.setItem("Email", this.user.email)
+                localStorage.setItem("Email", this.user.email);
+                //localStorage.setItem("Name",  this.$store.state.user.userLogin[0].us_first_name+" "+this.$store.state.user.userLogin[0].us_last_name);
                 this.changePage('Home');
                 } else if (status==401) {
-                  console.log("hola");
                   this.snackbarError2=true;
                 } else if (status==204) {
                   this.snackbarError3=true;
                 }
-            });
-                 } else {  console.log("Datos no validos");
-                           this.snackbarError=true;
-                            }
-     };
+            }) .catch((status: any) => {
+                if (status==401) {
+                  this.snackbarError2=true;
+                } 
+                 });
+                   } else {  console.log("Datos no validos");
+                                this.snackbarError=true;
+                            } 
+   }
 
       changePage(link: string) {
          this.$router.push({ name: link });

@@ -48,9 +48,12 @@ export default {
           .then((response: any) => {
             context.commit("setLoginRoute", response.data);
             localStorage.setItem("token",response.data.token);
+            /*localStorage.setItem("Name",  response.data.userLogin[0].us_first_name +" "+ response.data.userLogin[0].us_last_name);*/
             resolve(response.status);
-          });
-        // .catch((error: any) => {});
+          })
+        .catch((error: any) => {
+          resolve(error.status);
+       });
      });
     },
    },
