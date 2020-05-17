@@ -80,7 +80,7 @@
                         <v-col> 
                         </v-col>
                         <v-col> 
-                            <a href="#" style="color:#454545;">{{loginLink}}</a>
+                            <a href="" @click="changePage('Login')" style="color:#454545;">{{loginLink}}</a>
                         </v-col> 
                         <v-col > 
                            <v-row class="hidden-md-and-up"> 

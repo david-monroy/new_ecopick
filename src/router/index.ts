@@ -7,7 +7,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Home from "../views/Home.vue";
 
 
-import recoverPassword from "../views/RecoverPassword.vue";
+import RecoverPassword from "../views/RecoverPassword.vue";
 
 Vue.use(VueRouter);
 
@@ -87,7 +87,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/recover",
     name: "RecoverPassword",
-    component: recoverPassword,
+    component: RecoverPassword,
     meta: {
       requiresAuth: false,
       hideBasicComponents: true,
