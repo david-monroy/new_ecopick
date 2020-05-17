@@ -5,7 +5,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 
 //Componentes
 import Home from "../views/Home.vue";
-import Shipment from "../views/Shipment.vue";
+import NewShipment from "../views/NewShipment.vue";
 
 Vue.use(VueRouter);
 
@@ -58,12 +58,13 @@ const routes: Array<RouteConfig> = [
   {
     path: "/shipments/new",
     name: "NewShipment",
-    component: Shipment,
+    component: NewShipment,
     meta: {
       requiresAuth: true,
       hideBasicComponents: false,
     },
   },
+
   {
     path: "/profile",
     name: "Profile",
