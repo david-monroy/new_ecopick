@@ -2,8 +2,8 @@
   <v-container fluid class="bg" >
 
         <v-row no gutters class="hidden-sm-and-down"> 
-            <v-col cols="12" sm="1"> <a style="color: gray;" @click="changePage('Home')"><v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon> <h4>{{goBack}}</h4></a></v-col> 
-             <v-col ><Translate /></v-col>
+            <v-col cols="12" sm="1"> <a style="color: gray;" @click="changePage('Home')"><v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon> <h4>{{goBack}}</h4></a></v-col> <v-col ></v-col>
+             <v-col cols="12" sm="1"><Translate /></v-col>
              
 
         </v-row> 
@@ -28,6 +28,11 @@
                              <h3>{{titlePage}}</h3>
                         </v-col> 
                         <v-col> 
+                          <v-row class="hidden-md-and-up"> 
+                             <v-col cols="12" sm="1"> 
+                             <Translate />
+                              </v-col> 
+                          </v-row>  
                         </v-col>  
                     </v-row> 
                 <v-form ref="form">
@@ -159,7 +164,7 @@
                             <v-select
                             :items="items"
                             :label="languageInput"
-                            v-model="id_language"></v-select>
+                            v-model="nameLanguage"></v-select>
                         </v-col>  
                     </v-row> 
 
@@ -203,7 +208,11 @@
                         </v-col>  
                         <v-col cols="12" sm="6"> 
                            <v-btn rounded color="#a9ff4d" dark @click="searchRoute()">{{buttonSignup}}</v-btn>
-                        </v-col>  
+                        </v-col> 
+                         <v-col> 
+                          
+                        </v-col> 
+                        
                     </v-row> 
                 </v-form>
 
@@ -292,12 +301,20 @@ export default class SignUp extends Vue {
 
     password2= "";
     items: Array<string> = ['English', 'Spanish'];
+    nameLanguage = "";
     snackbar = false;
     snackbarError = false;
     snackbarPassword = false;
     timeout =7000;
 
+   
+
     searchRoute() {
+      if (this.nameLanguage=="English"){
+      this.user.idLanguage = 1;
+    } else if (this.nameLanguage == "Spanish") {
+      this.user.idLanguage = 2;
+    }
         if (this.$refs.form.validate()&&this.password2===this.user.password){
              console.log(this.user);
             this.$store
