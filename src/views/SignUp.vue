@@ -271,9 +271,7 @@ export default class SignUp extends Vue {
                 idLanguage: 1,
                 idStatus: 4,
             };
-                
-    
-    //////Variables estaticas/////
+              
 
                 identification= "Identitificacion"
                 firstName= "First name"
@@ -297,7 +295,6 @@ export default class SignUp extends Vue {
                 snack2 = "User registration error. Try again."
                 snack3 = "Please confirm password correctly"
 
-    //////Fin variables estaticas//////
 
     password2= "";
     items: Array<string> = ['English', 'Spanish'];
@@ -320,11 +317,15 @@ export default class SignUp extends Vue {
             this.$store
             .dispatch("user/createUserRoute", this.user)
             .then(() => {
-                //this.cosasdelaBD = this.$store.state.example.route;
-                console.log(this.user);
                 this.snackbar=true;
-                this.changePage('Home');
-        });}   else if (this.password2!==this.user.password){
+                setTimeout(() => {
+                this.changePage("Login");
+                }, 1000);
+        }).catch(() => {
+            this.snackbarError = true;
+            });
+
+                 } else if (this.password2!==this.user.password){
                     console.log("Datos no validos");
                     this.snackbarPassword=true;
                  }  else {
@@ -354,21 +355,15 @@ export default class SignUp extends Vue {
     };
 
  
-    ////// Date Picker //////
-    /*data*/
     date: string = new Date().toISOString().substr(0, 10);
     menu1 =false;
     menu2 =false;
 
-    /*watch*/
       @Watch("date")
         dateChanged(val: string){
         this.user.birthday= this.formatDate(this.date);
       }; 
     
-
-    /*Methods*/
-
     public formatDate (date: string): string {
         if (!date) return ''
         const [year, month, day] = date.split('-')
@@ -380,11 +375,7 @@ export default class SignUp extends Vue {
         const [month, day, year] = date.split('/')
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
       };
-     
-    ///// End Date Picker /////
 
-
-    //////Internationalization//////
 
      mounted() {
     this.translate();
