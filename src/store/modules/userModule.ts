@@ -1,63 +1,37 @@
 import Vue from "vue";
 import userService from "@/services/userService";
 
-//Aqui se importan los servicios
-
 export default {
   namespaced: true,
   // -----------------------------------------------------------------
   state: {
-    // Aqui van los atributos
     userLogin: [],
   },
   // -----------------------------------------------------------------
   getters: {
-    // getters and computed props
   },
   // -----------------------------------------------------------------
   mutations: {
-    // Aqui se setean los atributos del state
-    setLoginRoute(state: any, newRoute: {}) {   //----OJO pasas un json
+    setLoginRoute(state: any, newRoute: {}) {  
         Vue.set(state, "userLogin", newRoute);
       },
   },
   // -----------------------------------------------------------------
   actions: {
-    // métodos que llamen a un servicio para obtener información y a un mutation para setearla en el state
-    createUserRoute: async function (context: any, user: {}) {
-        await userService
-          .createUserRoute(user)
-          .then((response: any) => {
-            console.log(user);
-          });
-        // .catch((error: any) => {});
-      },
-     validateUserRoute2: async function (context: any, user: {}) {
-        await userService
-          .validateUserRoute(user)
-          .then((response: any) => {
-            console.log(response.data);
-            context.commit("setLoginRoute", response.data);
-            localStorage.set("token",response.data.token)
-          });
-        // .catch((error: any) => {});
-      },
       validateUserRoute: async function (context: any, user: {}) {
         return new Promise((resolve, reject) => {
          userService.validateUserRoute(user)
           .then((response: any) => {
             context.commit("setLoginRoute", response.data);
             localStorage.setItem("token",response.data.token);
-            /*localStorage.setItem("Name",  response.data.userLogin[0].us_first_name +" "+ response.data.userLogin[0].us_last_name);*/
+            console.log(response.data);
+            localStorage.setItem("Name",  response.data.results[0].us_first_name +" "+ response.data.results[0].us_last_name);
             resolve(response.status);
-          })
-        .catch((error: any) => {
-          resolve(error.status);
-       });
+          }) /*.catch((error: any) => {
+             resolve(error.status);
+           });*/
      });
     },
    },
     
 };
-
-//this.$store.dispatch("example/nombre_action").then(() => {}); para llamar a un action

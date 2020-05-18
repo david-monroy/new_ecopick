@@ -162,11 +162,11 @@
         </v-snackbar>
         <v-snackbar v-model="snackbarError2" top:timeout="timeout" color="error">
             {{snack3}}
-             <v-btn dark text @click="snackbarPassword=false">{{close}}</v-btn>
+             <v-btn dark text @click="snackbarError2=false">{{close}}</v-btn>
         </v-snackbar>
         <v-snackbar v-model="snackbarError3" top:timeout="timeout" color="error">
             {{snack4}}
-             <v-btn dark text @click="snackbarPassword=false">{{close}}</v-btn>
+             <v-btn dark text @click="snackbarError3=false">{{close}}</v-btn>
         </v-snackbar>
 
 
@@ -196,8 +196,7 @@ export default class Login extends Vue{
                 password: "",
             };
 
-    //////Variables estaticas/////
-                
+
                 titlePage= "Login"
                 email= "E-mail"
                 password= "Password"
@@ -213,8 +212,7 @@ export default class Login extends Vue{
                 snack4 = "Your user hasn't permission to access or it's disabled."
                 close = "Close"
 
-    //////Fin variables estaticas//////
-
+  
     snackbar = false;
     snackbarError = false;
     snackbarError2 = false;
@@ -235,18 +233,17 @@ export default class Login extends Vue{
                 if (status==200) {
                 this.snackbar=true;
                 localStorage.setItem("Email", this.user.email);
-                //localStorage.setItem("Name",  this.$store.state.user.userLogin[0].us_first_name+" "+this.$store.state.user.userLogin[0].us_last_name);
-                this.changePage('Home');
-                } else if (status==401) {
-                  this.snackbarError2=true;
+                setTimeout(() => {
+                this.changePage("Home");
+                }, 1000);
                 } else if (status==204) {
                   this.snackbarError3=true;
-                }
-            }) .catch((status: any) => {
-                if (status==401) {
+                } else {
                   this.snackbarError2=true;
-                } 
-                 });
+                }
+            }); //.catch((status:any) => {
+                 // this.snackbarError2=true;
+                //});
                    } else {  console.log("Datos no validos");
                                 this.snackbarError=true;
                             } 
@@ -268,10 +265,6 @@ export default class Login extends Vue{
        };
 
     
-
-    
-    //////Internationalization//////
-
   mounted() {
     this.translate();
   }

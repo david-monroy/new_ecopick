@@ -90,20 +90,5 @@ const router = new VueRouter({
   routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//   to.matched.some((route) => {
-//     if (route.meta.requiresAuth) {
-//       const token: any = localStorage.getItem("token");
-//       if (jwt.isExpired(token)) {
-//         localStorage.clear();
-//         next({ path: "/login" });
-//       } else {
-//         next();
-//       }
-//     } else {
-//       next();
-//     }
-//   });
-// });
 
 export default router;

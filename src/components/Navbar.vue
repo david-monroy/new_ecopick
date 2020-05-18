@@ -54,7 +54,7 @@
           <span>
             <a class="icon mr-1" @click="changePage('SignUp')">{{ signUp }}</a>
             /
-            <a class="icon ml-1" @click="changePage('LogIn')">{{ logIn }}</a>
+            <a class="icon ml-1" @click="changePage('Login')">{{ logIn }}</a>
           </span>
         </p>
       </template>
@@ -62,7 +62,7 @@
         <v-list-item @click="changePage('SignUp')">
           <v-list-item-title>{{ signUp }}</v-list-item-title>
         </v-list-item>
-        <v-list-item @click="changePage('LogIn')">
+        <v-list-item @click="changePage('Login')">
           <v-list-item-title>{{ logIn }}</v-list-item-title>
         </v-list-item>
       </v-list>
@@ -85,7 +85,14 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    <Translate />
+    <Translate /> 
+    <v-btn text small class="option font-weight-light mx-2" @click="changePage('Login')">
+       <v-icon>
+       mdi-exit-to-app
+      </v-icon>
+      <p class="hidden-sm-and-down ma-0"> 
+       Sign out</p>
+      </v-btn>
   </v-app-bar>
 </template>
 
@@ -128,6 +135,9 @@ export default class Navbar extends Vue {
   // Metodos
   // // Redirección
   changePage(link: string) {
+    if (link == "Login"){
+      localStorage.clear();
+    }
     this.$router.push({ name: link });
   }
   searchShipment() {
