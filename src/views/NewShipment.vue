@@ -21,7 +21,11 @@
 
             <v-divider></v-divider>
 
-            <v-stepper-step color="teal" step="3">{{ Step3 }}</v-stepper-step>
+            <v-stepper-step color="teal" :complete="e1 > 3" step="3">
+              {{
+              Step3
+              }}
+            </v-stepper-step>
 
             <v-divider></v-divider>
 
@@ -52,7 +56,7 @@
                     </v-col>
                   </v-row>
                   <!--Form 1-->
-                  <form>
+                  <v-form ref="form">
                     <!--User-->
                     <v-row>
                       <v-col cols="3">
@@ -97,9 +101,8 @@
                         ></v-text-field>
                       </v-col>
                     </v-row>
-                    <!--Direction 1-->
+                    <!--Office-->
                     <v-row>
-                      <v-col cols="3"></v-col>
                       <v-col cols="6">
                         <v-select
                           v-model="Office"
@@ -111,7 +114,19 @@
                           required
                         ></v-select>
                       </v-col>
-                      <v-col cols="3"></v-col>
+                      <v-col cols="6">
+                        <v-text-field
+                          class="pb-0 mb-0"
+                          solo
+                          dense
+                          v-model="Purpose"
+                          :error-messages="PurposeErrors"
+                          :label="PurposeLabel"
+                          required
+                          @input="$v.Purpose.$touch()"
+                          @blur="$v.Purpose.$touch()"
+                        ></v-text-field>
+                      </v-col>
                     </v-row>
                     <!--Title 3 -->
                     <v-row>
@@ -284,13 +299,13 @@
                         </v-list-item-group>
                       </v-list>
                     </v-row>
-                  </form>
+                  </v-form>
                 </v-container>
               </v-card>
 
-              <v-btn color="normal" @click="e1 = 2">Continue</v-btn>
+              <v-btn color="normal" @click="e1 = 2">{{ Continuebtn }}</v-btn>
 
-              <v-btn text @click="changePage('Home')">Cancel</v-btn>
+              <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
             </v-stepper-content>
 
             <!--Packages-->
@@ -370,7 +385,7 @@
                           ></v-text-field>
                         </v-col>
                       </v-row>
-                      <!--Costs-->
+                      <!--Characteristics2-->
                       <v-row>
                         <v-col cols="6">
                           <v-select
@@ -383,6 +398,23 @@
                             required
                           ></v-select>
                         </v-col>
+                        <v-col cols="6">
+                          <v-text-field
+                            class="pa-0 ma-0"
+                            solo
+                            dense
+                            v-model="PackageDescription"
+                            :error-messages="PackageDescriptionErrors"
+                            :label="PackageDescriptionLabel"
+                            required
+                            @input="$v.PackageDescription.$touch()"
+                            @blur="$v.PackageDescription.$touch()"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <!--Costs-->
+                      <v-row>
+                        <v-col cols="3"></v-col>
                         <v-col cols="4">
                           <v-text-field
                             class="pa-0 ma-0"
@@ -406,6 +438,7 @@
                             <v-icon class="mr-1 mt-0">mdi-delete</v-icon>
                           </v-btn>
                         </v-col>
+                        <v-col cols="3"></v-col>
                       </v-row>
                     </div>
                     <v-btn color="normal" @click="addPackage">
@@ -416,9 +449,9 @@
                 </v-container>
               </v-card>
 
-              <v-btn color="normal" @click="e1 = 3">Continue</v-btn>
+              <v-btn color="normal" @click="e1 = 3">{{ Continuebtn }}</v-btn>
 
-              <v-btn text @click="changePage('Home')">Cancel</v-btn>
+              <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
             </v-stepper-content>
 
             <!--Costs-->
@@ -429,7 +462,7 @@
                   <!--Títle -->
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
-                    <v-col class="align-center" justify="center">
+                    <v-col cols="6" class="align-center" justify="center">
                       <v-text class="display-2 white--text">{{ NewShipmentTitle }}</v-text>
                     </v-col>
                     <v-col cols="3"></v-col>
@@ -456,19 +489,7 @@
                           @blur="$v.ShipmentCost.$touch()"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="3">
-                        <v-text-field
-                          class="pa-0 ma-0"
-                          solo
-                          dense
-                          v-model="Weight"
-                          suffix="lbs"
-                          :error-messages="WeightErrors"
-                          :label="WeightLabel"
-                          @input="$v.Weight.$touch()"
-                          @blur="$v.Weight.$touch()"
-                        ></v-text-field>
-                      </v-col>
+                      <v-col cols="3"></v-col>
                     </v-row>
                     <!--Packages Cost-->
                     <div v-for="(experience, index) in PackagesDetails" :key="index">
@@ -520,19 +541,17 @@
                 </v-container>
               </v-card>
               <v-row justify="center">
-                <v-btn color="normal" @click="e1 = 4">Continue</v-btn>
+                <v-btn color="normal" @click="e1 = 4">{{ Continuebtn }}</v-btn>
 
-                <v-btn text @click="changePage('Home')">Cancel</v-btn>
+                <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
               </v-row>
             </v-stepper-content>
 
             <!--Confirmation-->
             <v-stepper-content step="4" class="teal">
-              <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+              <v-btn color="normal" @submit="hola">{{ Continuebtn }}</v-btn>
 
-              <v-btn color="normal" @click="e1 = 1">Continue</v-btn>
-
-              <v-btn text @click="changePage('Home')">Cancel</v-btn>
+              <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
@@ -558,7 +577,7 @@ export default class Shipment extends Vue {
 
   Step1 = "Origin/Destination";
   PhoneLabel = "Phone";
-  EmailLabel = "Email (optional)";
+  EmailLabel = "Email";
   ZipCodeLabel = "Zip Code";
   UserName = localStorage.getItem("Name");
   CityLabel = "City";
@@ -569,8 +588,8 @@ export default class Shipment extends Vue {
   OfficeLabel = "Select an office";
   Offices = "";
   Options = ["Opcion1", "Opcion2", "Opcion3", "Opcion4"];
-
   EmailValidation = "Email is incorrect";
+  PurposeLabel = "Purpose of Shipment";
 
   Step2 = "Packages";
   WidthLabel = "Width";
@@ -579,8 +598,9 @@ export default class Shipment extends Vue {
   WeightLabel = "Weight";
   CharacteristicLabel = "Characteristic";
   PackageTotal = "20$";
-  PackageCharacteristics = "";
+  PackageCharacteristics = [];
   AddPackage = "Add another package";
+  PackageDescriptionLabel = "Description";
 
   PackagesDetails = [
     {
@@ -600,6 +620,15 @@ export default class Shipment extends Vue {
 
   Step4 = "Confirmation";
 
+  isValid = true;
+  $refs!: {
+    form: any;
+  };
+
+  Validatebtn = "Validate";
+  Continuebtn = "Continue";
+  Cancelbtn = "Cancel";
+
   rules: {} = {
     required: (value: string) =>
       (!!value && value !== "" && value !== undefined) || "Required",
@@ -609,6 +638,15 @@ export default class Shipment extends Vue {
     ],
   };
 
+  validate() {
+    if (this.$refs.form.validate()) {
+      this.isValid = false;
+      console.log("Correct data");
+    } else {
+      console.log("Invalid Data");
+    }
+  }
+
   changePage(link: string) {
     this.$router.push({ name: link });
   }
@@ -616,6 +654,7 @@ export default class Shipment extends Vue {
   beforemount() {
     this.$store.dispatch("NewShipment/getPackagesCharacteristic").then(() => {
       this.PackageCharacteristics = this.$store.state.NewShipment.characteristics;
+      console.log(this.PackageCharacteristics);
     });
   }
 
@@ -629,10 +668,10 @@ export default class Shipment extends Vue {
     });
   }
 
-  deletePackage(index) {
+  deletePackage(index: number) {
     this.PackagesDetails.splice(index, 1);
   }
-  /*mounted() {
+  mounted() {
     this.translate();
   }
 
@@ -644,23 +683,79 @@ export default class Shipment extends Vue {
     this.translator
       .filter(
         (term: { context: string; name: string; translation: string }) => {
-          return term.context == "general" || term.context == "home";
+          return (
+            term.context == "general" ||
+            term.context == "Shipment" ||
+            term.context == "package"
+          );
         }
       )
       .forEach(
         (term: { context: string; name: string; translation: string }) => {
-          if (term.name == "generalSearch") {
-            this.search = term.translation;
-          } else if (term.name == "homeBanner") {
-            this.banner = term.translation;
-          } else if (term.name == "homeNoticeTitle") {
-            this.noticeTitle = term.translation;
-          } else if (term.name == "homeNoticeText") {
-            this.noticeText = term.translation;
+          if (term.name == "generalName") {
+            this.ReceiverNameLabel = term.translation;
+          } else if (term.name == "generalEmail") {
+            this.EmailLabel = term.translation;
+          } else if (term.name == "generalPhone") {
+            this.PhoneLabel = term.translation;
+          } else if (term.name == "generalOrigin") {
+            this.OriginTitle = term.translation;
+          } else if (term.name == "generalDestination") {
+            this.DestinationTitle = term.translation;
+          } else if (term.name == "generalEmailRule") {
+            this.EmailValidation = term.translation;
+          } else if (term.name == "ShipmentTitle") {
+            this.NewShipmentTitle = term.translation;
+          } else if (term.name == "ShipmentZipCode") {
+            this.ZipCodeLabel = term.translation;
+          } else if (term.name == "ShipmentCity") {
+            this.CityLabel = term.translation;
+          } else if (term.name == "ShipmentDirection1") {
+            this.DirectionLabel1 = term.translation;
+          } else if (term.name == "ShipmentDirection2") {
+            this.DirectionLabel2 = term.translation;
+          } else if (term.name == "ShipmentOfficeSelect") {
+            this.OfficeLabel = term.translation;
+          } else if (term.name == "ShipmentStep1") {
+            this.Step1 = term.translation;
+          } else if (term.name == "ShipmentPurpose") {
+            this.PurposeLabel = term.translation;
+          } else if (term.name == "generalLastName") {
+            this.ReceiverLastNameLabel = term.translation;
+          } else if (term.name == "generalCancelbutton") {
+            this.Cancelbtn = term.translation;
+          } else if (term.name == "generalContinuebutton") {
+            this.Continuebtn = term.translation;
+          } else if (term.name == "generalValidatebutton") {
+            this.Validatebtn = term.translation;
+          } else if (term.name == "packageStep2") {
+            this.Step2 = term.translation;
+          } else if (term.name == "packageWeight") {
+            this.WeightLabel = term.translation;
+          } else if (term.name == "packageCharacteristic") {
+            this.CharacteristicLabel = term.translation;
+          } else if (term.name == "packageWidth") {
+            this.WidthLabel = term.translation;
+          } else if (term.name == "packageHeight") {
+            this.HeightLabel = term.translation;
+          } else if (term.name == "packageLenght") {
+            this.LenghtLabel = term.translation;
+          } else if (term.name == "packageAdd") {
+            this.AddPackage = term.translation;
+          } else if (term.name == "ShipmentStep3") {
+            this.Step3 = term.translation;
+          } else if (term.name == "ShipmentCost") {
+            this.ShipmentCostLabel = term.translation;
+          } else if (term.name == "packageCost") {
+            this.PackageCostLabel = term.translation;
+          } else if (term.name == "ShipmentConfirmation") {
+            this.Step4 = term.translation;
+          } else if (term.name == "packageDescription") {
+            this.PackageDescriptionLabel = term.translation;
           }
         }
       );
-  }*/
+  }
 
   data() {
     return {
