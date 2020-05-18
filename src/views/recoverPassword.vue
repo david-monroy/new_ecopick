@@ -137,10 +137,7 @@ export default class RecoverPassword extends Vue {
      user: {email:string} = {
                 email: "",
             };
-                
-    
-    //////Variables estaticas/////
-
+                    
                 titleRecover= "Recover password"
                 description= "Fill in your email and we'll send you an email to reset your password"
                 emailForm= "E-mail"
@@ -154,9 +151,7 @@ export default class RecoverPassword extends Vue {
                 requiredRule = "Field required"
                 loginLink = "Login"
 
-    //////Fin variables estaticas//////
 
-  
     snackbar = false;
     snackbarError = false;
     snackbarError2 = false;
@@ -168,9 +163,7 @@ export default class RecoverPassword extends Vue {
             .dispatch("user/recoverPasswordRoute", this.user)
             .then((status:any) => {
                 if (status==200) {
-                //this.cosasdelaBD = this.$store.state.example.route;
                 this.snackbar=true;
-                //this.changePage('Home'); 
                 } else if (status==204) {
                   this.snackbarError2=true;
                 }
@@ -203,9 +196,7 @@ export default class RecoverPassword extends Vue {
         form:any;
     };
 
-    //////Internationalization//////
 
-    
     mounted() {
     this.translate();
   }
