@@ -29,7 +29,8 @@ export default {
             resolve(response.status);
           }) /*.catch((error: any) => {
              resolve(error.status);
-           });*/
+           });
+           */
      });
     },
    },
