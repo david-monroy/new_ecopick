@@ -6,25 +6,19 @@
         <v-stepper v-model="e1">
           <v-stepper-header class="light-green accent-1">
             <v-stepper-step color="teal" :complete="e1 > 1" step="1">
-              {{
-              Step1
-              }}
+              {{ Step1 }}
             </v-stepper-step>
 
             <v-divider></v-divider>
 
             <v-stepper-step color="teal" :complete="e1 > 2" step="2">
-              {{
-              Step2
-              }}
+              {{ Step2 }}
             </v-stepper-step>
 
             <v-divider></v-divider>
 
             <v-stepper-step color="teal" :complete="e1 > 3" step="3">
-              {{
-              Step3
-              }}
+              {{ Step3 }}
             </v-stepper-step>
 
             <v-divider></v-divider>
@@ -42,7 +36,9 @@
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
                     <v-col class="align-center" justify="center">
-                      <v-text class="display-2 white--text">{{ NewShipmentTitle }}</v-text>
+                      <v-text class="display-2 white--text">{{
+                        NewShipmentTitle
+                      }}</v-text>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
@@ -52,7 +48,8 @@
                       <v-text
                         class="body-1 font-weight-light align-center white--text"
                         justify="center"
-                      >{{ OriginTitle }}</v-text>
+                        >{{ OriginTitle }}</v-text
+                      >
                     </v-col>
                   </v-row>
                   <!--Form 1-->
@@ -134,7 +131,8 @@
                         <v-text
                           class="body-1 font-weight-light align-center white--text"
                           justify="center"
-                        >{{ DestinationTitle }}</v-text>
+                          >{{ DestinationTitle }}</v-text
+                        >
                       </v-col>
                     </v-row>
                     <!--Receiver -->
@@ -282,7 +280,9 @@
                             >
                               <template v-slot:default="{ active, toggle }">
                                 <v-list-item-content>
-                                  <v-list-item-title v-text="Option"></v-list-item-title>
+                                  <v-list-item-title
+                                    v-text="Option"
+                                  ></v-list-item-title>
                                 </v-list-item-content>
 
                                 <v-list-item-action>
@@ -302,8 +302,12 @@
                   </v-form>
                 </v-container>
               </v-card>
-
-              <v-btn color="normal" @click="e1 = 2">{{ Continuebtn }}</v-btn>
+              <v-btn color="normal" @click="validate" class="ma-1">
+                {{ Validatebtn }}
+              </v-btn>
+              <v-btn color="normal" @click="e1 = 2" :disabled="isValid">
+                {{ Continuebtn }}
+              </v-btn>
 
               <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
             </v-stepper-content>
@@ -317,13 +321,18 @@
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
                     <v-col class="align-center" justify="center">
-                      <v-text class="display-2 white--text">{{ NewShipmentTitle }}</v-text>
+                      <v-text class="display-2 white--text">{{
+                        NewShipmentTitle
+                      }}</v-text>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
                   <!--Form 1-->
                   <form>
-                    <div v-for="(experience, index) in PackagesDetails" :key="index">
+                    <div
+                      v-for="(experience, index) in PackagesDetails"
+                      :key="index"
+                    >
                       <!--Characteristics-->
                       <v-row>
                         <v-col cols="3">
@@ -463,7 +472,9 @@
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
                     <v-col cols="6" class="align-center" justify="center">
-                      <v-text class="display-2 white--text">{{ NewShipmentTitle }}</v-text>
+                      <v-text class="display-2 white--text">{{
+                        NewShipmentTitle
+                      }}</v-text>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
@@ -492,7 +503,10 @@
                       <v-col cols="3"></v-col>
                     </v-row>
                     <!--Packages Cost-->
-                    <div v-for="(experience, index) in PackagesDetails" :key="index">
+                    <div
+                      v-for="(experience, index) in PackagesDetails"
+                      :key="index"
+                    >
                       <v-row>
                         <v-col cols="3"></v-col>
                         <v-col cols="3">
@@ -519,7 +533,9 @@
                     <v-row>
                       <v-col cols="3"></v-col>
                       <v-col cols="3">
-                        <v-subheader class="title font-weight-black">TOTAL</v-subheader>
+                        <v-subheader class="title font-weight-black"
+                          >TOTAL</v-subheader
+                        >
                       </v-col>
                       <v-col cols="3">
                         <v-text-field
