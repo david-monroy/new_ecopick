@@ -26,6 +26,8 @@ export default {
             localStorage.setItem("token",response.data.token);
             console.log(response.data);
             localStorage.setItem("Name",  response.data.results[0].us_first_name +" "+ response.data.results[0].us_last_name);
+            localStorage.setItem("Language",  response.data.results[0].us_fk_language);
+            localStorage.setItem("ID",  response.data.results[0].us_id);
             resolve(response.status);
           }) /*.catch((error: any) => {
              resolve(error.status);
