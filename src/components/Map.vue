@@ -7,12 +7,18 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import { mapState } from "vuex";
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
 
-@Component({})
+@Component({
+  computed: {
+    ...mapState("route", ["route"]),
+  },
+})
 export default class Home extends Vue {
+  route!: [];
   mounted() {
     const map = new mapboxgl.Map({
       container: "map",
@@ -128,6 +134,14 @@ export default class Home extends Vue {
         padding: { top: 50, bottom: 50, left: 30, right: 30 },
       }
     );
+  }
+  getRoute(trackingId: string) {
+    this.$store
+      .dispatch("route/getRoute", trackingId)
+      .then(() => console.log("TERMIN"));
+  }
+  created() {
+    this.getRoute(this.$route.params.id);
   }
 }
 </script>
