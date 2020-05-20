@@ -22,12 +22,13 @@ export default {
         return new Promise((resolve, reject) => {
          userService.validateUserRoute(user)
           .then((response: any) => {
+             if (response.data!==""){
             context.commit("setLoginRoute", response.data);
             localStorage.setItem("token",response.data.token);
-            console.log(response.data);
             localStorage.setItem("Name",  response.data.results[0].us_first_name +" "+ response.data.results[0].us_last_name);
             localStorage.setItem("Language",  response.data.results[0].us_fk_language);
-            localStorage.setItem("ID",  response.data.results[0].us_id);
+            localStorage.setItem("ID",  response.data.results[0].us_id); }
+            console.log(response.data)
             resolve(response.status);
           }) /*.catch((error: any) => {
              resolve(error.status);
