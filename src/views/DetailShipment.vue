@@ -7,14 +7,20 @@
       </v-col>
     </v-row>
     <v-row no-gutters>
-      <v-col class="hidden-sm-and-down"></v-col>
-      <v-col cols="6" md="3"></v-col>
-      <v-col cols="6" md="3">
-        <v-card height="300">
-          <Map />
+      <v-col cols="1" class="hidden-sm-and-down"></v-col>
+      <v-col cols="5" class="hidden-sm-and-down"></v-col>
+      <v-col cols="12" md="5">
+        <v-card height="300" :loading="loadingMap">
+          <Map v-if="routeExists" />
+          <span v-else>
+            <v-card-title>{{ noRoute }}</v-card-title>
+            <v-card-text>{{
+              waitingRoute + " " + shipment.office
+            }}</v-card-text>
+          </span>
         </v-card>
       </v-col>
-      <v-col class="hidden-sm-and-down"></v-col>
+      <v-col cols="1" class="hidden-sm-and-down"></v-col>
     </v-row>
   </v-container>
 </template>
@@ -30,6 +36,13 @@ import Map from "../components/Map.vue";
 })
 export default class DetailShipment extends Vue {
   $route: any;
+  loadingMap = true;
+  routeExists = true;
+  noRoute = "No existe ruta";
+  waitingRoute = "Esperando que el/los paquetes sean entregados en";
+  shipment = {
+    office: "Mr Postel Atlanta",
+  };
   //Modificar este dato con la respuesta de la petición de detalle de envío
   userId = 2;
 
@@ -42,7 +55,15 @@ export default class DetailShipment extends Vue {
   }
 
   getRoute(trackingId: string) {
-    this.$store.dispatch("route/getRoute", trackingId);
+    this.$store
+      .dispatch("shipment/getRoute", trackingId)
+      .then(() => {
+        this.loadingMap = false;
+      })
+      .catch(() => {
+        this.loadingMap = false;
+        this.routeExists = false;
+      });
   }
 
   created() {

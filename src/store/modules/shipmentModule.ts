@@ -1,5 +1,5 @@
 import Vue from "vue";
-import routeService from "../../services/routeService";
+import shipmentService from "../../services/shipmentService";
 
 export default {
   namespaced: true,
@@ -23,12 +23,12 @@ export default {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
     getRoute: async (context: any, trackingId: string) => {
-      await routeService.getRoute(trackingId).then(async (response: any) => {
+      await shipmentService.getRoute(trackingId).then(async (response: any) => {
         const route = response.data;
         context.commit("setRoute", route);
         let latLon;
         for (let i = 0; i < route.length; i++) {
-          latLon = await routeService.getLatLon(
+          latLon = await shipmentService.getLatLon(
             route[i].primaryline + ", " + route[i].city
           );
           route[i].latlon = latLon.data;

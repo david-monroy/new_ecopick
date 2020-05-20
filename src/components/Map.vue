@@ -14,7 +14,7 @@ import moment from "moment";
 
 @Component({
   computed: {
-    ...mapState("route", { route: "mapRoute" }),
+    ...mapState("shipment", { route: "mapRoute" }),
   },
 })
 export default class Map extends Vue {
