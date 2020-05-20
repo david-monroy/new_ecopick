@@ -1,7 +1,5 @@
 <template>
-  <v-container fluid class="pa-0">
-    <div id="map"></div>
-  </v-container>
+  <div id="map"></div>
 </template>
 
 <script lang="ts">
@@ -11,88 +9,83 @@ import { mapState } from "vuex";
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
+import { Watch } from "vue-property-decorator";
+import moment from "moment";
 
 @Component({
   computed: {
-    ...mapState("route", ["route"]),
+    ...mapState("route", { route: "mapRoute" }),
   },
 })
-export default class Home extends Vue {
-  route!: [];
-  mounted() {
+export default class Map extends Vue {
+  route!: [
+    {
+      primaryline: string;
+      date: string;
+      latlon: { lon: number; lat: number };
+    }
+  ];
+
+  @Watch("route")
+  setRoute() {
+    const markers: {
+      type: string;
+      properties: { stop: number; direction: string; date: string };
+      geometry: { type: string; coordinates: number[] };
+    }[] = [];
+    const routeLine: number[][] = [];
+    for (let i = 0; i < this.route.length; i++) {
+      markers.push({
+        type: "Feature",
+        properties: {
+          stop: i + 1,
+          direction: this.route[i].primaryline,
+          date: moment(this.route[i].date).format("YYYY-MM-DD HH:mm:ss"),
+        },
+        geometry: {
+          type: "Point",
+          coordinates: [this.route[i].latlon.lon, this.route[i].latlon.lat],
+        },
+      });
+      routeLine.push([this.route[i].latlon.lon, this.route[i].latlon.lat]);
+    }
+
+    /* MAP CREATION */
     const map = new mapboxgl.Map({
       container: "map",
-      attributionControl: false, //need this to show a compact attribution icon (i) instead of the whole text
+      attributionControl: false,
       style: `${process.env.VUE_APP_LOCATIONIQ_URL_STREETS}?key=${process.env.VUE_APP_LOCATIONIQ_API_KEY}`,
-      zoom: 9,
-      center: [-122.461627, 37.752945],
     });
     map.addControl(
       new mapboxgl.ScaleControl({
         maxWidth: 80,
-        unit: "metric", //imperial for miles
+        unit: "metric",
       })
     );
     const geojson = {
       type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          properties: {
-            message: "Foo",
-            iconSize: [60, 60],
-          },
-          geometry: {
-            type: "Point",
-            coordinates: [-122.487377, 37.772487],
-          },
-        },
-        {
-          type: "Feature",
-          properties: {
-            message: "Bar",
-            iconSize: [50, 50],
-          },
-          geometry: {
-            type: "Point",
-            coordinates: [-122.461627, 37.752945],
-          },
-        },
-        {
-          type: "Feature",
-          properties: {
-            message: "Baz",
-            iconSize: [40, 40],
-          },
-          geometry: {
-            type: "Point",
-            coordinates: [-122.431415, 37.761766],
-          },
-        },
-      ],
+      features: markers,
     };
 
-    const markers: any = [];
-    //Add markers to map
-    //https://www.mapbox.com/mapbox-gl-js/api#marker
+    /* MAP MARKERS */
     geojson.features.forEach(function (marker) {
-      // create a DOM element for the marker
       const el = document.createElement("div");
       el.className = "marker";
+      el.style.padding = "0 0 90px 0";
 
-      //Instead of this click listener, we can attach a popup / infowindow to this marker (see next section)
-      el.addEventListener("click", function () {
-        window.alert(marker.properties.message);
-      });
+      const popup = new mapboxgl.Popup().setHTML(
+        `<b>Stop:</b> ${marker.properties.stop}<br>
+        <b>Direction:</b> ${marker.properties.direction}<br>
+        <b>Date:</b> ${marker.properties.date}`
+      );
 
-      // add marker to map
-      new mapboxgl.Marker(el).setLngLat(marker.geometry.coordinates).addTo(map);
-      markers.push(marker.geometry.coordinates);
+      new mapboxgl.Marker(el)
+        .setLngLat(marker.geometry.coordinates)
+        .setPopup(popup)
+        .addTo(map);
       map.on("load", function () {
         const mapLayer = map.getLayer("route");
-
         if (typeof mapLayer !== "undefined") {
-          // Remove map layer & source.
           map.removeLayer("route").removeSource("route");
         }
         map.addLayer({
@@ -105,11 +98,7 @@ export default class Home extends Vue {
               properties: {},
               geometry: {
                 type: "LineString",
-                coordinates: [
-                  [-122.487377, 37.772487],
-                  [-122.461627, 37.752945],
-                  [-122.431415, 37.761766],
-                ],
+                coordinates: routeLine,
               },
             },
           },
@@ -118,30 +107,21 @@ export default class Home extends Vue {
             "line-cap": "round",
           },
           paint: {
-            "line-color": "#B22222",
-            "line-width": 5,
+            "line-color": "teal",
+            "line-width": 3,
           },
         });
       });
     });
-    console.log(markers);
-    map.fitBounds(
-      [
-        [-122.487377, 37.772487],
-        [-122.431415, 37.761766],
-      ],
-      {
-        padding: { top: 50, bottom: 50, left: 30, right: 30 },
-      }
-    );
-  }
-  getRoute(trackingId: string) {
-    this.$store
-      .dispatch("route/getRoute", trackingId)
-      .then(() => console.log("TERMIN"));
-  }
-  created() {
-    this.getRoute(this.$route.params.id);
+    const bounds = new mapboxgl.LngLatBounds();
+
+    geojson.features.forEach(function (feature) {
+      bounds.extend(feature.geometry.coordinates);
+    });
+
+    map.fitBounds(bounds, {
+      padding: { top: 50, bottom: 10, left: 30, right: 30 },
+    });
   }
 }
 </script>
@@ -159,9 +139,7 @@ export default class Home extends Vue {
   padding-bottom: 20px;
 }
 #map {
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  width: 500px;
+  width: 100%;
+  height: 100%;
 }
 </style>

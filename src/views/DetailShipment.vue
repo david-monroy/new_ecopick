@@ -1,15 +1,20 @@
 <template>
   <v-container fluid class="pa-0">
-    <v-row>
+    <v-row justify-center>
       <v-col md="9" class="hidden-xs-only"></v-col>
       <v-col>
         <ButtonInvoice />
       </v-col>
     </v-row>
     <v-row no-gutters>
-      <v-col>
-        <Map />
+      <v-col class="hidden-sm-and-down"></v-col>
+      <v-col cols="6" md="3"></v-col>
+      <v-col cols="6" md="3">
+        <v-card height="300">
+          <Map />
+        </v-card>
       </v-col>
+      <v-col class="hidden-sm-and-down"></v-col>
     </v-row>
   </v-container>
 </template>
@@ -36,9 +41,14 @@ export default class DetailShipment extends Vue {
     this.$store.dispatch("user/getUser", userID);
   }
 
+  getRoute(trackingId: string) {
+    this.$store.dispatch("route/getRoute", trackingId);
+  }
+
   created() {
-    this.getInvoice(this.$route.params.id);
-    this.getUser(this.userId);
+    // this.getInvoice(this.$route.params.id);
+    this.getRoute(this.$route.params.id);
+    // this.getUser(this.userId);
   }
 }
 </script>
