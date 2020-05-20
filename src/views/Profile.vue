@@ -53,7 +53,7 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                :value="nameTest"
+                                :value="userInfo.firstname"
                                 :rules="[rules.required]"
                                 :error-messages="errorMessages"
                                 :label="firstName"
@@ -65,7 +65,7 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                :value="nameTest"
+                                :value="userInfo.secondname"
                                 :label="secondName"
                                 :placeholder="secondNameP"
                                 disabled
@@ -77,7 +77,7 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                :value="nameTest"
+                                :value="userInfo.lastname"
                                 :rules="[rules.required]"
                                 :label="lastName"
                                 :placeholder="lastName"
@@ -88,7 +88,7 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                :value="nameTest"
+                                :value="userInfo.secondlastname"
                                 :label="secondLastName"
                                 :placeholder="secondLastNameP"
                                 required
@@ -101,7 +101,7 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                :value="nameTest"
+                                :value="userInfo.identification"
                                 :rules="[rules.required]"
                                 :error-messages="errorMessages"
                                 :label="identification"
@@ -113,7 +113,7 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                :value="nameTest"
+                                :value="userInfo.phonenumber"
                                 :rules="[rules.required]"
                                 :error-messages="errorMessages"
                                 :label="phoneNumber"
@@ -129,12 +129,12 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                :value="nameTest"
+                                :value="userInfo.email"
                                 :rules="rules.emailRules"
                                 :error-messages="errorMessages"
                                 :label="email"
                                 :placeholder="email"
-                                required
+                                
                                 disabled
                             ></v-text-field>
                         </v-col>
@@ -142,10 +142,11 @@
                             <v-icon class="mt-5 mr-2" style="float: left;">mdi-calendar</v-icon>
                            
                                     <v-text-field
-                                    :value="nameTest"
+                                    :value="dateInfo"
                                     :label="birthday"
                                     :placeholder="birthday"
-                                    disabled
+                                    disabled 
+                                    required
                                     ></v-text-field>
                                 
                         </v-col>  
@@ -155,7 +156,7 @@
                         <v-col> 
                             <v-text-field
                                 ref="name"
-                                :value="nameTest"
+                                :value="userInfo.password"
                                 :rules="[rules.required]"
                                 :error-messages="errorMessages"
                                 :label="password"
@@ -169,7 +170,8 @@
                         </v-col>
                         <v-col> 
                              <v-text-field
-                                    :value="nameTest"
+                                    ref="name"
+                                    :value="nameLanguage"
                                     :label="languageInput"
                                     :placeholder="languageInput"
                                     disabled
@@ -221,28 +223,27 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import {Watch} from "vue-property-decorator";
+import { mapState } from "vuex";
 import Translate from "../components/Translate.vue";
-@Component({ components: { Translate } })
-export default class SignUp extends Vue {
+
+@Component({ 
+  components: { 
+    Translate,
+   },
+  computed: {
+    ...mapState("user", { userInfo: "userData" }),
+  },
+})
+
+export default class Profile extends Vue {
+
     $store: any;
     $router: any;
-    user: {identification: string, firstName: string, secondName: string,
-    lastName:string, secondLastName: string, birthday:string, email:string, password: string
-    phoneNumber:string, charge: string, idLanguage: number, idStatus: number} = {
-                identification: "",
-                firstName: "",
-                secondName: "",
-                lastName: "",
-                secondLastName: "",
-                birthday: "",
-                email: "",
-                password: "",
-                phoneNumber: "",
-                charge:  "Client",
-                idLanguage: 1,
-                idStatus: 4,
-            };
-              
+    userInfo!: { firstname: string, secondname: string,
+    lastname:string, secondlastname: string,phonenumber:string, identification: string,birthday:string, language: number, email:string, password: string
+    };
+
+
                 identification= "Identitificacion"
                 firstName= "First name"
                 secondName= "Second name"
@@ -273,42 +274,27 @@ export default class SignUp extends Vue {
     snackbarPassword = false;
     timeout =7000;
     nameTest = "Vanessa";
-
-    searchRoute() {
-      if (this.nameLanguage=="English"){
-      this.user.idLanguage = 1;
-    } else if (this.nameLanguage == "Spanish") {
-      this.user.idLanguage = 2;
-    }
-        if (this.$refs.form.validate()&&this.password2===this.user.password){
-             console.log(this.user);
-            this.$store
-            .dispatch("user/createUserRoute", this.user)
-            .then(() => {
-                this.snackbar=true;
-                setTimeout(() => {
-                this.changePage("Login");
-                }, 1000);
-        }).catch(() => {
-            this.snackbarError = true;
-            });
-                 } else if (this.password2!==this.user.password){
-                    console.log("Datos no validos");
-                    this.snackbarPassword=true;
-                 }  else {
-                            console.log("Datos no validos");
-                            this.snackbarError=true;
-                         }
-                } 
+    IDuser = localStorage.getItem("ID");
+    languageName = "";
+    dateInfo = "";
 
          getUserData(userId: number) {
-         this.$store.dispatch("user/getUserData", userId);
-         
+         this.$store.dispatch("user/getUserData", userId).then(() => {
+            if (this.userInfo.language===1){
+              this.nameLanguage="English";
+            } else if (this.userInfo.language===2){ 
+              this.nameLanguage="Español";
+            } 
+            })
          }
+          created() {
+            this.getUserData(parseInt(this.IDuser!));
+          }
     
       changePage(link: string) {
          this.$router.push({ name: link });
-  }
+       }
+
     rules: {} = {
         required: (value: string) =>
         (!!value && value !== "" && value !== undefined) || "Required",
@@ -323,26 +309,6 @@ export default class SignUp extends Vue {
         form:any;
     };
  
-    date: string = new Date().toISOString().substr(0, 10);
-    menu1 =false;
-    menu2 =false;
-      @Watch("date")
-        dateChanged(val: string){
-        this.user.birthday= this.formatDate(this.date);
-      }; 
-    
-    public formatDate (date: string): string {
-        if (!date) return ''
-        const [year, month, day] = date.split('-')
-        return `${month}/${day}/${year}`
-      };
-    public parseDate (date: string): string {
-        if (!date) return ''
-        const [month, day, year] = date.split('/')
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-      };
-
-
      mounted() {
     this.translate();
   }
@@ -355,7 +321,7 @@ export default class SignUp extends Vue {
     this.translator
       .filter(
         (term: { context: string; name: string; translation: string }) => {
-          return term.context == "signup" || term.context == "general";
+          return term.context == "signup" || term.context == "general" || term.context == "profile";
         }
       )
       .forEach(
@@ -392,7 +358,7 @@ export default class SignUp extends Vue {
             this.buttonSignup = term.translation;
           } else if (term.name == "signupTermCondition") {
             this.termCondition = term.translation;
-          } else if (term.name == "signupTitlePage") {
+          } else if (term.name == "profileTitlePage") {
             this.titlePage = term.translation;
           } else if (term.name == "signupDateHint") {
             this.dateHint = term.translation;
@@ -415,6 +381,7 @@ export default class SignUp extends Vue {
 .bg {
         /* background-image: url('../assets/bg-login.jpg');*/
          min-height:100%;
+         background-color: #f7f7f7;
          background-size:cover;
     }
 .clickable {

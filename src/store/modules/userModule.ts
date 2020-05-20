@@ -40,7 +40,7 @@ export default {
         });
       });
     },
-    getUserData: async function (context: any, userId: any) {
+    getUserData: async function (context: any, userId: number) {
       await userService
         .getUser(userId)
         .then((response: any) => {
@@ -49,7 +49,7 @@ export default {
             secondname: response.data[0].us_second_name ,
             lastname: response.data[0].us_last_name,
             secondlastname: response.data[0].us_second_last_name,
-            phoneNumber: response.data[0].us_phone_number,
+            phonenumber: response.data[0].us_phone_number,
             identification: response.data[0].us_identification,
             birthday: response.data[0].us_birthday,
             language: response.data[0].us_fk_language,
