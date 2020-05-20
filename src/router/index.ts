@@ -57,7 +57,7 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    path: "/shipments/new",
+    path: "/shipment/new",
     name: "NewShipment",
     component: NewShipment,
     meta: {

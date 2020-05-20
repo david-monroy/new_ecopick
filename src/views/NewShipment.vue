@@ -6,19 +6,25 @@
         <v-stepper v-model="e1">
           <v-stepper-header class="light-green accent-1">
             <v-stepper-step color="teal" :complete="e1 > 1" step="1">
-              {{ Step1 }}
+              {{
+              Step1
+              }}
             </v-stepper-step>
 
             <v-divider></v-divider>
 
             <v-stepper-step color="teal" :complete="e1 > 2" step="2">
-              {{ Step2 }}
+              {{
+              Step2
+              }}
             </v-stepper-step>
 
             <v-divider></v-divider>
 
             <v-stepper-step color="teal" :complete="e1 > 3" step="3">
-              {{ Step3 }}
+              {{
+              Step3
+              }}
             </v-stepper-step>
 
             <v-divider></v-divider>
@@ -36,103 +42,19 @@
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
                     <v-col class="align-center" justify="center">
-                      <v-text class="display-2 white--text">{{
-                        NewShipmentTitle
-                      }}</v-text>
+                      <v-text class="display-2 white--text">{{ NewShipmentTitle }}</v-text>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
-                  <!--Title 2 -->
-                  <v-row>
-                    <v-col>
-                      <v-text
-                        class="body-1 font-weight-light align-center white--text"
-                        justify="center"
-                        >{{ OriginTitle }}</v-text
-                      >
-                    </v-col>
-                  </v-row>
                   <!--Form 1-->
                   <v-form ref="form">
-                    <!--User-->
-                    <v-row>
-                      <v-col cols="3">
-                        <v-text-field
-                          class="pb-0 mb-0"
-                          solo
-                          dense
-                          v-model="UserName"
-                          :error-messages="UserNameErrors"
-                          disabled
-                          :label="UserName"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="4">
-                        <v-text-field
-                          class="pa-0 ma-0"
-                          solo
-                          dense
-                          v-model="OrPhone"
-                          :error-messages="OrPhoneErrors"
-                          color="white"
-                          :label="PhoneLabel"
-                          type="number"
-                          counter="10"
-                          required
-                          @input="$v.OrPhone.$touch()"
-                          @blur="$v.OrPhone.$touch()"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="5">
-                        <v-text-field
-                          class="pa-0 ma-0"
-                          solo
-                          dense
-                          v-model="OrEmail"
-                          :rules="rules.emailRules"
-                          :error-messages="OrEmailErrors"
-                          color="white"
-                          :label="EmailLabel"
-                          @input="$v.OrEmail.$touch()"
-                          @blur="$v.OrEmail.$touch()"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <!--Office-->
-                    <v-row>
-                      <v-col cols="6">
-                        <v-select
-                          v-model="Office"
-                          solo
-                          dense
-                          :items="Offices"
-                          :rules="[(v) => !!v || 'Item is required']"
-                          :label="OfficeLabel"
-                          required
-                        ></v-select>
-                      </v-col>
-                      <v-col cols="6">
-                        <v-text-field
-                          class="pb-0 mb-0"
-                          solo
-                          dense
-                          v-model="Purpose"
-                          :error-messages="PurposeErrors"
-                          :label="PurposeLabel"
-                          required
-                          @input="$v.Purpose.$touch()"
-                          @blur="$v.Purpose.$touch()"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
                     <!--Title 3 -->
                     <v-row>
                       <v-col>
                         <v-text
                           class="body-1 font-weight-light align-center white--text"
                           justify="center"
-                          >{{ DestinationTitle }}</v-text
-                        >
+                        >{{ DestinationTitle }}</v-text>
                       </v-col>
                     </v-row>
                     <!--Receiver -->
@@ -142,12 +64,10 @@
                           class="pa-0 ma-0"
                           solo
                           dense
-                          v-model="ReceiverName"
-                          :error-messages="ReceiverNameErrors"
+                          v-model="Order.receiver.firstName"
+                          :rules="rules.item"
                           :label="ReceiverNameLabel"
                           required
-                          @input="$v.ReceiverName.$touch()"
-                          @blur="$v.ReceiverName.$touch()"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="4">
@@ -155,8 +75,8 @@
                           class="pa-0 ma-0"
                           solo
                           dense
-                          v-model="ReceiverLastName"
-                          :error-messages="ReceiverLastNameErrors"
+                          v-model="Order.receiver.lastName"
+                          :rules="rules.item"
                           :label="ReceiverLastNameLabel"
                           required
                           @input="$v.ReceiverLastName.$touch()"
@@ -168,12 +88,10 @@
                           class="pa-0 ma-0"
                           solo
                           dense
-                          v-model="ReceiverID"
-                          :error-messages="ReceiverIDErrors"
+                          v-model="Order.receiver.identification"
+                          :rules="rules.numericitem"
                           label="ID"
                           required
-                          @input="$v.ReceiverID.$touch()"
-                          @blur="$v.ReceiverID.$touch()"
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -184,14 +102,12 @@
                           class="pa-0 ma-0"
                           solo
                           dense
-                          v-model="OrPhone"
-                          :error-messages="OrPhoneErrors"
+                          v-model="Order.receiver.phoneNumber"
+                          :rules="rules.PhoneRules"
                           :label="PhoneLabel"
                           required
                           type="number"
                           counter="10"
-                          @input="$v.OrPhone.$touch()"
-                          @blur="$v.OrPhone.$touch()"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="8">
@@ -199,43 +115,47 @@
                           class="pa-0 ma-0"
                           solo
                           dense
-                          v-model="OrEmail"
+                          v-model="Order.receiver.email"
                           :rules="rules.emailRules"
-                          :error-messages="OrEmailErrors"
                           :label="EmailLabel"
-                          @input="$v.OrEmail.$touch()"
-                          @blur="$v.OrEmail.$touch()"
                         ></v-text-field>
                       </v-col>
                     </v-row>
                     <!--Direction 3 -->
                     <v-row>
-                      <v-col cols="6">
+                      <v-col cols="4">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
                           dense
-                          v-model="OrZipCode"
-                          :error-messages="OrZipCodeErrors"
+                          v-model="Order.direction.zipcode"
+                          :rules="rules.ZipCodeRules"
                           :label="ZipCodeLabel"
                           required
                           type="number"
                           counter="5"
-                          @input="$v.OrZipCode.$touch()"
-                          @blur="$v.OrZipCode.$touch()"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="6">
+                      <v-col cols="4">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
                           dense
-                          v-model="OrCity"
-                          :error-messages="OrCityErrors"
+                          v-model="Order.direction.city"
+                          :rules="rules.item"
                           :label="CityLabel"
                           required
-                          @input="$v.OrCity.$touch()"
-                          @blur="$v.OrCity.$touch()"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="4">
+                        <v-text-field
+                          class="pa-0 ma-0"
+                          solo
+                          dense
+                          v-model="Order.direction.state"
+                          :rules="rules.item"
+                          :label="StateLabel"
+                          required
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -246,12 +166,10 @@
                           class="pa-0 ma-0"
                           solo
                           dense
-                          v-model="OrDirection"
-                          :error-messages="OrDirectionErrors"
+                          v-model="Order.direction.primaryLine"
+                          :rules="rules.item"
                           :label="DirectionLabel1"
                           required
-                          @input="$v.OrDirection.$touch()"
-                          @blur="$v.OrDirection.$touch()"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6">
@@ -259,55 +177,75 @@
                           class="pa-0 ma-0"
                           solo
                           dense
-                          v-model="OrDirection2"
-                          :error-messages="OrDirection2Errors"
+                          v-model="Order.direction.secondaryLine"
+                          :rules="rules.item"
                           :label="DirectionLabel2"
                           required
-                          @input="$v.OrDirection2.$touch()"
-                          @blur="$v.OrDirection2.$touch()"
                         ></v-text-field>
                       </v-col>
                     </v-row>
                     <!--Options-->
                     <v-row>
-                      <v-list dense>
-                        <v-list-item-group v-model="model" multiple>
-                          <template v-for="(Option, i) in Options">
-                            <v-list-item
-                              :key="`item-${i}`"
-                              :value="item"
-                              active-class="teal--text text--accent-4"
-                            >
-                              <template v-slot:default="{ active, toggle }">
-                                <v-list-item-content>
-                                  <v-list-item-title
-                                    v-text="Option"
-                                  ></v-list-item-title>
-                                </v-list-item-content>
+                      <v-col cols="6">
+                        <v-list dense>
+                          <v-list-item-group v-model="Order.options.option" multiple>
+                            <template v-for="option in options">
+                              <v-list-item
+                                :key="option.op_id"
+                                :value="option.op_name"
+                                active-class="teal--text text--accent-4"
+                              >
+                                <template v-slot:default="{ active, toggle }">
+                                  <v-list-item-content>
+                                    <v-list-item-title v-text="option.op_name"></v-list-item-title>
+                                  </v-list-item-content>
 
-                                <v-list-item-action>
-                                  <v-checkbox
-                                    :input-value="active"
-                                    :true-value="Option"
-                                    color="teal accent-4"
-                                    @click="toggle"
-                                  ></v-checkbox>
-                                </v-list-item-action>
-                              </template>
-                            </v-list-item>
-                          </template>
-                        </v-list-item-group>
-                      </v-list>
+                                  <v-list-item-action>
+                                    <v-checkbox
+                                      :input-value="active"
+                                      :true-value="option"
+                                      color="teal accent-4"
+                                      @click="toggle"
+                                    ></v-checkbox>
+                                  </v-list-item-action>
+                                </template>
+                              </v-list-item>
+                            </template>
+                          </v-list-item-group>
+                        </v-list>
+                      </v-col>
+
+                      <v-col cols="6">
+                        <!--Office-->
+                        <v-row>
+                          <v-select
+                            v-model="Order.shipment.office"
+                            solo
+                            dense
+                            :items="offices"
+                            :rules="rules.item"
+                            item-text="of_name"
+                            item-value="of_id"
+                            :label="OfficeLabel"
+                            required
+                          ></v-select>
+                        </v-row>
+                        <v-row>
+                          <v-text-field
+                            class="pb-0 mb-0"
+                            solo
+                            dense
+                            v-model="Order.shipment.purpose"
+                            :label="PurposeLabel"
+                            require
+                          ></v-text-field>
+                        </v-row>
+                      </v-col>
                     </v-row>
                   </v-form>
                 </v-container>
               </v-card>
-              <v-btn color="normal" @click="validate" class="ma-1">
-                {{ Validatebtn }}
-              </v-btn>
-              <v-btn color="normal" @click="e1 = 2" :disabled="isValid">
-                {{ Continuebtn }}
-              </v-btn>
+              <v-btn color="normal" @click="e1 = 2">{{ Continuebtn }}</v-btn>
 
               <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
             </v-stepper-content>
@@ -321,18 +259,13 @@
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
                     <v-col class="align-center" justify="center">
-                      <v-text class="display-2 white--text">{{
-                        NewShipmentTitle
-                      }}</v-text>
+                      <v-text class="display-2 white--text">{{ NewShipmentTitle }}</v-text>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
                   <!--Form 1-->
-                  <form>
-                    <div
-                      v-for="(experience, index) in PackagesDetails"
-                      :key="index"
-                    >
+                  <v-form ref="form">
+                    <div v-for="(experience, index) in PackagesDetails" :key="index">
                       <!--Characteristics-->
                       <v-row>
                         <v-col cols="3">
@@ -340,14 +273,12 @@
                             class="pb-0 mb-0"
                             solo
                             dense
-                            v-model="Width"
+                            v-model="Order.packages.width"
                             suffix="cm"
-                            :error-messages="WidthErrors"
+                            :rules="rules.numericitem"
                             required
                             type="number"
                             :label="WidthLabel"
-                            @input="$v.Width.$touch()"
-                            @blur="$v.Width.$touch()"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="3">
@@ -355,14 +286,12 @@
                             class="pa-0 ma-0"
                             solo
                             dense
-                            v-model="Height"
+                            v-model="Order.packages.height"
                             suffix="cm"
-                            :error-messages="HeightErrors"
+                            :rules="rules.numericitem"
                             :label="HeightLabel"
                             type="number"
                             required
-                            @input="$v.Height.$touch()"
-                            @blur="$v.Height.$touch()"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="3">
@@ -370,13 +299,12 @@
                             class="pa-0 ma-0"
                             solo
                             dense
-                            v-model="Lenght"
+                            v-model="Order.packages.lenght"
                             suffix="cm"
                             required
-                            :error-messages="LenghtErrors"
+                            type="number"
+                            :rules="rules.numericitem"
                             :label="LenghtLabel"
-                            @input="$v.Lenght.$touch()"
-                            @blur="$v.Lenght.$touch()"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="3">
@@ -384,13 +312,12 @@
                             class="pa-0 ma-0"
                             solo
                             dense
-                            v-model="Weight"
+                            v-model="Order.packages.weight"
                             suffix="lbs"
-                            requi
-                            :error-messages="WeightErrors"
+                            required
+                            type="number"
+                            :rules="rules.numericitem"
                             :label="WeightLabel"
-                            @input="$v.Weight.$touch()"
-                            @blur="$v.Weight.$touch()"
                           ></v-text-field>
                         </v-col>
                       </v-row>
@@ -398,11 +325,12 @@
                       <v-row>
                         <v-col cols="6">
                           <v-select
-                            v-model="Characteristic"
+                            v-model="Order.packages.characteristic"
                             solo
                             dense
-                            :items="PackageCharacteristics"
-                            :rules="[(v) => !!v || 'Item is required']"
+                            :items="characteristics"
+                            item-text="ch_name"
+                            item-value="ch_id"
                             :label="CharacteristicLabel"
                             required
                           ></v-select>
@@ -412,12 +340,9 @@
                             class="pa-0 ma-0"
                             solo
                             dense
-                            v-model="PackageDescription"
-                            :error-messages="PackageDescriptionErrors"
+                            v-model="Order.packages.description"
                             :label="PackageDescriptionLabel"
                             required
-                            @input="$v.PackageDescription.$touch()"
-                            @blur="$v.PackageDescription.$touch()"
                           ></v-text-field>
                         </v-col>
                       </v-row>
@@ -429,8 +354,7 @@
                             class="pa-0 ma-0"
                             solo
                             dense
-                            v-model="PackageCost"
-                            :error-messages="PackageCostErrors"
+                            v-model="Order.packages.cost"
                             :label="PackageTotal"
                             disabled
                             @input="$v.PackageCost.$touch()"
@@ -454,11 +378,15 @@
                       <v-icon class="mr-1 mt-0">mdi-plus</v-icon>
                       <p class="mt-3">{{ AddPackage }}</p>
                     </v-btn>
-                  </form>
+                  </v-form>
                 </v-container>
               </v-card>
 
-              <v-btn color="normal" @click="e1 = 3">{{ Continuebtn }}</v-btn>
+              <v-btn color="normal" @click="validate()">
+                {{
+                Continuebtn
+                }}
+              </v-btn>
 
               <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
             </v-stepper-content>
@@ -472,14 +400,35 @@
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
                     <v-col cols="6" class="align-center" justify="center">
-                      <v-text class="display-2 white--text">{{
-                        NewShipmentTitle
-                      }}</v-text>
+                      <v-text class="display-2 white--text">{{ NewShipmentTitle }}</v-text>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
                   <!--Form 1-->
                   <form>
+                    
+                    <!--Packages Cost-->
+                    <div v-for="(experience, index) in PackagesDetails" :key="index">
+                      <v-row>
+                        <v-col cols="3"></v-col>
+                        <v-col cols="3">
+                          <v-subheader>{{ PackageCostLabel }}</v-subheader>
+                        </v-col>
+                        <v-col cols="3">
+                          <v-text-field
+                            class="pa-0 ma-0"
+                            solo
+                            dense
+                            v-model="Order.packages.cost"
+                            disabled
+                            suffix="$"
+                            :label="PackageTotal"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="3"></v-col>
+                      </v-row>
+                    </div>
+                    <v-divider></v-divider>
                     <!--Ship-->
                     <v-row>
                       <v-col cols="3"></v-col>
@@ -494,61 +443,36 @@
                           v-model="ShipmentCost"
                           disabled
                           suffix="$"
-                          :error-messages="ShipmentCostErrors"
                           :label="ShipmentCost"
-                          @input="$v.ShipmentCost.$touch()"
-                          @blur="$v.ShipmentCost.$touch()"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="3"></v-col>
+                      <v-col cols="3">
+                        <v-select
+                          v-model="Order.discount"
+                          solo
+                          dense
+                          :items="discounts"
+                          item-value="di_id"
+                          item-text="di_name"
+                          :label="DiscountLabel"
+                        ></v-select>
+                      </v-col>
                     </v-row>
-                    <!--Packages Cost-->
-                    <div
-                      v-for="(experience, index) in PackagesDetails"
-                      :key="index"
-                    >
-                      <v-row>
-                        <v-col cols="3"></v-col>
-                        <v-col cols="3">
-                          <v-subheader>{{ PackageCostLabel }}</v-subheader>
-                        </v-col>
-                        <v-col cols="3">
-                          <v-text-field
-                            class="pa-0 ma-0"
-                            solo
-                            dense
-                            v-model="PackageCost"
-                            disabled
-                            suffix="$"
-                            :error-messages="PackageCostErrors"
-                            :label="PackageTotal"
-                            @input="$v.PackageCost.$touch()"
-                            @blur="$v.PackageCost.$touch()"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="3"></v-col>
-                      </v-row>
-                    </div>
-                    <v-divider></v-divider>
+                    <!--Total-->
                     <v-row>
                       <v-col cols="3"></v-col>
                       <v-col cols="3">
-                        <v-subheader class="title font-weight-black"
-                          >TOTAL</v-subheader
-                        >
+                        <v-subheader class="title font-weight-black">TOTAL</v-subheader>
                       </v-col>
                       <v-col cols="3">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
                           dense
-                          v-model="TotalShipment"
+                          v-model="Order.shipment.total"
                           disabled
                           suffix="$"
-                          :error-messages="TotalShipmentErrors"
                           :label="TotalShipment"
-                          @input="$v.TotalShipment.$touch()"
-                          @blur="$v.TotalShipment.$touch()"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="3"></v-col>
@@ -565,7 +489,11 @@
 
             <!--Confirmation-->
             <v-stepper-content step="4" class="teal">
-              <v-btn color="normal" @submit="hola">{{ Continuebtn }}</v-btn>
+              <v-btn color="normal" @click="validate()">
+                {{
+                Continuebtn
+                }}
+              </v-btn>
 
               <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
             </v-stepper-content>
@@ -581,11 +509,135 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Watch } from "vue-property-decorator";
+import { mapState } from "vuex";
 
-@Component({})
+@Component({
+  components: {},
+  computed: {
+    ...mapState("NewShipment", [
+      "characteristics",
+      "options",
+      "offices",
+      "discounts",
+    ]),
+  },
+})
 export default class Shipment extends Vue {
   $store: any;
   $router: any;
+  data() {
+    return {
+      e1: 1,
+    };
+  }
+  e1 = 1;
+
+  characteristics!: {
+    ch_id: number;
+    ch_name: string;
+    ch_charge: number;
+    ch_charge_parameter: string;
+  }[];
+
+  options!: {
+    op_id: number;
+    op_name: string;
+    op_charge: number;
+    op_charge_parameter: string;
+  }[];
+
+  offices!: {
+    of_id: number;
+    of_name: string;
+    of_fk_direction: number;
+    of_fk_status: number;
+  }[];
+
+  discounts!: {
+    di_id: number;
+    di_name: string;
+    di_percentage: number;
+  }[];
+
+  Order: {
+    receiver: {
+      identification: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      phoneNumber: string;
+    };
+    direction: {
+      zipCode: number;
+      city: string;
+      state: string;
+      country: string;
+      primaryLine: string;
+      secondaryLine: string;
+    };
+    shipment: {
+      date: string;
+      total: number;
+      office: number;
+      user: number;
+      purpose: string;
+    };
+    packages: {
+      width: number;
+      height: number;
+      lenght: number;
+      weight: number;
+      cost: number;
+      characteristic: number;
+      description: string;
+    }[];
+    options: {
+      option: number;
+    }[];
+    discount: number;
+  } = {
+    receiver: {
+      identification: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+    },
+    direction: {
+      zipCode: 0,
+      city: "",
+      state: "",
+      country: "",
+      primaryLine: "",
+      secondaryLine: "",
+    },
+    shipment: {
+      date: "",
+      total: 0,
+      office: 0,
+      user: 0,
+      purpose: "",
+    },
+    packages: [
+      {
+        width: 1,
+        height: 1,
+        lenght: 1,
+        weight: 1,
+        cost: 1,
+        characteristic: 1,
+        description: "",
+      },
+    ],
+    options: [
+      {
+        option: 0,
+      },
+    ],
+    discount: 0,
+  };
+
+  UserName = localStorage.getItem("Name");
 
   NewShipmentTitle = "Your Order";
   OriginTitle = "ORIGIN";
@@ -595,15 +647,15 @@ export default class Shipment extends Vue {
   PhoneLabel = "Phone";
   EmailLabel = "Email";
   ZipCodeLabel = "Zip Code";
-  UserName = localStorage.getItem("Name");
   CityLabel = "City";
+  StateLabel = "State";
   DirectionLabel1 = "Address Line";
   DirectionLabel2 = "Address Line (cont)";
   ReceiverNameLabel = "Name";
   ReceiverLastNameLabel = "Last Name";
-  OfficeLabel = "Select an office";
+  OfficeLabel = "Select an origin office";
   Offices = "";
-  Options = ["Opcion1", "Opcion2", "Opcion3", "Opcion4"];
+
   EmailValidation = "Email is incorrect";
   PurposeLabel = "Purpose of Shipment";
 
@@ -618,6 +670,22 @@ export default class Shipment extends Vue {
   AddPackage = "Add another package";
   PackageDescriptionLabel = "Description";
 
+  Step3 = "Costs";
+  ShipmentCostLabel = "Ship Cost";
+  ShipmentCost = "0";
+  PackageCostLabel = "Package 1";
+  TotalShipment = "100";
+  DiscountLabel = "Select one of your discounts";
+
+  Step4 = "Confirmation";
+
+  Continuebtn = "Continue";
+  Cancelbtn = "Cancel";
+  ItemValidation = "This Item is required";
+  ZipCodeValidation = "The zip code must be 5 digits";
+  PhoneValidation = "The phone must be 10 digits";
+  ZeroValidation = "Zero is not valid data";
+
   PackagesDetails = [
     {
       width: "",
@@ -628,23 +696,6 @@ export default class Shipment extends Vue {
     },
   ];
 
-  Step3 = "Costs";
-  ShipmentCostLabel = "Ship Cost";
-  ShipmentCost = "0";
-  PackageCostLabel = "Package 1";
-  TotalShipment = "100";
-
-  Step4 = "Confirmation";
-
-  isValid = true;
-  $refs!: {
-    form: any;
-  };
-
-  Validatebtn = "Validate";
-  Continuebtn = "Continue";
-  Cancelbtn = "Cancel";
-
   rules: {} = {
     required: (value: string) =>
       (!!value && value !== "" && value !== undefined) || "Required",
@@ -652,12 +703,50 @@ export default class Shipment extends Vue {
       (v: string) => !!v || this.EmailValidation,
       (v: string) => /.+@.+\..+/.test(v) || this.EmailValidation,
     ],
+    item: [(v: string) => !!v || this.ItemValidation],
+    numericitem: [
+      (v: number) => !!v || this.ItemValidation,
+      (v: number) => v > 0 || this.ZeroValidation,
+    ],
+    ZipCodeRules: [
+      (v: number) => !!v || this.ItemValidation,
+      (v: number) => (v > 9999 && v < 99999) || this.ZipCodeValidation,
+    ],
+    PhoneRules: [
+      (v: number) => !!v || this.ItemValidation,
+      (v: number) => (v > 999999999 && v < 9999999999) || this.PhoneValidation,
+    ],
   };
+
+  $refs!: {
+    form: any;
+  };
+
+  beforeMount() {
+    this.$store.dispatch("NewShipment/getCharacteristics").then(() => {
+      this.characteristics = this.$store.state.NewShipment.characteristics;
+      console.log(this.characteristics);
+    });
+    this.$store.dispatch("NewShipment/getOptions").then(() => {
+      this.options = this.$store.state.NewShipment.options;
+      console.log(this.options);
+    });
+    this.$store.dispatch("NewShipment/getOffices").then(() => {
+      this.offices = this.$store.state.NewShipment.offices;
+      console.log("offices", this.offices);
+    });
+    this.$store.dispatch("NewShipment/getDiscounts").then(() => {
+      this.discounts = this.$store.state.NewShipment.discounts;
+      console.log("discounts", this.discounts);
+    });
+  }
 
   validate() {
     if (this.$refs.form.validate()) {
-      this.isValid = false;
       console.log("Correct data");
+      if (this.e1 != 4) {
+        this.e1++;
+      }
     } else {
       console.log("Invalid Data");
     }
@@ -665,13 +754,6 @@ export default class Shipment extends Vue {
 
   changePage(link: string) {
     this.$router.push({ name: link });
-  }
-
-  beforemount() {
-    this.$store.dispatch("NewShipment/getPackagesCharacteristic").then(() => {
-      this.PackageCharacteristics = this.$store.state.NewShipment.characteristics;
-      console.log(this.PackageCharacteristics);
-    });
   }
 
   addPackage() {
@@ -687,6 +769,40 @@ export default class Shipment extends Vue {
   deletePackage(index: number) {
     this.PackagesDetails.splice(index, 1);
   }
+
+  
+  /*get total() {
+    if (this.Order.discount == 0) {
+      return this.Order.packages.reduce(
+        (acc, item: { cost: number }) => acc + item.cost,
+        0
+      );
+    } else {
+      return (
+        this.Order.packages.reduce(
+          (acc, item: { pa_cost: number }) => acc + item.pa_cost,
+          0
+        ) * this.discount
+      );
+    }
+  }
+  get packagesGrossWeight() {
+    return this.packages
+      .reduce((acc, item: { pa_weight: number }) => acc + item.pa_weight, 0)
+      .toFixed(2);
+  }
+  get packagesDimensionalWeight() {
+    return (
+      this.packages.reduce(
+        (
+          acc,
+          item: { pa_width: number; pa_height: number; pa_length: number }
+        ) => acc + item.pa_width * item.pa_height * item.pa_length,
+        0
+      ) / 5000
+    ).toFixed(2);
+  }*/
+  
   mounted() {
     this.translate();
   }
@@ -694,6 +810,7 @@ export default class Shipment extends Vue {
   get translator() {
     return this.$store.state.translate.languageTexts;
   }
+
   @Watch("translator")
   translate() {
     this.translator
@@ -714,12 +831,8 @@ export default class Shipment extends Vue {
             this.EmailLabel = term.translation;
           } else if (term.name == "generalPhone") {
             this.PhoneLabel = term.translation;
-          } else if (term.name == "generalOrigin") {
-            this.OriginTitle = term.translation;
           } else if (term.name == "generalDestination") {
             this.DestinationTitle = term.translation;
-          } else if (term.name == "generalEmailRule") {
-            this.EmailValidation = term.translation;
           } else if (term.name == "ShipmentTitle") {
             this.NewShipmentTitle = term.translation;
           } else if (term.name == "ShipmentZipCode") {
@@ -742,8 +855,6 @@ export default class Shipment extends Vue {
             this.Cancelbtn = term.translation;
           } else if (term.name == "generalContinuebutton") {
             this.Continuebtn = term.translation;
-          } else if (term.name == "generalValidatebutton") {
-            this.Validatebtn = term.translation;
           } else if (term.name == "packageStep2") {
             this.Step2 = term.translation;
           } else if (term.name == "packageWeight") {
@@ -768,15 +879,13 @@ export default class Shipment extends Vue {
             this.Step4 = term.translation;
           } else if (term.name == "packageDescription") {
             this.PackageDescriptionLabel = term.translation;
+          } else if (term.name == "generalEmailRule") {
+            this.EmailValidation = term.translation;
+          } else if (term.name == "generalItemValidation") {
+            this.ItemValidation = term.translation;
           }
         }
       );
-  }
-
-  data() {
-    return {
-      e1: 1,
-    };
   }
 }
 </script>
