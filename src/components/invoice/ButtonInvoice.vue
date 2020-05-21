@@ -102,7 +102,6 @@ export default class ButtonInvoice extends Vue {
 
 <style lang="scss" scoped>
 .size-md {
-  width: 60%;
   margin: 0 auto;
 }
 </style>

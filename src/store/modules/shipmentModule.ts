@@ -34,7 +34,7 @@ export default {
     getRoute: async (context: any, trackingId: string) => {
       await shipmentService.getRoute(trackingId).then(async (response: any) => {
         const route = response.data;
-        context.commit("setRoute", route);
+        context.commit("setRoute", route.reverse());
         let latLon = { data: { lat: Number, long: Number } };
         for (let i = 0; i < route.length; i++) {
           latLon = await shipmentService.getLatLon(
