@@ -35,18 +35,19 @@ export default {
       await shipmentService.getRoute(trackingId).then(async (response: any) => {
         const route = response.data;
         context.commit("setRoute", route);
-        let latLon;
+        let latLon = { data: { lat: Number, long: Number } };
         for (let i = 0; i < route.length; i++) {
           latLon = await shipmentService.getLatLon(
             route[i].primaryline + ", " + route[i].city
           );
-          route[i].latlon = latLon.data;
+          if (latLon.data.lat !== undefined) {
+            route[i].latlon = latLon.data;
+          } else {
+            route.splice(i, 1);
+          }
           await context.dispatch("sleep", 250);
         }
-        context.commit(
-          "setMapRoute",
-          route.filter((x: undefined | []) => x !== undefined)
-        );
+        context.commit("setMapRoute", route);
       });
     },
   },

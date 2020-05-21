@@ -21,7 +21,7 @@ export default {
       { direction: direction },
       {
         headers: {
-          Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOiIyMDIwLTA1LTIxVDAwOjA0OjI4LjkxMVoiLCJleHAiOiIyMDIwLTA1LTIyVDAwOjA0OjI4LjkxMVoifQ.4i2PLd81GM932_-2tM4ERp6x3XM9p28I-J8IHfwIQIs`,
+          Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOiIyMDIwLTA1LTIxVDExOjAwOjQ0LjY1NVoiLCJleHAiOiIyMDIwLTA1LTIyVDExOjAwOjQ0LjY1N1oifQ.scTB-Q-Pt6quoR4i-aHZH0LLyQPkjKfHdgaWSGez45E`,
         },
       }
     );
