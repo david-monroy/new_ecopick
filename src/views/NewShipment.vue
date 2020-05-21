@@ -6,25 +6,19 @@
         <v-stepper v-model="e1">
           <v-stepper-header class="light-green accent-1">
             <v-stepper-step color="teal" :complete="e1 > 1" step="1">
-              {{
-              Step1
-              }}
+              {{ Step1 }}
             </v-stepper-step>
 
             <v-divider></v-divider>
 
             <v-stepper-step color="teal" :complete="e1 > 2" step="2">
-              {{
-              Step2
-              }}
+              {{ Step2 }}
             </v-stepper-step>
 
             <v-divider></v-divider>
 
             <v-stepper-step color="teal" :complete="e1 > 3" step="3">
-              {{
-              Step3
-              }}
+              {{ Step3 }}
             </v-stepper-step>
 
             <v-divider></v-divider>
@@ -42,7 +36,9 @@
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
                     <v-col class="align-center" justify="center">
-                      <v-text class="display-2 white--text">{{ NewShipmentTitle }}</v-text>
+                      <v-text class="display-2 white--text">{{
+                        NewShipmentTitle
+                      }}</v-text>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
@@ -54,7 +50,8 @@
                         <v-text
                           class="body-1 font-weight-light align-center white--text"
                           justify="center"
-                        >{{ DestinationTitle }}</v-text>
+                          >{{ DestinationTitle }}</v-text
+                        >
                       </v-col>
                     </v-row>
                     <!--Receiver -->
@@ -128,7 +125,7 @@
                           class="pa-0 ma-0"
                           solo
                           dense
-                          v-model="Order.direction.zipcode"
+                          v-model="Order.direction.zipCode"
                           :rules="rules.ZipCodeRules"
                           :label="ZipCodeLabel"
                           required
@@ -188,7 +185,10 @@
                     <v-row>
                       <v-col cols="6">
                         <v-list dense>
-                          <v-list-item-group v-model="Order.options.option" multiple>
+                          <v-list-item-group
+                            v-model="Order.options.option"
+                            multiple
+                          >
                             <template v-for="option in options">
                               <v-list-item
                                 :key="option.op_id"
@@ -197,7 +197,9 @@
                               >
                                 <template v-slot:default="{ active, toggle }">
                                   <v-list-item-content>
-                                    <v-list-item-title v-text="option.op_name"></v-list-item-title>
+                                    <v-list-item-title
+                                      v-text="option.op_name"
+                                    ></v-list-item-title>
                                   </v-list-item-content>
 
                                   <v-list-item-action>
@@ -259,13 +261,18 @@
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
                     <v-col class="align-center" justify="center">
-                      <v-text class="display-2 white--text">{{ NewShipmentTitle }}</v-text>
+                      <v-text class="display-2 white--text">{{
+                        NewShipmentTitle
+                      }}</v-text>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
                   <!--Form 1-->
                   <v-form ref="form">
-                    <div v-for="(experience, index) in PackagesDetails" :key="index">
+                    <div
+                      v-for="(experience, index) in PackagesDetails"
+                      :key="index"
+                    >
                       <!--Characteristics-->
                       <v-row>
                         <v-col cols="3">
@@ -383,9 +390,7 @@
               </v-card>
 
               <v-btn color="normal" @click="validate()">
-                {{
-                Continuebtn
-                }}
+                {{ Continuebtn }}
               </v-btn>
 
               <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
@@ -400,15 +405,19 @@
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
                     <v-col cols="6" class="align-center" justify="center">
-                      <v-text class="display-2 white--text">{{ NewShipmentTitle }}</v-text>
+                      <v-text class="display-2 white--text">{{
+                        NewShipmentTitle
+                      }}</v-text>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
                   <!--Form 1-->
                   <form>
-                    
                     <!--Packages Cost-->
-                    <div v-for="(experience, index) in PackagesDetails" :key="index">
+                    <div
+                      v-for="(experience, index) in PackagesDetails"
+                      :key="index"
+                    >
                       <v-row>
                         <v-col cols="3"></v-col>
                         <v-col cols="3">
@@ -431,7 +440,6 @@
                     <v-divider></v-divider>
                     <!--Ship-->
                     <v-row>
-                      <v-col cols="3"></v-col>
                       <v-col cols="3">
                         <v-subheader>{{ ShipmentCostLabel }}</v-subheader>
                       </v-col>
@@ -446,7 +454,7 @@
                           :label="ShipmentCost"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="3">
+                      <v-col cols="6">
                         <v-select
                           v-model="Order.discount"
                           solo
@@ -462,7 +470,9 @@
                     <v-row>
                       <v-col cols="3"></v-col>
                       <v-col cols="3">
-                        <v-subheader class="title font-weight-black">TOTAL</v-subheader>
+                        <v-subheader class="title font-weight-black"
+                          >TOTAL</v-subheader
+                        >
                       </v-col>
                       <v-col cols="3">
                         <v-text-field
@@ -489,10 +499,118 @@
 
             <!--Confirmation-->
             <v-stepper-content step="4" class="teal">
-              <v-btn color="normal" @click="validate()">
-                {{
-                Continuebtn
-                }}
+              <v-card class="d-inline-block mx-auto teal" outlined>
+                <!--Begin -->
+                <v-container fluid>
+                  <!--Títle -->
+                  <v-row class="align-center">
+                    <v-col cols="3"></v-col>
+                    <v-col class="align-center" justify="center">
+                      <v-text class="display-2 white--text">{{
+                        NewShipmentTitle
+                      }}</v-text>
+                    </v-col>
+                    <v-col cols="3"></v-col>
+                  </v-row>
+                  <!--Form 1-->
+                  <form>
+                    <!--Title 3 -->
+                    <v-row>
+                      <v-col>
+                        <v-text
+                          class="body-1 font-weight-light align-center white--text"
+                          justify="center"
+                          >{{ DestinationTitle }}</v-text
+                        >
+                      </v-col>
+                    </v-row>
+                    <!--Receiver -->
+                    <v-row>
+                      <v-col cols="6">
+                        <v-text-field
+                          class="pa-0 ma-0"
+                          solo
+                          dense
+                          v-model="Order.receiver.firstName"
+                          :label="Order.receiver.firstName"
+                          disabled
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6">
+                        <v-text-field
+                          class="pa-0 ma-0"
+                          solo
+                          dense
+                          v-model="Order.receiver.lastName"
+                          :label="Order.receiver.lastName"
+                          disabled
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <!--Direction 3 -->
+                    <v-row>
+                      <v-col cols="4">
+                        <v-text-field
+                          class="pa-0 ma-0"
+                          solo
+                          dense
+                          v-model="Order.direction.zipCode"
+                          :value="Order.direction.zipCode"
+                          disabled
+                          type="number"
+                          counter="5"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="4">
+                        <v-text-field
+                          class="pa-0 ma-0"
+                          solo
+                          dense
+                          v-model="Order.direction.city"
+                          :label="Order.direction.city"
+                          disabled
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="4">
+                        <v-text-field
+                          class="pa-0 ma-0"
+                          solo
+                          dense
+                          v-model="Order.direction.state"
+                          :label="Order.direction.state"
+                          disabled
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <!--Direction 4 -->
+                    <v-row>
+                      <v-col cols="6">
+                        <v-text-field
+                          class="pa-0 ma-0"
+                          solo
+                          dense
+                          v-model="Order.direction.primaryLine"
+                          :label="Order.direction.primaryLine"
+                          disabled
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6">
+                        <v-text-field
+                          class="pa-0 ma-0"
+                          solo
+                          dense
+                          v-model="Order.direction.secondaryLine"
+                          :label="Order.direction.secondaryLine"
+                          disabled
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </form>
+                </v-container>
+              </v-card>
+
+              <v-btn color="normal" @click="prueba()">
+                {{ Continuebtn }}
               </v-btn>
 
               <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
@@ -568,7 +686,7 @@ export default class Shipment extends Vue {
       phoneNumber: string;
     };
     direction: {
-      zipCode: number;
+      zipCode: number | null;
       city: string;
       state: string;
       country: string;
@@ -604,7 +722,7 @@ export default class Shipment extends Vue {
       phoneNumber: "",
     },
     direction: {
-      zipCode: 0,
+      zipCode: null,
       city: "",
       state: "",
       country: "",
@@ -722,6 +840,10 @@ export default class Shipment extends Vue {
     form: any;
   };
 
+  prueba() {
+    console.log("order", this.Order);
+  }
+
   beforeMount() {
     this.$store.dispatch("NewShipment/getCharacteristics").then(() => {
       this.characteristics = this.$store.state.NewShipment.characteristics;
@@ -770,7 +892,6 @@ export default class Shipment extends Vue {
     this.PackagesDetails.splice(index, 1);
   }
 
-  
   /*get total() {
     if (this.Order.discount == 0) {
       return this.Order.packages.reduce(
@@ -802,7 +923,7 @@ export default class Shipment extends Vue {
       ) / 5000
     ).toFixed(2);
   }*/
-  
+
   mounted() {
     this.translate();
   }
