@@ -24,6 +24,7 @@
                     
                     <v-row> 
                         <v-col >
+                           <v-icon dark>mdi-pencil</v-icon>
                         </v-col>
                         <v-col> 
                              <h3>{{titlePage}}</h3>
@@ -142,7 +143,7 @@
                             <v-icon class="mt-5 mr-2" style="float: left;">mdi-calendar</v-icon>
                            
                                     <v-text-field
-                                    :value="dateInfo"
+                                    :value="formatDate(this.userInfo.birthday)"
                                     :label="birthday"
                                     :placeholder="birthday"
                                     disabled 
@@ -153,21 +154,7 @@
                     </v-row> 
 
                     <v-row> 
-                        <v-col> 
-                            <v-text-field
-                                ref="name"
-                                :value="userInfo.password"
-                                :rules="[rules.required]"
-                                :error-messages="errorMessages"
-                                :label="password"
-                                :placeholder="password"
-                                required
-                                :type="show2 ? 'text' : 'password'"
-                                name="input-10-2"
-                                class="input-group--focused"
-                                disabled
-                            ></v-text-field>
-                        </v-col>
+                        
                         <v-col> 
                              <v-text-field
                                     ref="name"
@@ -225,6 +212,7 @@ import Component from "vue-class-component";
 import {Watch} from "vue-property-decorator";
 import { mapState } from "vuex";
 import Translate from "../components/Translate.vue";
+import moment from "moment";
 
 @Component({ 
   components: { 
@@ -308,6 +296,10 @@ export default class Profile extends Vue {
     $refs!: {
         form:any;
     };
+
+     formatDate(date: string) {
+    return moment(date).format("YYYY-MM-DD");
+  }
  
      mounted() {
     this.translate();
