@@ -96,10 +96,11 @@
                             <v-text-field
                                 ref="name"
                                 v-model="user.phoneNumber"
-                                :rules="[rules.required]"
+                                :rules="rules.phoneRules"
                                 :error-messages="errorMessages"
                                 :label="phoneNumber"
                                 :placeholder="phoneNumber"
+                                type="number"
                                 required
                             ></v-text-field>
                             
@@ -140,7 +141,7 @@
                                     v-on="on"
                                     ></v-text-field>
                                 </template>
-                                <v-date-picker v-model="date" no-title @input="menu1 = false"></v-date-picker>
+                                <v-date-picker v-model="date" no-title @input="menu1 = false" max="2002-06-01"></v-date-picker>
                                 </v-menu>
                         </v-col>  
                     </v-row> 
@@ -239,6 +240,10 @@
             {{snack3}}
              <v-btn dark text @click="snackbarPassword=false">Close</v-btn>
         </v-snackbar>
+        <v-snackbar v-model="snackbarError2" top:timeout="timeout" color="error">
+            {{snackDatabase}}
+             <v-btn dark text @click="snackbarError2=false">Close</v-btn>
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -290,10 +295,11 @@ export default class SignUp extends Vue {
                 buttonSignup= "Sign up"
                 termCondition= "Accept the terms and conditions"
                 titlePage= "Sign up"
-                dateHint="MM/DD/YYYY format"
+                dateHint="MM/DD/YYYY format. You need to be above 18 to register"
                 snack1 = "User registered successfully"
                 snack2 = "User registration error. Try again."
                 snack3 = "Please confirm password correctly"
+                snackDatabase = "This email is already in use or date format is invalid. Please verify those fields"
 
 
     password2= "";
@@ -301,6 +307,7 @@ export default class SignUp extends Vue {
     nameLanguage = "";
     snackbar = false;
     snackbarError = false;
+    snackbarError2 = false;
     snackbarPassword = false;
     timeout =7000;
 
@@ -322,7 +329,7 @@ export default class SignUp extends Vue {
                 this.changePage("Login");
                 }, 1000);
         }).catch(() => {
-            this.snackbarError = true;
+            this.snackbarError2 = true;
             });
 
                  } else if (this.password2!==this.user.password){
@@ -346,6 +353,9 @@ export default class SignUp extends Vue {
         emailRules: [ 
             (v:string) => !!v || "E-mail is required",
             (v:string) => /.+@.+\..+/.test(v) || "E-mail is required",
+        ],
+        phoneRules: [
+        (v: number) => !!v || "Required. Please only use numbers and avoid spaces.",
         ],
      
     };
@@ -439,6 +449,8 @@ export default class SignUp extends Vue {
             this.snack3 = term.translation;
           } else if (term.name == "generalGoBack") {
             this.goBack = term.translation;
+          } else if (term.name == "signupSnack4") {
+            this.snackDatabase = term.translation;
           }
         }
       );
