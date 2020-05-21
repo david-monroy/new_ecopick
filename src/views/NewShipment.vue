@@ -43,7 +43,7 @@
                     <v-col cols="3"></v-col>
                   </v-row>
                   <!--Form 1-->
-                  <v-form ref="form">
+                  <v-form ref="form1">
                     <!--Title 3 -->
                     <v-row>
                       <v-col>
@@ -184,37 +184,18 @@
                     <!--Options-->
                     <v-row>
                       <v-col cols="6">
-                        <v-list dense>
-                          <v-list-item-group
-                            v-model="Order.options.option"
-                            multiple
-                          >
-                            <template v-for="option in options">
-                              <v-list-item
-                                :key="option.op_id"
-                                :value="option.op_name"
-                                active-class="teal--text text--accent-4"
-                              >
-                                <template v-slot:default="{ active, toggle }">
-                                  <v-list-item-content>
-                                    <v-list-item-title
-                                      v-text="option.op_name"
-                                    ></v-list-item-title>
-                                  </v-list-item-content>
-
-                                  <v-list-item-action>
-                                    <v-checkbox
-                                      :input-value="active"
-                                      :true-value="option"
-                                      color="teal accent-4"
-                                      @click="toggle"
-                                    ></v-checkbox>
-                                  </v-list-item-action>
-                                </template>
-                              </v-list-item>
-                            </template>
-                          </v-list-item-group>
-                        </v-list>
+                        <v-card color="white" class="ma-0 pa-5">
+                          <template v-for="(option, i) in options">
+                            <v-checkbox
+                              :key="i"
+                              :label="option.op_name"
+                              :value="option.op_id"
+                              v-model="selectedOptions"
+                              color="teal accent-4"
+                              class="teal--text mt-0"
+                            ></v-checkbox>
+                          </template>
+                        </v-card>
                       </v-col>
 
                       <v-col cols="6">
@@ -247,7 +228,9 @@
                   </v-form>
                 </v-container>
               </v-card>
-              <v-btn color="normal" @click="e1 = 2">{{ Continuebtn }}</v-btn>
+              <v-btn color="normal" @click="validate(2)">{{
+                Continuebtn
+              }}</v-btn>
 
               <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
             </v-stepper-content>
@@ -268,7 +251,7 @@
                     <v-col cols="3"></v-col>
                   </v-row>
                   <!--Form 1-->
-                  <v-form ref="form">
+                  <v-form ref="form2">
                     <div
                       v-for="(experience, index) in PackagesDetails"
                       :key="index"
@@ -389,7 +372,7 @@
                 </v-container>
               </v-card>
 
-              <v-btn color="normal" @click="validate()">
+              <v-btn color="normal" @click="validate(3)">
                 {{ Continuebtn }}
               </v-btn>
 
@@ -709,9 +692,7 @@ export default class Shipment extends Vue {
       characteristic: number;
       description: string;
     }[];
-    options: {
-      option: number;
-    }[];
+    options: {}[];
     discount: number;
   } = {
     receiver: {
@@ -747,13 +728,10 @@ export default class Shipment extends Vue {
         description: "",
       },
     ],
-    options: [
-      {
-        option: 0,
-      },
-    ],
+    options: [],
     discount: 0,
   };
+  selectedOptions = [];
 
   UserName = localStorage.getItem("Name");
 
@@ -837,7 +815,8 @@ export default class Shipment extends Vue {
   };
 
   $refs!: {
-    form: any;
+    form1: any;
+    form2: any;
   };
 
   prueba() {
@@ -863,11 +842,16 @@ export default class Shipment extends Vue {
     });
   }
 
-  validate() {
-    if (this.$refs.form.validate()) {
+  validate(page: number) {
+    if (this.$refs.form1.validate()) {
       console.log("Correct data");
+      if (this.e1 == 1) {
+        for (let i = 0; i < this.selectedOptions.length; i++) {
+          this.Order.options.push({ order: this.selectedOptions[i] });
+        }
+      }
       if (this.e1 != 4) {
-        this.e1++;
+        this.e1 = page;
       }
     } else {
       console.log("Invalid Data");
