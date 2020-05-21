@@ -24,16 +24,13 @@
                     
                     <v-row> 
                         <v-col >
-                           <v-icon dark>mdi-pencil</v-icon>
+                           <v-icon class="clickable" style="float: left;">mdi-pencil</v-icon>
                         </v-col>
                         <v-col> 
                              <h3>{{titlePage}}</h3>
                         </v-col> 
                         <v-col> 
-                          <v-row class="hidden-md-and-up"> 
-                             <v-col > 
-                             </v-col> 
-                          </v-row>  
+                         
                         </v-col>  
                     </v-row> 
 
@@ -143,18 +140,19 @@
                             <v-icon class="mt-5 mr-2" style="float: left;">mdi-calendar</v-icon>
                            
                                     <v-text-field
-                                    :value="formatDate(this.userInfo.birthday)"
+                                    :value="formatDate(userInfo.birthday)"
                                     :label="birthday"
                                     :placeholder="birthday"
                                     disabled 
                                     required
-                                    ></v-text-field>
+                                    > </v-text-field>
                                 
                         </v-col>  
                     </v-row> 
 
                     <v-row> 
-                        
+                        <v-col> 
+                       </v-col>  
                         <v-col> 
                              <v-text-field
                                     ref="name"
@@ -164,6 +162,8 @@
                                     disabled
                              ></v-text-field>
                         </v-col>  
+                        <v-col> 
+                       </v-col>  
                     </v-row> 
 
                     <v-row> 
@@ -227,9 +227,7 @@ export default class Profile extends Vue {
 
     $store: any;
     $router: any;
-    userInfo!: { firstname: string, secondname: string,
-    lastname:string, secondlastname: string,phonenumber:string, identification: string,birthday:string, language: number, email:string, password: string
-    };
+    userInfo!: {};
 
 
                 identification= "Identitificacion"
@@ -254,29 +252,25 @@ export default class Profile extends Vue {
                 snack2 = "User registration error. Try again."
                 snack3 = "Please confirm password correctly"
 
-    password2= "";
-    items: Array<string> = ['English', 'Spanish'];
-    nameLanguage = "";
-    snackbar = false;
-    snackbarError = false;
-    snackbarPassword = false;
+  
+    nameLanguage = ""
     timeout =7000;
-    nameTest = "Vanessa";
     IDuser = localStorage.getItem("ID");
     languageName = "";
     dateInfo = "";
 
          getUserData(userId: number) {
          this.$store.dispatch("user/getUserData", userId).then(() => {
-            if (this.userInfo.language===1){
+            if (localStorage.getItem("Language")=="1"){
               this.nameLanguage="English";
-            } else if (this.userInfo.language===2){ 
+            } else if (localStorage.getItem("Language")=="2"){ 
               this.nameLanguage="Español";
-            } 
+            }  
             })
          }
           created() {
             this.getUserData(parseInt(this.IDuser!));
+
           }
     
       changePage(link: string) {
