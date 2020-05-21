@@ -1,41 +1,61 @@
 <template>
   <v-container fluid class="pa-0">
-    <v-row justify-center>
-      <v-col md="9" class="hidden-xs-only"></v-col>
+    <v-row v-if="noContent == false">
       <v-col>
-        <ButtonInvoice />
-      </v-col>
+        <v-row justify-center>
+          <v-col md="9" class="hidden-xs-only"></v-col>
+          <v-col>
+            <ButtonInvoice />
+          </v-col>
+        </v-row>
+        <v-row no-gutters v-if="routeExists">
+          <v-col cols="1" class="hidden-sm-and-down"></v-col>
+          <v-col cols="5" class="hidden-sm-and-down"></v-col>
+          <v-col cols="12" md="5">
+            <v-card height="300" :loading="loadingMap">
+              <Map />
+            </v-card>
+          </v-col>
+          <v-col cols="1" class="hidden-sm-and-down"></v-col>
+        </v-row>
+        <v-row no-gutters class="py-2" align="center" v-else>
+          <v-col cols="2" class="hidden-sm-and-down"></v-col>
+          <v-col>
+            <v-alert
+              border="top"
+              colored-border
+              type="info"
+              elevation="2"
+              color="rgba(103,176,49,1)"
+              icon="mdi-clock-outline"
+            >
+              <p class="subtitle-1 ma-0">
+                {{ waitingRoute }}
+              </p>
+              <p class="title ma-0">
+                {{ shipment.office }}
+              </p>
+            </v-alert>
+          </v-col>
+          <v-col cols="2" class="hidden-sm-and-down"></v-col> </v-row
+      ></v-col>
     </v-row>
-    <v-row no-gutters v-if="routeExists">
-      <v-col cols="1" class="hidden-sm-and-down"></v-col>
-      <v-col cols="5" class="hidden-sm-and-down"></v-col>
-      <v-col cols="12" md="5">
-        <v-card height="300" :loading="loadingMap">
-          <Map />
-        </v-card>
-      </v-col>
-      <v-col cols="1" class="hidden-sm-and-down"></v-col>
-    </v-row>
-    <v-row no-gutters class="py-2" align="center" v-else>
-      <v-col cols="2" class="hidden-sm-and-down"></v-col>
-      <v-col>
-        <v-alert
-          border="top"
-          colored-border
-          type="info"
-          elevation="2"
-          color="rgba(103,176,49,1)"
-          icon="mdi-clock-outline"
-        >
-          <p class="subtitle-1 ma-0">
-            {{ waitingRoute }}
-          </p>
-          <p class="title ma-0">
-            {{ shipment.office }}
-          </p>
-        </v-alert>
-      </v-col>
-      <v-col cols="2" class="hidden-sm-and-down"></v-col>
+    <v-row v-else align="center" justify="center" class="grey lighten-5 screen">
+      <v-alert
+        border="top"
+        colored-border
+        type="info"
+        elevation="2"
+        color="teal"
+        icon="mdi-emoticon-sad-outline"
+      >
+        <p class="subtitle-1 ma-0">
+          {{ noContentText }}
+        </p>
+        <p class="subtitle-1 ma-0">
+          {{ "Tracking ID: " + this.$route.params.id }}
+        </p>
+      </v-alert>
     </v-row>
   </v-container>
 </template>
@@ -56,6 +76,8 @@ import { Watch } from "vue-property-decorator";
 })
 export default class DetailShipment extends Vue {
   $route: any;
+  noContent = true;
+  noContentText = "We didn't find the route you were looking for";
   shipment!: {
     userid: number;
     office: string;
@@ -83,14 +105,22 @@ export default class DetailShipment extends Vue {
       });
   }
 
-  created() {
+  getShipment(trackingId: string) {
     this.$store
       .dispatch("shipment/getShipment", this.$route.params.id)
-      .then(() => {
+      .then((response: any) => {
         this.$store.dispatch("user/getUser", this.shipment.userid);
+        this.$store.dispatch("invoice/getInvoice", this.$route.params.id);
+        this.getRoute(this.$route.params.id);
+        this.noContent = false;
+      })
+      .catch(() => {
+        this.noContent = true;
       });
-    this.$store.dispatch("invoice/getInvoice", this.$route.params.id);
-    this.getRoute(this.$route.params.id);
+  }
+
+  created() {
+    this.getShipment(this.$route.params.id);
   }
 
   get translator() {
@@ -101,13 +131,15 @@ export default class DetailShipment extends Vue {
     this.translator
       .filter(
         (term: { context: string; name: string; translation: string }) => {
-          return term.context == "route";
+          return term.context == "route" || term.context == "general";
         }
       )
       .forEach(
         (term: { context: string; name: string; translation: string }) => {
           if (term.name == "routeWait") {
             this.waitingRoute = term.translation;
+          } else if (term.name == "generalNoContent") {
+            this.noContentText = term.translation;
           }
         }
       );
@@ -115,4 +147,8 @@ export default class DetailShipment extends Vue {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.screen {
+  height: 80vh;
+}
+</style>
