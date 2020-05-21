@@ -23,14 +23,24 @@ export default class Map extends Vue {
       primaryline: string;
       date: string;
       latlon: { lon: number; lat: number };
+      status: string;
     }
   ];
+  status = "Status";
+  direction = "Direction";
+  stop = "Stop";
+  date = "Date";
 
   @Watch("route")
   setRoute() {
     const markers: {
       type: string;
-      properties: { stop: number; direction: string; date: string };
+      properties: {
+        stop: number;
+        direction: string;
+        date: string;
+        status: string;
+      };
       geometry: { type: string; coordinates: number[] };
     }[] = [];
     const routeLine: number[][] = [];
@@ -41,6 +51,7 @@ export default class Map extends Vue {
           stop: i + 1,
           direction: this.route[i].primaryline,
           date: moment(this.route[i].date).format("YYYY-MM-DD HH:mm:ss"),
+          status: this.route[i].status,
         },
         geometry: {
           type: "Point",
@@ -68,15 +79,16 @@ export default class Map extends Vue {
     };
 
     /* MAP MARKERS */
-    geojson.features.forEach(function (marker) {
+    geojson.features.forEach((marker) => {
       const el = document.createElement("div");
       el.className = "marker";
       el.style.padding = "0 0 90px 0";
 
       const popup = new mapboxgl.Popup().setHTML(
-        `<b>Stop:</b> ${marker.properties.stop}<br>
-        <b>Direction:</b> ${marker.properties.direction}<br>
-        <b>Date:</b> ${marker.properties.date}`
+        `<b>${this.stop}:</b> ${marker.properties.stop}<br>
+        <b>${this.direction}:</b> ${marker.properties.direction}<br>
+        <b>${this.date}:</b> ${marker.properties.date}<br>
+        <b>${this.status}:</b> ${marker.properties.status}`
       );
 
       new mapboxgl.Marker(el)
@@ -122,6 +134,31 @@ export default class Map extends Vue {
     map.fitBounds(bounds, {
       padding: { top: 50, bottom: 10, left: 30, right: 30 },
     });
+  }
+  get translator() {
+    return this.$store.state.translate.languageTexts;
+  }
+  @Watch("translator")
+  translate() {
+    this.translator
+      .filter(
+        (term: { context: string; name: string; translation: string }) => {
+          return term.context == "route";
+        }
+      )
+      .forEach(
+        (term: { context: string; name: string; translation: string }) => {
+          if (term.name == "routeStatus") {
+            this.status = term.translation;
+          } else if (term.name == "routeDirection") {
+            this.direction = term.translation;
+          } else if (term.name == "routeDate") {
+            this.date = term.translation;
+          } else if (term.name == "routeStop") {
+            this.stop = term.translation;
+          }
+        }
+      );
   }
 }
 </script>
