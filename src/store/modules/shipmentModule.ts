@@ -5,11 +5,15 @@ export default {
   namespaced: true,
   // -----------------------------------------------------------------
   state: {
+    shipment: {},
     mapRoute: [],
     route: [],
   },
   // -----------------------------------------------------------------
   mutations: {
+    setShipment(state: {}, shipment: {}) {
+      Vue.set(state, "shipment", shipment);
+    },
     setMapRoute(state: {}, route: {}) {
       Vue.set(state, "mapRoute", route);
     },
@@ -19,6 +23,11 @@ export default {
   },
   // -----------------------------------------------------------------
   actions: {
+    getShipment: async (context: any, trackingId: string) => {
+      await shipmentService.getShipment(trackingId).then((response: any) => {
+        context.commit("setShipment", response.data[0]);
+      });
+    },
     sleep: async (context: any, ms: number) => {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },

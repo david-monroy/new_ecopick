@@ -4,9 +4,9 @@
       <tr class="top">
         <td colspan="3">
           <img src="../assets/page-logo.png" class="logo" />
-          <p class="cell-title">
-            {{ trackingName }} #{{ this.$route.params.id }}
-          </p>
+          <p class="cell-title">{{ trackingName }} #{{ this.$route.params.id }}</p>
+
+          <p class="cell-title">{{ date }}</p>
         </td>
         <td>
           <div class="qrCode">
@@ -16,9 +16,7 @@
       </tr>
 
       <tr class="section-heading">
-        <td colspan="3">
-          {{ shipperInformation }}
-        </td>
+        <td colspan="3">{{ shipperInformation }}</td>
         <td></td>
       </tr>
       <tr class="item">
@@ -41,17 +39,13 @@
       </tr>
 
       <tr class="section-heading">
-        <td colspan="3">
-          {{ receiverInformation }}
-        </td>
+        <td colspan="3">{{ receiverInformation }}</td>
         <td></td>
       </tr>
       <tr class="item">
         <td>
           <p class="cell-title">{{ name }}</p>
-          <p class="cell-description">
-            {{ receiver.name }}
-          </p>
+          <p class="cell-description">{{ receiver.name }}</p>
         </td>
         <td>
           <p class="cell-title">{{ identification }}</p>
@@ -68,9 +62,7 @@
       </tr>
 
       <tr class="section-heading">
-        <td colspan="3">
-          {{ shipmentInformation }}
-        </td>
+        <td colspan="3">{{ shipmentInformation }}</td>
         <td></td>
       </tr>
       <tr class="item">
@@ -94,7 +86,7 @@
       <tr class="item">
         <td>
           <p class="cell-title">{{ purpose }}</p>
-          <!-- <p class="cell-description">{{ shipment.sh_purpose || "" }}</p> -->
+          <p class="cell-description">{{ shipment.purpose }}</p>
         </td>
         <td>
           <p class="cell-title">{{ numberPackages }}</p>
@@ -121,13 +113,9 @@
         <td>{{ packageCost }}</td>
       </tr>
       <tr class="item" v-for="(item, k) in packages" :key="k">
-        <td>
-          {{ item.pa_description }}
-        </td>
+        <td>{{ item.pa_description }}</td>
         <td>{{ item.pa_weight }} kg</td>
-        <td>
-          {{ item.characteristic }}
-        </td>
+        <td>{{ item.characteristic }}</td>
         <td>${{ item.pa_cost }}</td>
       </tr>
       <tr class="total">
@@ -137,8 +125,8 @@
       </tr>
       <tr class="total">
         <td colspan="2"></td>
-        <td>Total</td>
-        <td>${{ total }}</td>
+        <td>Total + {{ serviceCost }}</td>
+        <td>${{ shipment.amount }}</td>
       </tr>
     </table>
   </div>
@@ -147,6 +135,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import moment from "moment";
 import { mapState } from "vuex";
 import { Watch } from "vue-property-decorator";
 import QRCode from "../components/invoice/QRCode.vue";
@@ -164,7 +153,7 @@ import QRCode from "../components/invoice/QRCode.vue";
       "discount",
     ]),
     ...mapState("user", { shipper: "user" }),
-    // ...mapState("shipment", ["shipment"]),
+    ...mapState("shipment", ["shipment"]),
   },
 })
 export default class Invoice extends Vue {
@@ -184,6 +173,7 @@ export default class Invoice extends Vue {
   }[];
   discount!: number;
   shipper!: {};
+  shipment!: { delivered: string };
   // Keywords
   shipperInformation = "Shipper information";
   receiverInformation = "Receiver information";
@@ -205,22 +195,12 @@ export default class Invoice extends Vue {
   packageCharacteristic = "Characteristic";
   packageCost = "Unitary cost";
   discountName = "Discount";
+  serviceCost = "Service Cost";
 
-  get total() {
-    if (this.discount == 0) {
-      return this.packages.reduce(
-        (acc, item: { pa_cost: number }) => acc + item.pa_cost,
-        0
-      );
-    } else {
-      return (
-        this.packages.reduce(
-          (acc, item: { pa_cost: number }) => acc + item.pa_cost,
-          0
-        ) * this.discount
-      );
-    }
+  get date() {
+    return moment(this.shipment.delivered).format("YYYY-MM-DD HH:mm:ss");
   }
+
   get packagesGrossWeight() {
     return this.packages
       .reduce((acc, item: { pa_weight: number }) => acc + item.pa_weight, 0)
@@ -271,8 +251,12 @@ export default class Invoice extends Vue {
             this.grossWeight = term.translation;
           } else if (term.name == "invoiceDimensionalWeight") {
             this.dimensionalWeight = term.translation;
+          } else if (term.name == "invoiceServiceCost") {
+            this.serviceCost = term.translation;
           } else if (term.name == "generalTrackingID") {
             this.trackingName = term.translation;
+          } else if (term.name == "generalName") {
+            this.name = term.translation;
           } else if (term.name == "generalName") {
             this.name = term.translation;
           } else if (term.name == "generalIdentification") {
