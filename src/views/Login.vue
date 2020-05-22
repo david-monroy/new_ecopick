@@ -238,12 +238,10 @@ export default class Login extends Vue{
                 }, 1000);
                 } else if (status==204) {
                   this.snackbarError3=true;
-                } else {
+                } 
+            }) .catch((status:any) => {
                   this.snackbarError2=true;
-                }
-            }); //.catch((status:any) => {
-                 // this.snackbarError2=true;
-                //});
+                });
                    } else {  console.log("Datos no validos");
                                 this.snackbarError=true;
                             } 

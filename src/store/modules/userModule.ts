@@ -30,10 +30,10 @@ export default {
             localStorage.setItem("ID",  response.data.results[0].us_id); }
             console.log(response.data)
             resolve(response.status);
-          }) /*.catch((error: any) => {
-             resolve(error.status);
+          }) .catch((error: any) => {
+             reject(error.response.status);
            });
-           */
+           
      });
     },
    },
