@@ -7,6 +7,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Home from "../views/Home.vue";
 import SignUp  from "../views/SignUp.vue";
 import DetailShipment from "../views/DetailShipment.vue";
+import Profile from "../views/Profile.vue";
 
 
 import RecoverPassword from "../views/RecoverPassword.vue";
@@ -71,7 +72,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/profile",
     name: "Profile",
-    // component: Home,
+    component: Profile,
     meta: {
       requiresAuth: true,
       hideBasicComponents: false,
