@@ -1,7 +1,6 @@
 import { API_URL } from "./config";
 
 export default {
-  //Aqui van los las llamadas a la API de un módulo determinado, se colocan métodos que devuelvan promesas, por ejemplo: API_URL.get('/ruta')
   createUserRoute(user: {}) {
     return API_URL.post(`/user/register`, user, {     
         headers: {
@@ -9,6 +8,20 @@ export default {
       }, 
     })
   },
+  getUser(userId: any) {
+    return API_URL.get(`/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOiIyMDIwLTA1LTIxVDIwOjAzOjMxLjEwMloiLCJleHAiOiIyMDIwLTA1LTIyVDIwOjAzOjMxLjEwMloifQ.poUKL-IJjepDcHfYmt1zZRK1cvj7FvzXT5bo0C0b3eY`,
+      },
+    });
+  },
+  recoverPasswordRoute(user: {}) {
+    return API_URL.put(`/user/newPassword`, user, {     
+        headers: {
+        Authorization: {"Content-Type":"application/json"},
+      }, 
+    })
+  }, 
   validateUserRoute(user: {}) {
     return API_URL.post(`/user/login`, user, {     
         headers: {

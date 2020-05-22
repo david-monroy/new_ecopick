@@ -5,6 +5,12 @@ import VueRouter, { RouteConfig } from "vue-router";
 
 //Componentes
 import Home from "../views/Home.vue";
+import SignUp  from "../views/SignUp.vue";
+import DetailShipment from "../views/DetailShipment.vue";
+import Profile from "../views/Profile.vue";
+
+
+import RecoverPassword from "../views/RecoverPassword.vue";
 
 import Login from "../views/Login.vue";
 
@@ -32,7 +38,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/signup",
     name: "SignUp",
-    // component: Home,
+    component: SignUp,
     meta: {
       requiresAuth: false,
       hideBasicComponents: true,
@@ -50,7 +56,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/shipments/:id",
     name: "DetailShipment",
-    // component: Home,
+    component: DetailShipment,
     meta: {
       requiresAuth: false,
       hideBasicComponents: false,
@@ -68,7 +74,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/profile",
     name: "Profile",
-    // component: Home,
+    component: Profile,
     meta: {
       requiresAuth: true,
       hideBasicComponents: false,
@@ -81,6 +87,15 @@ const routes: Array<RouteConfig> = [
     meta: {
       requiresAuth: true,
       hideBasicComponents: false,
+    },
+  },
+  {
+    path: "/recover",
+    name: "RecoverPassword",
+    component: RecoverPassword,
+    meta: {
+      requiresAuth: false,
+      hideBasicComponents: true,
     },
   },
 ];
