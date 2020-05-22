@@ -36,9 +36,9 @@
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
                     <v-col class="align-center" justify="center">
-                      <v-text class="display-2 white--text">{{
-                        NewShipmentTitle
-                      }}</v-text>
+                      <p class="display-2 white--text">
+                        {{ NewShipmentTitle }}
+                      </p>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
@@ -47,11 +47,12 @@
                     <!--Title 3 -->
                     <v-row>
                       <v-col>
-                        <v-text
+                        <p
                           class="body-1 font-weight-light align-center white--text"
                           justify="center"
-                          >{{ DestinationTitle }}</v-text
                         >
+                          {{ DestinationTitle }}
+                        </p>
                       </v-col>
                     </v-row>
                     <!--Receiver -->
@@ -244,18 +245,15 @@
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
                     <v-col class="align-center" justify="center">
-                      <v-text class="display-2 white--text">{{
-                        NewShipmentTitle
-                      }}</v-text>
+                      <p class="display-2 white--text">
+                        {{ NewShipmentTitle }}
+                      </p>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
                   <!--Form 1-->
                   <v-form ref="form2">
-                    <div
-                      v-for="(experience, index) in PackagesDetails"
-                      :key="index"
-                    >
+                    <div>
                       <!--Characteristics-->
                       <v-row>
                         <v-col cols="3">
@@ -263,7 +261,7 @@
                             class="pb-0 mb-0"
                             solo
                             dense
-                            v-model="Order.packages.width"
+                            v-model="PackageDetails.width"
                             suffix="cm"
                             :rules="rules.numericitem"
                             required
@@ -276,7 +274,7 @@
                             class="pa-0 ma-0"
                             solo
                             dense
-                            v-model="Order.packages.height"
+                            v-model="PackageDetails.height"
                             suffix="cm"
                             :rules="rules.numericitem"
                             :label="HeightLabel"
@@ -289,12 +287,12 @@
                             class="pa-0 ma-0"
                             solo
                             dense
-                            v-model="Order.packages.lenght"
+                            v-model="PackageDetails.length"
                             suffix="cm"
                             required
                             type="number"
                             :rules="rules.numericitem"
-                            :label="LenghtLabel"
+                            :label="LengthLabel"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="3">
@@ -302,7 +300,7 @@
                             class="pa-0 ma-0"
                             solo
                             dense
-                            v-model="Order.packages.weight"
+                            v-model="PackageDetails.weight"
                             suffix="lbs"
                             required
                             type="number"
@@ -315,7 +313,7 @@
                       <v-row>
                         <v-col cols="6">
                           <v-select
-                            v-model="Order.packages.characteristic"
+                            v-model="PackageDetails.characteristics"
                             solo
                             dense
                             :items="characteristics"
@@ -330,7 +328,7 @@
                             class="pa-0 ma-0"
                             solo
                             dense
-                            v-model="Order.packages.description"
+                            v-model="PackageDetails.description"
                             :label="PackageDescriptionLabel"
                             required
                           ></v-text-field>
@@ -338,36 +336,77 @@
                       </v-row>
                       <!--Costs-->
                       <v-row>
-                        <v-col cols="3"></v-col>
+                        <v-col></v-col>
                         <v-col cols="4">
                           <v-text-field
                             class="pa-0 ma-0"
                             solo
                             dense
-                            v-model="Order.packages.cost"
+                            v-model="PackageDetails.cost"
                             :label="PackageTotal"
                             disabled
                             @input="$v.PackageCost.$touch()"
                             @blur="$v.PackageCost.$touch()"
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="2">
-                          <v-btn
-                            small
-                            color="error"
-                            @click="deletePackage(index)"
-                            :disabled="index == 0"
-                          >
-                            <v-icon class="mr-1 mt-0">mdi-delete</v-icon>
-                          </v-btn>
-                        </v-col>
-                        <v-col cols="3"></v-col>
+                        <v-col></v-col>
                       </v-row>
                     </div>
                     <v-btn color="normal" @click="addPackage">
                       <v-icon class="mr-1 mt-0">mdi-plus</v-icon>
                       <p class="mt-3">{{ AddPackage }}</p>
                     </v-btn>
+                    <v-card
+                      v-for="(orderPackage, i) in Order.packages"
+                      :key="i"
+                      color="rgba(255,255,255,.5)"
+                      class="mt-3"
+                    >
+                      <v-row align="center">
+                        <v-col cols="4" class="text-start pl-10"
+                          ><p class="my-0">
+                            {{ WidthLabel + ": " + orderPackage.width }}
+                          </p>
+                          <p class="my-0">
+                            {{ HeightLabel + ": " + orderPackage.height }}
+                          </p>
+                          <p class="my-0">
+                            {{ LengthLabel + ": " + orderPackage.length }}
+                          </p>
+                          <p class="my-0">
+                            {{ WeightLabel + ": " + orderPackage.weight }}
+                          </p></v-col
+                        >
+                        <v-col class="text-start pl-5"
+                          ><p class="my-0">
+                            {{ CharacteristicLabel }}:
+                            {{
+                              orderPackage.characteristics !== null
+                                ? getCharacteristic(
+                                    orderPackage.characteristics
+                                  )
+                                : ""
+                            }}
+                          </p>
+                          <p class="my-0">
+                            {{ PackageDescriptionLabel }}:
+                            {{
+                              orderPackage.description !== null
+                                ? orderPackage.description
+                                : ""
+                            }}
+                          </p>
+                          <p class="my-0">
+                            {{ "Total: " + orderPackage.cost }}
+                          </p></v-col
+                        >
+                        <v-col cols="2">
+                          <v-btn small color="error" @click="deletePackage(i)">
+                            <v-icon class="mr-1 mt-0">mdi-delete</v-icon>
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-card>
                   </v-form>
                 </v-container>
               </v-card>
@@ -388,19 +427,16 @@
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
                     <v-col cols="6" class="align-center" justify="center">
-                      <v-text class="display-2 white--text">{{
-                        NewShipmentTitle
-                      }}</v-text>
+                      <p class="display-2 white--text">
+                        {{ NewShipmentTitle }}
+                      </p>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
                   <!--Form 1-->
                   <form>
                     <!--Packages Cost-->
-                    <div
-                      v-for="(experience, index) in PackagesDetails"
-                      :key="index"
-                    >
+                    <div>
                       <v-row>
                         <v-col cols="3"></v-col>
                         <v-col cols="3">
@@ -489,9 +525,9 @@
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
                     <v-col class="align-center" justify="center">
-                      <v-text class="display-2 white--text">{{
-                        NewShipmentTitle
-                      }}</v-text>
+                      <p class="display-2 white--text">
+                        {{ NewShipmentTitle }}
+                      </p>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
@@ -500,11 +536,12 @@
                     <!--Title 3 -->
                     <v-row>
                       <v-col>
-                        <v-text
+                        <p
                           class="body-1 font-weight-light align-center white--text"
                           justify="center"
-                          >{{ DestinationTitle }}</v-text
                         >
+                          {{ DestinationTitle }}
+                        </p>
                       </v-col>
                     </v-row>
                     <!--Receiver -->
@@ -626,11 +663,6 @@ import { mapState } from "vuex";
 export default class Shipment extends Vue {
   $store: any;
   $router: any;
-  data() {
-    return {
-      e1: 1,
-    };
-  }
   e1 = 1;
 
   characteristics!: {
@@ -686,11 +718,11 @@ export default class Shipment extends Vue {
     packages: {
       width: number;
       height: number;
-      lenght: number;
+      length: number;
       weight: number;
-      cost: number;
-      characteristic: number;
+      characteristics: number;
       description: string;
+      cost: number;
     }[];
     options: {}[];
     discount: number;
@@ -717,17 +749,7 @@ export default class Shipment extends Vue {
       user: 0,
       purpose: "",
     },
-    packages: [
-      {
-        width: 1,
-        height: 1,
-        lenght: 1,
-        weight: 1,
-        cost: 1,
-        characteristic: 1,
-        description: "",
-      },
-    ],
+    packages: [],
     options: [],
     discount: 0,
   };
@@ -758,12 +780,12 @@ export default class Shipment extends Vue {
   Step2 = "Packages";
   WidthLabel = "Width";
   HeightLabel = "Height";
-  LenghtLabel = "Lenght";
+  LengthLabel = "Length";
   WeightLabel = "Weight";
   CharacteristicLabel = "Characteristic";
   PackageTotal = "20$";
   PackageCharacteristics = [];
-  AddPackage = "Add another package";
+  AddPackage = "Add package";
   PackageDescriptionLabel = "Description";
 
   Step3 = "Costs";
@@ -782,15 +804,23 @@ export default class Shipment extends Vue {
   PhoneValidation = "The phone must be 10 digits";
   ZeroValidation = "Zero is not valid data";
 
-  PackagesDetails = [
-    {
-      width: "",
-      height: "",
-      lenght: "",
-      weight: "",
-      characteristics: "",
-    },
-  ];
+  PackageDetails: {
+    width: number | null;
+    height: number | null;
+    length: number | null;
+    weight: number | null;
+    characteristics: number | null;
+    description: string | null;
+    cost: number | null;
+  } = {
+    width: null,
+    height: null,
+    length: null,
+    weight: null,
+    characteristics: null,
+    description: null,
+    cost: null,
+  };
 
   rules: {} = {
     required: (value: string) =>
@@ -843,18 +873,24 @@ export default class Shipment extends Vue {
   }
 
   validate(page: number) {
-    if (this.$refs.form1.validate()) {
-      console.log("Correct data");
-      if (this.e1 == 1) {
+    if (page == 2) {
+      if (this.$refs.form1.validate()) {
+        console.log("Correct data / Form 1");
         for (let i = 0; i < this.selectedOptions.length; i++) {
           this.Order.options.push({ order: this.selectedOptions[i] });
         }
-      }
-      if (this.e1 != 4) {
         this.e1 = page;
+      } else {
+        console.log("Invalid Data / Form 1");
       }
-    } else {
-      console.log("Invalid Data");
+    } else if (page == 3) {
+      if (this.Order.packages.length > 0) {
+        console.log("Has packages / Form 2");
+        this.e1 = page;
+      } else {
+        this.$refs.form2.validate();
+        console.log("No packages / Form 2");
+      }
     }
   }
 
@@ -863,17 +899,26 @@ export default class Shipment extends Vue {
   }
 
   addPackage() {
-    this.PackagesDetails.push({
-      width: "",
-      height: "",
-      lenght: "",
-      weight: "",
-      characteristics: "",
-    });
+    if (this.$refs.form2.validate()) {
+      this.Order.packages.push({
+        width: this.PackageDetails.width,
+        height: this.PackageDetails.height,
+        length: this.PackageDetails.length,
+        weight: this.PackageDetails.weight,
+        characteristics: this.PackageDetails.characteristics,
+        description: this.PackageDetails.description,
+        cost: this.PackageDetails.cost,
+      });
+      this.$refs.form2.reset();
+    }
   }
 
   deletePackage(index: number) {
-    this.PackagesDetails.splice(index, 1);
+    this.Order.packages.splice(index, 1);
+  }
+
+  getCharacteristic(id: number) {
+    return this.characteristics.filter((c) => c.ch_id == id)[0].ch_name;
   }
 
   /*get total() {
@@ -970,8 +1015,8 @@ export default class Shipment extends Vue {
             this.WidthLabel = term.translation;
           } else if (term.name == "packageHeight") {
             this.HeightLabel = term.translation;
-          } else if (term.name == "packageLenght") {
-            this.LenghtLabel = term.translation;
+          } else if (term.name == "packageLength") {
+            this.LengthLabel = term.translation;
           } else if (term.name == "packageAdd") {
             this.AddPackage = term.translation;
           } else if (term.name == "ShipmentStep3") {
