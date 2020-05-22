@@ -8,6 +8,9 @@ import Home from "../views/Home.vue";
 import SignUp  from "../views/SignUp.vue";
 import DetailShipment from "../views/DetailShipment.vue";
 
+
+import RecoverPassword from "../views/RecoverPassword.vue";
+
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
@@ -83,6 +86,15 @@ const routes: Array<RouteConfig> = [
       hideBasicComponents: false,
     },
   },
+  {
+    path: "/recover",
+    name: "RecoverPassword",
+    component: RecoverPassword,
+    meta: {
+      requiresAuth: false,
+      hideBasicComponents: true,
+    },
+  },
 ];
 
 const router = new VueRouter({
@@ -90,20 +102,5 @@ const router = new VueRouter({
   routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//   to.matched.some((route) => {
-//     if (route.meta.requiresAuth) {
-//       const token: any = localStorage.getItem("token");
-//       if (jwt.isExpired(token)) {
-//         localStorage.clear();
-//         next({ path: "/login" });
-//       } else {
-//         next();
-//       }
-//     } else {
-//       next();
-//     }
-//   });
-// });
 
 export default router;
