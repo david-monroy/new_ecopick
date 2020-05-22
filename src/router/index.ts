@@ -5,6 +5,8 @@ import VueRouter, { RouteConfig } from "vue-router";
 
 //Componentes
 import Home from "../views/Home.vue";
+import SignUp  from "../views/SignUp.vue";
+import DetailShipment from "../views/DetailShipment.vue";
 
 
 import RecoverPassword from "../views/RecoverPassword.vue";
@@ -33,7 +35,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/signup",
     name: "SignUp",
-    // component: Home,
+    component: SignUp,
     meta: {
       requiresAuth: false,
       hideBasicComponents: true,
@@ -51,7 +53,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/shipments/:id",
     name: "DetailShipment",
-    // component: Home,
+    component: DetailShipment,
     meta: {
       requiresAuth: false,
       hideBasicComponents: false,
