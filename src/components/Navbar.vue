@@ -135,6 +135,7 @@ export default class Navbar extends Vue {
       name: "DetailShipment",
       params: { id: this.trackingID },
     });
+    location.reload();
   }
   // // Traducción
   get translator() {
