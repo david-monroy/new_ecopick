@@ -4,14 +4,14 @@ export default {
   getShipment(trackingId: string) {
     return API_URL.get(`/shipment/${trackingId}`, {
       headers: {
-        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOiIyMDIwLTA1LTIxVDAwOjA0OjI4LjkxMVoiLCJleHAiOiIyMDIwLTA1LTIyVDAwOjA0OjI4LjkxMVoifQ.4i2PLd81GM932_-2tM4ERp6x3XM9p28I-J8IHfwIQIs`,
+        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOiIyMDIwLTA1LTIxVDEzOjIyOjE5LjA2MFoiLCJleHAiOiIyMDIwLTA1LTIyVDEzOjIyOjE5LjA2MFoifQ.tP9NiVbcrhYNxCzsLqDGlBMuhnWPxYQuN_ADNcUAfjg`,
       },
     });
   },
   getRoute(trackingId: string) {
     return API_URL.get(`/shipment/${trackingId}/route`, {
       headers: {
-        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOiIyMDIwLTA1LTIxVDAwOjA0OjI4LjkxMVoiLCJleHAiOiIyMDIwLTA1LTIyVDAwOjA0OjI4LjkxMVoifQ.4i2PLd81GM932_-2tM4ERp6x3XM9p28I-J8IHfwIQIs`,
+        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOiIyMDIwLTA1LTIxVDEzOjIyOjE5LjA2MFoiLCJleHAiOiIyMDIwLTA1LTIyVDEzOjIyOjE5LjA2MFoifQ.tP9NiVbcrhYNxCzsLqDGlBMuhnWPxYQuN_ADNcUAfjg`,
       },
     });
   },
