@@ -11,7 +11,7 @@ export default {
   getUser(userId: any) {
     return API_URL.get(`/user/${userId}`, {
       headers: {
-        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOiIyMDIwLTA1LTIxVDEzOjIyOjE5LjA2MFoiLCJleHAiOiIyMDIwLTA1LTIyVDEzOjIyOjE5LjA2MFoifQ.tP9NiVbcrhYNxCzsLqDGlBMuhnWPxYQuN_ADNcUAfjg`,
+        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOiIyMDIwLTA1LTIxVDIwOjAzOjMxLjEwMloiLCJleHAiOiIyMDIwLTA1LTIyVDIwOjAzOjMxLjEwMloifQ.poUKL-IJjepDcHfYmt1zZRK1cvj7FvzXT5bo0C0b3eY`,
       },
     });
   },

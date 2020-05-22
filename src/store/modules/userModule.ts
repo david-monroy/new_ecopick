@@ -6,6 +6,7 @@ export default {
   // -----------------------------------------------------------------
   state: { 
     user: {},
+    userData: {},
   },
   // -----------------------------------------------------------------
   getters: {
@@ -14,6 +15,9 @@ export default {
   mutations: {
     setUser(state: {}, user: {}) {
       Vue.set(state, "user", user);
+    },
+    setUserData(state: {}, userData: {}) {
+      Vue.set(state, "userData", userData);
     },
   },
   // -----------------------------------------------------------------
@@ -49,6 +53,24 @@ export default {
           .recoverPasswordRoute(user)
           .then((response: any) => {
             resolve(response.status);
+            });
+          });
+      },
+      getUserData: async function (context: any, userId: number) {
+        await userService
+          .getUser(userId)
+          .then((response: any) => {
+            context.commit("setUserData", {
+              firstname:response.data[0].us_first_name,
+              secondname: response.data[0].us_second_name ,
+              lastname: response.data[0].us_last_name,
+              secondlastname: response.data[0].us_second_last_name,
+              phonenumber: response.data[0].us_phone_number,
+              identification: response.data[0].us_identification,
+              birthday: response.data[0].us_birthday,
+              language: response.data[0].us_fk_language,
+              email: response.data[0].us_email,
+              password: response.data[0].us_password,
             });
           });
       },
