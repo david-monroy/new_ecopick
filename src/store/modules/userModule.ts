@@ -1,11 +1,14 @@
 import Vue from "vue";
-import userService from "../../services/userService";
+import userService from "@/services/userService";
 
 export default {
   namespaced: true,
   // -----------------------------------------------------------------
-  state: {
+  state: { 
     user: {},
+  },
+  // -----------------------------------------------------------------
+  getters: {
   },
   // -----------------------------------------------------------------
   mutations: {
@@ -15,26 +18,30 @@ export default {
   },
   // -----------------------------------------------------------------
   actions: {
-    getUser: async (context: any, userId: any) => {
-      await userService.getUser(userId).then((response: any) => {
-        context.commit("setUser", {
-          name:
-            response.data[0].us_first_name +
-            " " +
-            response.data[0].us_last_name,
-          fullName:
-            response.data[0].us_first_name +
-            " " +
-            response.data[0].us_second_name +
-            " " +
-            response.data[0].us_last_name +
-            " " +
-            response.data[0].us_second_last_name,
-          phoneNumber: response.data[0].us_phone_number,
-          identification: response.data[0].us_identification,
-          email: response.data[0].us_email,
+    createUserRoute: async function (context: any, user: {}) {
+        await userService
+          .createUserRoute(user)
+      },
+      getUser: async (context: any, userId: any) => {
+        await userService.getUser(userId).then((response: any) => {
+          context.commit("setUser", {
+            name:
+              response.data[0].us_first_name +
+              " " +
+              response.data[0].us_last_name,
+            fullName:
+              response.data[0].us_first_name +
+              " " +
+              response.data[0].us_second_name +
+              " " +
+              response.data[0].us_last_name +
+              " " +
+              response.data[0].us_second_last_name,
+            phoneNumber: response.data[0].us_phone_number,
+            identification: response.data[0].us_identification,
+            email: response.data[0].us_email,
+          });
         });
-      });
-    },
-  },
+      },
+   },
 };
