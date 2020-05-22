@@ -87,7 +87,7 @@
                           solo
                           dense
                           v-model="Order.receiver.identification"
-                          :rules="rules.numericitem"
+                          :rules="rules.item"
                           label="ID"
                           required
                         ></v-text-field>
@@ -176,7 +176,6 @@
                           solo
                           dense
                           v-model="Order.direction.secondaryLine"
-                          :rules="rules.item"
                           :label="DirectionLabel2"
                           required
                         ></v-text-field>
@@ -334,23 +333,6 @@
                           ></v-text-field>
                         </v-col>
                       </v-row>
-                      <!--Costs-->
-                      <v-row>
-                        <v-col></v-col>
-                        <v-col cols="4">
-                          <v-text-field
-                            class="pa-0 ma-0"
-                            solo
-                            dense
-                            v-model="PackageDetails.cost"
-                            :label="PackageTotal"
-                            disabled
-                            @input="$v.PackageCost.$touch()"
-                            @blur="$v.PackageCost.$touch()"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col></v-col>
-                      </v-row>
                     </div>
                     <v-btn color="normal" @click="addPackage">
                       <v-icon class="mr-1 mt-0">mdi-plus</v-icon>
@@ -365,16 +347,16 @@
                       <v-row align="center">
                         <v-col cols="4" class="text-start pl-10"
                           ><p class="my-0">
-                            {{ WidthLabel + ": " + orderPackage.width }}
+                            {{ WidthLabel + ": " + orderPackage.width + "cm"}}
                           </p>
                           <p class="my-0">
-                            {{ HeightLabel + ": " + orderPackage.height }}
+                            {{ HeightLabel + ": " + orderPackage.height + "cm" }}
                           </p>
                           <p class="my-0">
-                            {{ LengthLabel + ": " + orderPackage.length }}
+                            {{ LengthLabel + ": " + orderPackage.length + "cm"}}
                           </p>
                           <p class="my-0">
-                            {{ WeightLabel + ": " + orderPackage.weight }}
+                            {{ WeightLabel + ": " + orderPackage.weight + "lbs"}}
                           </p></v-col
                         >
                         <v-col class="text-start pl-5"
@@ -382,9 +364,7 @@
                             {{ CharacteristicLabel }}:
                             {{
                               orderPackage.characteristics !== null
-                                ? getCharacteristic(
-                                    orderPackage.characteristics
-                                  )
+                                ? orderPackage.characteristics
                                 : ""
                             }}
                           </p>
@@ -716,16 +696,16 @@ export default class Shipment extends Vue {
       purpose: string;
     };
     packages: {
-      width: number;
-      height: number;
-      length: number;
-      weight: number;
-      characteristics: number;
-      description: string;
-      cost: number;
+      width: number | null;
+      height: number | null;
+      length: number | null;
+      weight: number | null;
+      characteristics: number | null;
+      description: string | null;
+      cost: number | null;
     }[];
     options: {}[];
-    discount: number;
+    discount: number | null;
   } = {
     receiver: {
       identification: "",
@@ -907,9 +887,32 @@ export default class Shipment extends Vue {
         weight: this.PackageDetails.weight,
         characteristics: this.PackageDetails.characteristics,
         description: this.PackageDetails.description,
-        cost: this.PackageDetails.cost,
+        cost: this.CalcultePackageTotal(this.PackageDetails.weight,this.PackageDetails.height, this.PackageDetails.width, this.PackageDetails.length,this.PackageDetails.characteristics),
       });
       this.$refs.form2.reset();
+    }
+  }
+
+  ChargebyOptions!: number;
+  GrossWeight!: any;
+  DimensionalWeight!: any;
+  OptionsCharge: any;
+  CostBase = 2;
+
+  CalcultePackageTotal(
+    PackWeight: any,
+    PackHeight: any,
+    PackWidth: any,
+    PackLenght: any,
+    PackCharacteristic: any, 
+  ) {
+    this.GrossWeight = this.CostBase * PackWeight;
+    this.DimensionalWeight =
+      this.CostBase * PackWidth * PackLenght * PackHeight;
+    if (this.GrossWeight > this.DimensionalWeight) {
+      return this.GrossWeight + this.characteristics.filter((c) => c.ch_id == PackCharacteristic)[0].ch_charge;
+    } else {
+      return this.DimensionalWeight + this.characteristics.filter((c) => c.ch_id == PackCharacteristic)[0].ch_charge;
     }
   }
 
@@ -917,9 +920,23 @@ export default class Shipment extends Vue {
     this.Order.packages.splice(index, 1);
   }
 
+  /* Characteristicname = "";
   getCharacteristic(id: number) {
-    return this.characteristics.filter((c) => c.ch_id == id)[0].ch_name;
-  }
+    if (id == 1){
+      this.Characteristicname = "Fragile";
+    }
+    if (id == 2){
+      this.Characteristicname =  "Flammable";
+    }
+    if (id == 3){
+      this.Characteristicname = "Living Animal";
+    }
+    if (id == 4){
+     this.Characteristicname = "Food";
+    }
+    return this.Characteristicname;
+   // return this.characteristics.filter((c) => c.ch_id == id)[0].ch_name;
+  }*/
 
   /*get total() {
     if (this.Order.discount == 0) {
