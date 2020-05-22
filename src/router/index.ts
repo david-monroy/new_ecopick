@@ -6,6 +6,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 //Componentes
 import Home from "../views/Home.vue";
 import DetailShipment from "../views/DetailShipment.vue";
+import Shipments from "../views/Shipments.vue";
 
 Vue.use(VueRouter);
 
@@ -40,7 +41,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/shipments",
     name: "Shipments",
-    // component: Home,
+    component: Shipments,
     meta: {
       requiresAuth: true,
       hideBasicComponents: false,

@@ -5,6 +5,7 @@ import translate from "./modules/translateModule";
 import user from "./modules/userModule";
 import invoice from "./modules/invoiceModule";
 import shipment from "./modules/shipmentModule";
+import allShipments from "./modules/AllShipmentsModule";
 
 Vue.use(Vuex);
 
@@ -14,5 +15,6 @@ export default new Vuex.Store({
     user,
     invoice,
     shipment,
+    allShipments,
   },
 });
