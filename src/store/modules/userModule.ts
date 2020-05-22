@@ -43,5 +43,14 @@ export default {
           });
         });
       },
+      recoverPasswordRoute: async function (context: any, user: {}) {
+        return new Promise((resolve, reject) => {
+           userService
+          .recoverPasswordRoute(user)
+          .then((response: any) => {
+            resolve(response.status);
+            });
+          });
+      },
    },
 };
