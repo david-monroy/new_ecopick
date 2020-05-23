@@ -1,48 +1,47 @@
 <template>
   <v-container fluid class="bg">
-    <v-row no gutters class="hidden-sm-and-down">
-      <v-col> </v-col>
-      <v-col></v-col>
-      <v-col></v-col>
-    </v-row>
-
     <v-row>
-      <v-col class="hidden-sm-and-down"> </v-col>
-
-      <v-card class="mx-auto" outlined width="800">
+      <v-col class="hidden-sm-and-down"></v-col>
+      <v-card class="mx-auto px-8" outlined width="800">
         <v-col justify="center" align="center">
           <v-row>
-            <v-col>
-              <v-icon class="clickable" style="float: left;">mdi-pencil</v-icon>
-            </v-col>
-            <v-col>
-              <h3>{{ titlePage }}</h3>
-            </v-col>
-            <v-col> </v-col>
-          </v-row>
-
-          <v-row>
             <v-col> </v-col>
             <v-col>
-              <v-avatar color="teal" size="100">
-                <v-icon dark>mdi-account-circle</v-icon>
+              <v-avatar class="profile" color="teal lighten-2" size="100">
+                <v-img v-if="hasImage" :src="image"></v-img>
+                <v-icon v-else dark x-large>mdi-account-circle</v-icon>
               </v-avatar>
             </v-col>
-            <v-col> </v-col>
+            <v-col>
+              <v-col class="d-flex justify-end align-center">
+                <v-icon
+                  v-if="!edit"
+                  class="clickable text-right edit-btn pa-3"
+                  color="teal"
+                  @click="edit = true"
+                  >mdi-pencil</v-icon
+                >
+              </v-col>
+            </v-col>
           </v-row>
-
           <v-form ref="form">
-            <v-row>
+            <v-row v-if="edit">
+              <v-col>
+                <v-file-input
+                  :placeholder="photoInput"
+                  prepend-icon="mdi-camera"
+                  accept="image/*"
+                  @change="previewImage"
+                ></v-file-input>
+              </v-col>
+            </v-row>
+            <v-row v-if="!edit">
               <v-col>
                 <v-text-field
                   ref="name"
                   :value="userInfo.firstname"
-                  :rules="[rules.required]"
-                  :error-messages="errorMessages"
                   :label="firstName"
-                  :placeholder="firstName"
-                  required
-                  disabled
+                  readonly
                 ></v-text-field>
               </v-col>
               <v-col>
@@ -50,22 +49,17 @@
                   ref="name"
                   :value="userInfo.secondname"
                   :label="secondName"
-                  :placeholder="secondNameP"
-                  disabled
+                  readonly
                 ></v-text-field>
               </v-col>
             </v-row>
-
-            <v-row>
+            <v-row v-if="!edit">
               <v-col>
                 <v-text-field
                   ref="name"
                   :value="userInfo.lastname"
-                  :rules="[rules.required]"
                   :label="lastName"
-                  :placeholder="lastName"
-                  required
-                  disabled
+                  readonly
                 ></v-text-field>
               </v-col>
               <v-col>
@@ -73,106 +67,186 @@
                   ref="name"
                   :value="userInfo.secondlastname"
                   :label="secondLastName"
-                  :placeholder="secondLastNameP"
-                  required
-                  disabled
+                  readonly
                 ></v-text-field>
               </v-col>
             </v-row>
-
-            <v-row>
+            <v-row v-if="!edit">
               <v-col>
                 <v-text-field
                   ref="name"
                   :value="userInfo.identification"
-                  :rules="[rules.required]"
-                  :error-messages="errorMessages"
                   :label="identification"
-                  :placeholder="identification"
-                  required
-                  disabled
+                  readonly
                 ></v-text-field>
               </v-col>
               <v-col>
-                <v-text-field
-                  ref="name"
-                  :value="userInfo.phonenumber"
-                  :rules="[rules.required]"
-                  :error-messages="errorMessages"
-                  :label="phoneNumber"
-                  :placeholder="phoneNumber"
-                  required
-                  disabled
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col>
-                <v-text-field
-                  ref="name"
-                  :value="userInfo.email"
-                  :rules="rules.emailRules"
-                  :error-messages="errorMessages"
-                  :label="email"
-                  :placeholder="email"
-                  disabled
-                ></v-text-field>
-              </v-col>
-              <v-col>
-                <v-icon class="mt-5 mr-2" style="float: left;"
+                <v-icon class="mt-5 mr-2" color="black" style="float: left;"
                   >mdi-calendar</v-icon
                 >
-
                 <v-text-field
                   :value="formatDate(userInfo.birthday)"
                   :label="birthday"
-                  :placeholder="birthday"
-                  disabled
-                  required
+                  readonly
                 >
                 </v-text-field>
               </v-col>
             </v-row>
-
             <v-row>
-              <v-col> </v-col>
               <v-col>
                 <v-text-field
                   ref="name"
-                  :value="nameLanguage"
-                  :label="languageInput"
-                  :placeholder="languageInput"
-                  disabled
+                  v-model="userInfo.email"
+                  :rules="rules.emailRules"
+                  :label="email"
+                  :placeholder="email"
+                  :readonly="!edit"
                 ></v-text-field>
               </v-col>
-              <v-col> </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col> </v-col>
-              <v-col cols="12" sm="6">
-                <v-row>
-                  <v-col> </v-col>
-                  <v-col cols="12" sm="10"> </v-col>
-                </v-row>
+              <v-col>
+                <v-text-field
+                  ref="name"
+                  v-model="userInfo.phonenumber"
+                  :rules="[rules.required]"
+                  :label="phoneNumber"
+                  :placeholder="phoneNumber"
+                  :readonly="!edit"
+                ></v-text-field>
               </v-col>
             </v-row>
-
             <v-row>
-              <v-col> </v-col>
-              <v-col> </v-col>
-              <v-col> </v-col>
+              <v-col class="hidden-sm-and-down"> </v-col>
+              <v-col>
+                <v-tooltip right>
+                  <template v-slot:activator="{ on }">
+                    <v-select
+                      v-on="on"
+                      :items="languages"
+                      item-text="name"
+                      item-value="value"
+                      :label="languageInput"
+                      v-model="language"
+                      :readonly="!edit"
+                    ></v-select>
+                  </template>
+                  <span>{{ languageTooltip }}</span>
+                </v-tooltip>
+              </v-col>
+              <v-col class="hidden-sm-and-down"> </v-col>
+            </v-row>
+            <v-row>
+              <v-col v-if="edit && !updatePassword"
+                ><v-btn @click="updatePassword = true" color="teal" outlined
+                  ><v-icon class="mr-2">mdi-lock</v-icon
+                  >{{ updatePasswordText }}</v-btn
+                ></v-col
+              >
+            </v-row>
+            <v-row v-if="updatePassword">
+              <v-col cols="5">
+                <v-text-field
+                  ref="name"
+                  v-model="password1"
+                  :rules="[rules.required]"
+                  :label="password"
+                  :placeholder="password"
+                  required
+                  type="password"
+                  name="input-10-2"
+                  class="input-group--focused"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="5">
+                <v-text-field
+                  ref="name"
+                  v-model="password2"
+                  :rules="[rules.required]"
+                  :label="passwordc"
+                  :placeholder="passwordc"
+                  required
+                  type="password"
+                  name="input-10-2"
+                  class="input-group--focused"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="2"
+                ><v-btn color="error" icon @click="updatePassword = false"
+                  ><v-icon>mdi-close</v-icon></v-btn
+                ></v-col
+              >
+            </v-row>
+            <v-row v-if="edit">
+              <v-col></v-col>
+              <v-col class="d-flex justify-end">
+                <v-btn @click="cancel()" color="grey darken-1" outlined>{{
+                  cancelText
+                }}</v-btn>
+              </v-col>
+              <v-col class="d-flex justify-start">
+                <v-btn @click="update()" color="teal" dark>{{
+                  saveText
+                }}</v-btn>
+              </v-col>
+              <v-col></v-col>
+            </v-row>
+            <v-row>
+              <v-col class="d-flex justify-end">
+                <v-dialog v-model="dialog" persistent max-width="600">
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      v-if="!edit"
+                      v-on="on"
+                      color="error"
+                      small
+                      outlined
+                      >{{ deleteText }}</v-btn
+                    >
+                  </template>
+                  <v-card>
+                    <v-card-title
+                      class="headline font-weight-light red lighten-1 white--text"
+                      >{{ warningTitle }}</v-card-title
+                    >
+                    <v-card-text class="subtitle-1 mt-3">{{
+                      warningBody
+                    }}</v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        color="grey darken-1"
+                        text
+                        @click="dialog = false"
+                        >{{ cancelText }}</v-btn
+                      >
+                      <v-btn color="red" text @click="disable()">{{
+                        deleteText
+                      }}</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-col>
             </v-row>
           </v-form>
         </v-col>
       </v-card>
       <v-col class="hidden-sm-and-down"> </v-col>
     </v-row>
-
-    <v-row>
-      <v-col> </v-col>
-    </v-row>
+    <v-snackbar v-model="snackbarSuccess" top:timeout="timeout" color="success">
+      {{ snackSuccess }}
+      <v-btn dark text @click="snackbar = false">Close</v-btn>
+    </v-snackbar>
+    <v-snackbar v-model="snackbarError" top:timeout="timeout" color="error">
+      {{ snackError }}
+      <v-btn dark text @click="snackbarError = false">Close</v-btn>
+    </v-snackbar>
+    <v-snackbar v-model="snackbarPassword" top:timeout="timeout" color="error">
+      {{ snackPassword }}
+      <v-btn dark text @click="snackbarPassword = false">Close</v-btn>
+    </v-snackbar>
+    <v-snackbar v-model="snackbarDatabase" top:timeout="timeout" color="error">
+      {{ snackDatabase }}
+      <v-btn dark text @click="snackbarDatabase = false">Close</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -195,52 +269,133 @@ import moment from "moment";
 export default class Profile extends Vue {
   $store: any;
   $router: any;
-  userInfo!: {};
+  $refs!: {
+    form: any;
+  };
+  userInfo!: {
+    photo: string | null;
+    email: string;
+    password: string;
+    phonenumber: string | null;
+    language: number;
+  };
+  edit = false;
+  updatePassword = false;
+  dialog = false;
+  hasImage = false;
+  userPhoto!: Blob;
+  image = "";
+  languages: { name: string; value: string }[] = [
+    { name: "English", value: "EN" },
+    { name: "Español", value: "ES" },
+  ];
+  language = "EN";
+  timeout = 7000;
+  IDuser = localStorage.getItem("ID");
+  password1 = "";
+  password2 = "";
 
   identification = "Identitificacion";
   firstName = "First name";
   secondName = "Second name";
-  secondNameP = "Second name (Optional)";
   lastName = "Last name";
   secondLastName = "Second last name";
-  secondLastNameP = "Second last name (Optional)";
   birthday = "Birthday";
   email = "E-mail";
   password = "Password";
   passwordc = "Confirm password";
   phoneNumber = "Phone number";
   languageInput = "Language";
-  goBack = "Go back";
-  buttonSignup = "Sign up";
-  termCondition = "Accept the terms and conditions";
-  titlePage = "Profile";
-  dateHint = "MM/DD/YYYY format";
-  snack1 = "User registered successfully";
-  snack2 = "User registration error. Try again.";
-  snack3 = "Please confirm password correctly";
+  languageTooltip = "This is your notification's and page default language";
+  snackSuccess = "User updated successfully";
+  snackError = "User update error. Try again";
+  snackPassword = "Please confirm password correctly";
+  snackDatabase = "This email is already in use. Please verify";
+  photoInput = "Choose your profile picture";
+  cancelText = "Cancel";
+  saveText = "Save";
+  updatePasswordText = "Update Password";
+  deleteText = "Delete";
+  warningTitle = "";
+  warningBody = "";
+  snackbarSuccess = false;
+  snackbarError = false;
+  snackbarDatabase = false;
+  snackbarPassword = false;
 
-  nameLanguage = "";
-  timeout = 7000;
-  IDuser = localStorage.getItem("ID");
-  languageName = "";
-  dateInfo = "";
+  disable() {
+    this.$store
+      .dispatch("user/updateUser", {
+        id: localStorage.getItem("ID"),
+        photo: this.userInfo.photo,
+        email: this.userInfo.email,
+        password: this.userInfo.password,
+        phone: this.userInfo.phonenumber,
+        language: this.language,
+        status: "Disabled",
+      })
+      .then(() => {
+        localStorage.clear();
+        location.reload();
+      })
+      .catch(() => {
+        this.snackbarError = true;
+      });
+  }
 
-  getUserData(userId: number) {
-    this.$store.dispatch("user/getUserData", userId).then(() => {
-      const lan = localStorage.getItem("Language");
-      if (lan == "1") {
-        this.nameLanguage = "English";
-      } else if (lan == "2") {
-        this.nameLanguage = "Español";
+  update() {
+    if (this.updatePassword && this.password2 !== this.password1) {
+      this.snackbarPassword = true;
+    } else {
+      if (this.$refs.form.validate()) {
+        const user = {
+          id: localStorage.getItem("ID"),
+          photo: this.userInfo.photo,
+          email: this.userInfo.email,
+          password: "",
+          phone: this.userInfo.phonenumber,
+          language: this.language,
+          status: "Enabled",
+        };
+        if (this.updatePassword && this.password2 === this.password1) {
+          user.password = this.password1;
+        } else if (!this.updatePassword) {
+          user.password = this.userInfo.password;
+        }
+        this.$store
+          .dispatch("user/updateUser", user)
+          .then(() => {
+            this.snackbarSuccess = true;
+            this.edit = false;
+            this.updatePassword = false;
+          })
+          .catch(() => (this.snackbarDatabase = true));
       }
-    });
-  }
-  created() {
-    this.getUserData(parseInt(this.IDuser!));
+    }
   }
 
-  changePage(link: string) {
-    this.$router.push({ name: link });
+  cancel() {
+    location.reload();
+  }
+
+  previewImage(event: any) {
+    if (event) {
+      const files = event || event.dataTransfer.files;
+      this.userPhoto = files;
+      this.createImage(files);
+      //Files se debe mandar a Firebase cuando lo conectemos
+    } else {
+      this.hasImage = false;
+    }
+  }
+  createImage(file: any) {
+    const reader = new FileReader();
+
+    reader.onload = (e: any) => {
+      this.image = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    this.hasImage = true;
   }
 
   rules: {} = {
@@ -253,17 +408,31 @@ export default class Profile extends Vue {
     ],
   };
 
-  $refs!: {
-    form: any;
-  };
-
   formatDate(date: string) {
     return moment(date).format("YYYY-MM-DD");
+  }
+
+  getUserData(userId: number) {
+    this.$store.dispatch("user/getUserData", userId).then(() => {
+      if (this.userInfo.language == 1) {
+        this.language = "EN";
+      } else if (this.userInfo.language == 2) {
+        this.language = "ES";
+      }
+      if (this.userInfo.photo !== null) {
+        this.hasImage = true;
+      }
+    });
+  }
+
+  created() {
+    this.getUserData(parseInt(this.IDuser!));
   }
 
   mounted() {
     this.translate();
   }
+
   get translator() {
     return this.$store.state.translate.languageTexts;
   }
@@ -286,14 +455,10 @@ export default class Profile extends Vue {
             this.firstName = term.translation;
           } else if (term.name == "signupSecondName") {
             this.secondName = term.translation;
-          } else if (term.name == "signupSecondNameP") {
-            this.secondNameP = term.translation;
           } else if (term.name == "signupLastName") {
             this.lastName = term.translation;
           } else if (term.name == "signupSecondLastName") {
             this.secondLastName = term.translation;
-          } else if (term.name == "signupSecondLastNameP") {
-            this.secondLastNameP = term.translation;
           } else if (term.name == "signupIdentification") {
             this.identification = term.translation;
           } else if (term.name == "signupBirthday") {
@@ -308,24 +473,34 @@ export default class Profile extends Vue {
             this.phoneNumber = term.translation;
           } else if (term.name == "signupLanguageInput") {
             this.languageInput = term.translation;
-          } else if (term.name == "signupGoBack") {
-            this.goBack = term.translation;
-          } else if (term.name == "signupButton") {
-            this.buttonSignup = term.translation;
-          } else if (term.name == "signupTermCondition") {
-            this.termCondition = term.translation;
-          } else if (term.name == "profileTitlePage") {
-            this.titlePage = term.translation;
-          } else if (term.name == "signupDateHint") {
-            this.dateHint = term.translation;
-          } else if (term.name == "signupSnack1") {
-            this.snack1 = term.translation;
-          } else if (term.name == "signupSnack2") {
-            this.snack2 = term.translation;
+          } else if (term.name == "generalTooltipLanguage") {
+            this.languageTooltip = term.translation;
+          } else if (term.name == "signupPassword") {
+            this.password = term.translation;
+          } else if (term.name == "signupPasswordc") {
+            this.passwordc = term.translation;
+          } else if (term.name == "profileSnack1") {
+            this.snackSuccess = term.translation;
+          } else if (term.name == "profileSnack2") {
+            this.snackError = term.translation;
           } else if (term.name == "signupSnack3") {
-            this.snack3 = term.translation;
-          } else if (term.name == "generalGoBack") {
-            this.goBack = term.translation;
+            this.snackPassword = term.translation;
+          } else if (term.name == "profileSnack3") {
+            this.snackDatabase = term.translation;
+          } else if (term.name == "generalCancelbutton") {
+            this.cancelText = term.translation;
+          } else if (term.name == "generalSaveButton") {
+            this.saveText = term.translation;
+          } else if (term.name == "profileUpdatePassword") {
+            this.updatePasswordText = term.translation;
+          } else if (term.name == "profileDelete") {
+            this.deleteText = term.translation;
+          } else if (term.name == "warningTitle") {
+            this.warningTitle = term.translation;
+          } else if (term.name == "warningBody") {
+            this.warningBody = term.translation;
+          } else if (term.name == "photoInput") {
+            this.photoInput = term.translation;
           }
         }
       );
@@ -333,7 +508,7 @@ export default class Profile extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 .bg {
   min-height: 100%;
   background-color: #f7f7f7;
@@ -341,5 +516,12 @@ export default class Profile extends Vue {
 }
 .clickable {
   cursor: pointer;
+}
+.edit-btn {
+  border-radius: 50%;
+}
+.edit-btn:hover {
+  color: white !important;
+  background-color: teal;
 }
 </style>

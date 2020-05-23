@@ -29,4 +29,11 @@ export default {
       },
     });
   },
+  updateUser(user: {}) {
+    return API_URL.put(`/user/`, user, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+  },
 };

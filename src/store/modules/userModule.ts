@@ -30,6 +30,7 @@ export default {
     getUserData: async function (context: any, userId: number) {
       await userService.getUser(userId).then((response: any) => {
         context.commit("setUserData", {
+          photo: response.data[0].us_photo,
           firstname: response.data[0].us_first_name,
           secondname: response.data[0].us_second_name,
           lastname: response.data[0].us_last_name,
@@ -75,6 +76,9 @@ export default {
             reject(error.response.status);
           });
       });
+    },
+    updateUser: async function (context: any, user: {}) {
+      await userService.updateUser(user);
     },
   },
 };
