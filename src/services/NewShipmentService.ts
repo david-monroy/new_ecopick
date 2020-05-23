@@ -36,11 +36,11 @@ export default {
       },
     }); //Aqui van los las llamadas a la API de un módulo determinado, se colocan métodos que devuelvan promesas, por ejemplo: API_URL.get('/ruta')
   },
-  getOrder() {
-    return API_URL.get("/shipment", {
+  sendOrder(Order: {}) {
+    return API_URL.post(`/shipment`, Order, {
       headers: {
-        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOiIyMDIwLTA1LTIzVDAyOjI1OjAyLjM3NloiLCJleHAiOiIyMDIwLTA1LTI0VDAyOjI1OjAyLjM3NloifQ.7LIxxDBuHQ0yrEWYVU8Nl9XMBIREz-1OSuHfYG-sPis`,
+        Authorization: { "Content-Type": "application/json" },
       },
-    }); //Aqui van los las llamadas a la API de un módulo determinado, se colocan métodos que devuelvan promesas, por ejemplo: API_URL.get('/ruta')
+    });
   },
 };

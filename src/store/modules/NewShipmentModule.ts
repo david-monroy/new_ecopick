@@ -13,7 +13,7 @@ export default {
   offices: [],
   discounts: [],
   basecost: [],
-  order: [],
+  trackingID: [],
   },
   // -----------------------------------------------------------------
   getters: {
@@ -38,6 +38,11 @@ export default {
     setBaseCost (state:{}, basecost:[]) {
       Vue.set (state, "basecost", basecost);
     },
+
+    settrackingID (state:{}, trackingID:[]) {
+      Vue.set (state, "trackingID", trackingID);
+    },
+
   },
   // -----------------------------------------------------------------
   actions: {
@@ -73,11 +78,20 @@ export default {
       }
       )
     },
-    getOrder: async (context: any, order:) => {
-      await NewShipmentService.getOrder().then((response:any) => {
-          context.commit("setBaseCost", response.data)
-      }
-      )
+    sendOrder: async function (context: any, Order: {}) {
+      return new Promise((resolve, reject) => {
+        NewShipmentService
+          .sendOrder(Order)
+          .then((response: any) => {
+            if (response.data !== "") {
+              context.commit("settrackingID", response.data);
+            }
+            resolve(response.status);
+          })
+          .catch((error: any) => {
+            reject(error.response.status);
+          });
+      });
     },
 };
 

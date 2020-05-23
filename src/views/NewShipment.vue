@@ -438,7 +438,7 @@
                             class="pa-0 ma-0"
                             solo
                             dense
-                            disabled
+                            readonly
                             suffix="$"
                             :label="orderPackage.cost"
                           ></v-text-field>
@@ -456,7 +456,7 @@
                           class="pa-0 ma-0"
                           solo
                           dense
-                          disabled
+                          readonly
                           suffix="$"
                           :label="ShipmentSurcharges"
                         ></v-text-field>
@@ -487,7 +487,7 @@
                           class="pa-0 ma-0"
                           solo
                           dense
-                          disabled
+                          readonly
                           suffix="$"
                           :value="Order.shipment.total"
                         ></v-text-field>
@@ -541,7 +541,7 @@
                           dense
                           v-model="Order.receiver.firstName"
                           :label="Order.receiver.firstName"
-                          disabled
+                          readonly
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6">
@@ -551,7 +551,7 @@
                           dense
                           v-model="Order.receiver.lastName"
                           :label="Order.receiver.lastName"
-                          disabled
+                          readonly
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -564,7 +564,7 @@
                           dense
                           v-model="Order.direction.zipCode"
                           :value="Order.direction.zipCode"
-                          disabled
+                          readonly
                           type="number"
                           counter="5"
                         ></v-text-field>
@@ -576,7 +576,7 @@
                           dense
                           v-model="Order.direction.city"
                           :label="Order.direction.city"
-                          disabled
+                          readonly
                         ></v-text-field>
                       </v-col>
                       <v-col cols="4">
@@ -586,7 +586,7 @@
                           dense
                           v-model="Order.direction.state"
                           :label="Order.direction.state"
-                          disabled
+                          readonly
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -599,7 +599,7 @@
                           dense
                           v-model="Order.direction.primaryLine"
                           :label="Order.direction.primaryLine"
-                          disabled
+                          readonly
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6">
@@ -609,7 +609,7 @@
                           dense
                           v-model="Order.direction.secondaryLine"
                           :label="Order.direction.secondaryLine"
-                          disabled
+                          readonly
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -655,8 +655,6 @@ export default class Shipment extends Vue {
   e1 = 1;
   selectedOptions = [];
 
-  //UserName = localStorage.getItem("Name");
-
   GrossWeight!: any;
   DimensionalWeight!: any;
   OptionsCharge: number[] = [];
@@ -665,7 +663,8 @@ export default class Shipment extends Vue {
   PackTotal: any;
   OptionTotal: any;
   Subtotal: any;
-  trackingID : any;
+  trackingID: any;
+  userID: any;
 
   characteristics!: {
     ch_id: number;
@@ -752,14 +751,14 @@ export default class Shipment extends Vue {
       date: "",
       total: 0,
       office: 0,
-      user: 0,
+      user: this.userID,
       purpose: "",
     },
     packages: [],
     options: [],
     discount: null,
   };
-
+  
   PackageDetails: {
     width: number | null;
     height: number | null;
@@ -788,11 +787,10 @@ export default class Shipment extends Vue {
     item: [(v: string) => !!v || this.ItemValidation],
     numericitem: [
       (v: number) => !!v || this.ItemValidation,
-      (v: number) => v > 0 || this.ZeroValidation,
     ],
     ZipCodeRules: [
       (v: number) => !!v || this.ItemValidation,
-      (v: number) => (v > 9999 && v < 99999) || this.ZipCodeValidation,
+      (v: number) => (v > 9999 && v < 100000) || this.ZipCodeValidation,
     ],
     PhoneRules: [
       (v: number) => !!v || this.ItemValidation,
@@ -806,9 +804,22 @@ export default class Shipment extends Vue {
   };
 
   searchRoute() {
+    if (localStorage.getItem("ID") != null){
+      this.userID = localStorage.getItem("ID");
+    }
     console.log("order", this.Order);
-     this.$store.dispatch("NewShipment/getOrder", this.Order).then(() => {
-      this.trackingID = this.$store.state.NewShipment.trackingID;
+     this.$store
+     .dispatch("NewShipment/sendOrder", this.Order)
+     .then((status: any) => {
+      if (status == 200){
+         this.trackingID = this.$store.state.NewShipment.trackingID;
+         console.log ("trackingID", this.trackingID);
+         setTimeout(() => {
+           this.changePage("DetailShipment");
+         },1000);
+      }else if (status == 204){
+        console.log ("Error al registrar");
+      } 
     });
   }
 
