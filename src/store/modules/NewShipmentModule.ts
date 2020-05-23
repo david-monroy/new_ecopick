@@ -12,6 +12,7 @@ export default {
   options: [],
   offices: [],
   discounts: [],
+  basecost: [],
   },
   // -----------------------------------------------------------------
   getters: {
@@ -32,39 +33,45 @@ export default {
     setDiscounts (state:{}, discounts:[]) {
       Vue.set (state, "discounts", discounts);
     },
+
+    setBaseCost (state:{}, basecost:[]) {
+      Vue.set (state, "basecost", basecost);
+    },
   },
   // -----------------------------------------------------------------
   actions: {
     // métodos que llamen a un servicio para obtener información y a un mutation para setearla en el state
     getCharacteristics: async (context: any) => {
         await NewShipmentService.getCharacteristics().then((response:any) => {
-            console.log ("response" +  response.data);
             context.commit("setCharacteristics", response.data)
         }
         )
     },
     getOptions: async (context: any) => {
       await NewShipmentService.getOptions().then((response:any) => {
-          console.log ("response" +  response.data);
           context.commit("setOptions", response.data)
       }
       )
   },
     getOffices: async (context: any) => {
       await NewShipmentService.getOffices().then((response:any) => {
-          console.log ("response" +  response.data);
           context.commit("setOffices", response.data)
       }
       )
   },
     getDiscounts: async (context: any) => {
       await NewShipmentService.getDiscounts().then((response:any) => {
-          console.log ("response" +  response.data);
           context.commit("setDiscounts", response.data)
       }
       )
     }
   },
+    getBaseCost: async (context: any) => {
+      await NewShipmentService.getBaseCost().then((response:any) => {
+          context.commit("setBaseCost", response.data)
+      }
+      )
+    },
 };
 
 //this.$store.dispatch("example/nombre_action").then(() => {}); para llamar a un action

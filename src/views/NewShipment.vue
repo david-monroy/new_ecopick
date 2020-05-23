@@ -645,6 +645,7 @@ import { mapState } from "vuex";
       "options",
       "offices",
       "discounts",
+      "basecost",
     ]),
   },
 })
@@ -690,6 +691,10 @@ export default class Shipment extends Vue {
     di_id: number;
     di_name: string;
     di_percentage: number;
+  }[];
+
+  basecost!: {
+    co_value: number;
   }[];
 
   Order: {
@@ -806,19 +811,19 @@ export default class Shipment extends Vue {
   beforeMount() {
     this.$store.dispatch("NewShipment/getCharacteristics").then(() => {
       this.characteristics = this.$store.state.NewShipment.characteristics;
-      console.log(this.characteristics);
     });
     this.$store.dispatch("NewShipment/getOptions").then(() => {
       this.options = this.$store.state.NewShipment.options;
-      console.log(this.options);
     });
     this.$store.dispatch("NewShipment/getOffices").then(() => {
       this.offices = this.$store.state.NewShipment.offices;
-      console.log("offices", this.offices);
     });
     this.$store.dispatch("NewShipment/getDiscounts").then(() => {
       this.discounts = this.$store.state.NewShipment.discounts;
-      console.log("discounts", this.discounts);
+    });
+     this.$store.dispatch("NewShipment/getBaseCost").then(() => {
+      this.basecost = this.$store.state.NewShipment.basecost;
+      console.log ("basecost", this.basecost);
     });
   }
 
