@@ -4,7 +4,9 @@
       <tr class="top">
         <td colspan="3">
           <img src="../assets/page-logo.png" class="logo" />
-          <p class="cell-title">{{ trackingName }} #{{ this.$route.params.id }}</p>
+          <p class="cell-title">
+            {{ trackingName }} #{{ this.$route.params.id }}
+          </p>
 
           <p class="cell-title">{{ date }}</p>
         </td>
@@ -22,7 +24,9 @@
       <tr class="item">
         <td>
           <p class="cell-title">{{ name }}</p>
-          <p class="cell-description">{{ shipper.name }}</p>
+          <p class="cell-description">
+            {{ shipper.firstname + " " + shipper.lastname }}
+          </p>
         </td>
         <td>
           <p class="cell-title">{{ identification }}</p>
@@ -34,7 +38,7 @@
         </td>
         <td>
           <p class="cell-title">{{ phone }}</p>
-          <p class="cell-description">{{ shipper.phoneNumber }}</p>
+          <p class="cell-description">{{ shipper.phonenumber }}</p>
         </td>
       </tr>
 
@@ -152,7 +156,7 @@ import QRCode from "../components/invoice/QRCode.vue";
       "packages",
       "discount",
     ]),
-    ...mapState("user", { shipper: "user" }),
+    ...mapState("user", { shipper: "userData" }),
     ...mapState("shipment", ["shipment"]),
   },
 })

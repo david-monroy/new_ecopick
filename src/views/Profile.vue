@@ -1,304 +1,270 @@
 <template>
-  <v-container fluid class="bg" >
+  <v-container fluid class="bg">
+    <v-row no gutters class="hidden-sm-and-down">
+      <v-col> </v-col>
+      <v-col></v-col>
+      <v-col></v-col>
+    </v-row>
 
-        <v-row no gutters class="hidden-sm-and-down"> 
-            <v-col > 
-            </v-col> 
-            <v-col ></v-col>
-             <v-col ></v-col>
-             
+    <v-row>
+      <v-col class="hidden-sm-and-down"> </v-col>
 
-        </v-row> 
-        
-        <v-row >
+      <v-card class="mx-auto" outlined width="800">
+        <v-col justify="center" align="center">
+          <v-row>
+            <v-col>
+              <v-icon class="clickable" style="float: left;">mdi-pencil</v-icon>
+            </v-col>
+            <v-col>
+              <h3>{{ titlePage }}</h3>
+            </v-col>
+            <v-col> </v-col>
+          </v-row>
 
-        <v-col class="hidden-sm-and-down"> </v-col> 
+          <v-row>
+            <v-col> </v-col>
+            <v-col>
+              <v-avatar color="teal" size="100">
+                <v-icon dark>mdi-account-circle</v-icon>
+              </v-avatar>
+            </v-col>
+            <v-col> </v-col>
+          </v-row>
 
-            <v-card
-            class="mx-auto"
-            outlined 
-            width="800"
-        
-            >
-                <v-col justify="center" align="center"> 
-                    
-                    <v-row> 
-                        <v-col >
-                           <v-icon class="clickable" style="float: left;">mdi-pencil</v-icon>
-                        </v-col>
-                        <v-col> 
-                             <h3>{{titlePage}}</h3>
-                        </v-col> 
-                        <v-col> 
-                         
-                        </v-col>  
-                    </v-row> 
+          <v-form ref="form">
+            <v-row>
+              <v-col>
+                <v-text-field
+                  ref="name"
+                  :value="userInfo.firstname"
+                  :rules="[rules.required]"
+                  :error-messages="errorMessages"
+                  :label="firstName"
+                  :placeholder="firstName"
+                  required
+                  disabled
+                ></v-text-field>
+              </v-col>
+              <v-col>
+                <v-text-field
+                  ref="name"
+                  :value="userInfo.secondname"
+                  :label="secondName"
+                  :placeholder="secondNameP"
+                  disabled
+                ></v-text-field>
+              </v-col>
+            </v-row>
 
-                    <v-row> 
-                        <v-col> 
-                        </v-col>  
-                        <v-col > 
-                             <v-avatar color="teal" size="100">
-                             <v-icon dark>mdi-account-circle</v-icon>
-                             </v-avatar>
-                        </v-col> 
-                         <v-col>  
-                        </v-col>        
-                    </v-row> 
+            <v-row>
+              <v-col>
+                <v-text-field
+                  ref="name"
+                  :value="userInfo.lastname"
+                  :rules="[rules.required]"
+                  :label="lastName"
+                  :placeholder="lastName"
+                  required
+                  disabled
+                ></v-text-field>
+              </v-col>
+              <v-col>
+                <v-text-field
+                  ref="name"
+                  :value="userInfo.secondlastname"
+                  :label="secondLastName"
+                  :placeholder="secondLastNameP"
+                  required
+                  disabled
+                ></v-text-field>
+              </v-col>
+            </v-row>
 
-                <v-form ref="form">
-                    <v-row> 
-                        <v-col> 
-                            <v-text-field
-                                ref="name"
-                                :value="userInfo.firstname"
-                                :rules="[rules.required]"
-                                :error-messages="errorMessages"
-                                :label="firstName"
-                                :placeholder="firstName"
-                                required
-                                disabled
-                            ></v-text-field>
-                        </v-col>
-                        <v-col> 
-                            <v-text-field
-                                ref="name"
-                                :value="userInfo.secondname"
-                                :label="secondName"
-                                :placeholder="secondNameP"
-                                disabled
-                            ></v-text-field>
-                        </v-col>  
-                    </v-row> 
+            <v-row>
+              <v-col>
+                <v-text-field
+                  ref="name"
+                  :value="userInfo.identification"
+                  :rules="[rules.required]"
+                  :error-messages="errorMessages"
+                  :label="identification"
+                  :placeholder="identification"
+                  required
+                  disabled
+                ></v-text-field>
+              </v-col>
+              <v-col>
+                <v-text-field
+                  ref="name"
+                  :value="userInfo.phonenumber"
+                  :rules="[rules.required]"
+                  :error-messages="errorMessages"
+                  :label="phoneNumber"
+                  :placeholder="phoneNumber"
+                  required
+                  disabled
+                ></v-text-field>
+              </v-col>
+            </v-row>
 
-                    <v-row> 
-                        <v-col> 
-                            <v-text-field
-                                ref="name"
-                                :value="userInfo.lastname"
-                                :rules="[rules.required]"
-                                :label="lastName"
-                                :placeholder="lastName"
-                                required
-                                disabled
-                            ></v-text-field>
-                        </v-col>
-                        <v-col> 
-                            <v-text-field
-                                ref="name"
-                                :value="userInfo.secondlastname"
-                                :label="secondLastName"
-                                :placeholder="secondLastNameP"
-                                required
-                                disabled
-                            ></v-text-field>
-                        </v-col>  
-                    </v-row> 
+            <v-row>
+              <v-col>
+                <v-text-field
+                  ref="name"
+                  :value="userInfo.email"
+                  :rules="rules.emailRules"
+                  :error-messages="errorMessages"
+                  :label="email"
+                  :placeholder="email"
+                  disabled
+                ></v-text-field>
+              </v-col>
+              <v-col>
+                <v-icon class="mt-5 mr-2" style="float: left;"
+                  >mdi-calendar</v-icon
+                >
 
-                    <v-row> 
-                        <v-col> 
-                            <v-text-field
-                                ref="name"
-                                :value="userInfo.identification"
-                                :rules="[rules.required]"
-                                :error-messages="errorMessages"
-                                :label="identification"
-                                :placeholder="identification"
-                                required
-                                disabled
-                            ></v-text-field>
-                        </v-col>
-                        <v-col> 
-                            <v-text-field
-                                ref="name"
-                                :value="userInfo.phonenumber"
-                                :rules="[rules.required]"
-                                :error-messages="errorMessages"
-                                :label="phoneNumber"
-                                :placeholder="phoneNumber"
-                                required
-                                disabled
-                            ></v-text-field>
-                            
-                        </v-col>  
-                    </v-row> 
+                <v-text-field
+                  :value="formatDate(userInfo.birthday)"
+                  :label="birthday"
+                  :placeholder="birthday"
+                  disabled
+                  required
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
 
-                    <v-row> 
-                        <v-col> 
-                            <v-text-field
-                                ref="name"
-                                :value="userInfo.email"
-                                :rules="rules.emailRules"
-                                :error-messages="errorMessages"
-                                :label="email"
-                                :placeholder="email"
-                                
-                                disabled
-                            ></v-text-field>
-                        </v-col>
-                        <v-col> 
-                            <v-icon class="mt-5 mr-2" style="float: left;">mdi-calendar</v-icon>
-                           
-                                    <v-text-field
-                                    :value="formatDate(userInfo.birthday)"
-                                    :label="birthday"
-                                    :placeholder="birthday"
-                                    disabled 
-                                    required
-                                    > </v-text-field>
-                                
-                        </v-col>  
-                    </v-row> 
+            <v-row>
+              <v-col> </v-col>
+              <v-col>
+                <v-text-field
+                  ref="name"
+                  :value="nameLanguage"
+                  :label="languageInput"
+                  :placeholder="languageInput"
+                  disabled
+                ></v-text-field>
+              </v-col>
+              <v-col> </v-col>
+            </v-row>
 
-                    <v-row> 
-                        <v-col> 
-                       </v-col>  
-                        <v-col> 
-                             <v-text-field
-                                    ref="name"
-                                    :value="nameLanguage"
-                                    :label="languageInput"
-                                    :placeholder="languageInput"
-                                    disabled
-                             ></v-text-field>
-                        </v-col>  
-                        <v-col> 
-                       </v-col>  
-                    </v-row> 
+            <v-row>
+              <v-col> </v-col>
+              <v-col cols="12" sm="6">
+                <v-row>
+                  <v-col> </v-col>
+                  <v-col cols="12" sm="10"> </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
 
-                    <v-row> 
-                        <v-col> 
-                        
-                        </v-col>  
-                                <v-col cols="12" sm="6"> 
-                                    <v-row>
-                                        <v-col> 
-                                        </v-col> 
-                                        <v-col cols="12" sm="10">
-                                          </v-col> 
-                                    </v-row>
-                                    
-                                </v-col>  
-                    </v-row> 
-                
-                     <v-row> 
-                        <v-col> 
-                        </v-col>  
-                        <v-col > 
-                        </v-col> 
-                         <v-col>  
-                        </v-col>        
-                    </v-row> 
-                </v-form>
+            <v-row>
+              <v-col> </v-col>
+              <v-col> </v-col>
+              <v-col> </v-col>
+            </v-row>
+          </v-form>
+        </v-col>
+      </v-card>
+      <v-col class="hidden-sm-and-down"> </v-col>
+    </v-row>
 
-                </v-col> 
-            </v-card>
-        <v-col class="hidden-sm-and-down"> </v-col>    
-
-        </v-row> 
-
-        <v-row> 
-            <v-col> 
-            </v-col>     
-        </v-row> 
-
-    </v-container>
+    <v-row>
+      <v-col> </v-col>
+    </v-row>
+  </v-container>
 </template>
-
 
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import {Watch} from "vue-property-decorator";
+import { Watch } from "vue-property-decorator";
 import { mapState } from "vuex";
 import Translate from "../components/Translate.vue";
 import moment from "moment";
 
-@Component({ 
-  components: { 
+@Component({
+  components: {
     Translate,
-   },
+  },
   computed: {
     ...mapState("user", { userInfo: "userData" }),
   },
 })
-
 export default class Profile extends Vue {
+  $store: any;
+  $router: any;
+  userInfo!: {};
 
-    $store: any;
-    $router: any;
-    userInfo!: {};
+  identification = "Identitificacion";
+  firstName = "First name";
+  secondName = "Second name";
+  secondNameP = "Second name (Optional)";
+  lastName = "Last name";
+  secondLastName = "Second last name";
+  secondLastNameP = "Second last name (Optional)";
+  birthday = "Birthday";
+  email = "E-mail";
+  password = "Password";
+  passwordc = "Confirm password";
+  phoneNumber = "Phone number";
+  languageInput = "Language";
+  goBack = "Go back";
+  buttonSignup = "Sign up";
+  termCondition = "Accept the terms and conditions";
+  titlePage = "Profile";
+  dateHint = "MM/DD/YYYY format";
+  snack1 = "User registered successfully";
+  snack2 = "User registration error. Try again.";
+  snack3 = "Please confirm password correctly";
 
+  nameLanguage = "";
+  timeout = 7000;
+  IDuser = localStorage.getItem("ID");
+  languageName = "";
+  dateInfo = "";
 
-                identification= "Identitificacion"
-                firstName= "First name"
-                secondName= "Second name"
-                secondNameP= "Second name (Optional)"
-                lastName= "Last name"
-                secondLastName= "Second last name"
-                secondLastNameP= "Second last name (Optional)"
-                birthday= "Birthday"
-                email= "E-mail"
-                password= "Password"
-                passwordc= "Confirm password"
-                phoneNumber= "Phone number"
-                languageInput= "Language"
-                goBack=  "Go back"
-                buttonSignup= "Sign up"
-                termCondition= "Accept the terms and conditions"
-                titlePage= "Profile"
-                dateHint="MM/DD/YYYY format"
-                snack1 = "User registered successfully"
-                snack2 = "User registration error. Try again."
-                snack3 = "Please confirm password correctly"
+  getUserData(userId: number) {
+    this.$store.dispatch("user/getUserData", userId).then(() => {
+      const lan = localStorage.getItem("Language");
+      if (lan == "1") {
+        this.nameLanguage = "English";
+      } else if (lan == "2") {
+        this.nameLanguage = "Español";
+      }
+    });
+  }
+  created() {
+    this.getUserData(parseInt(this.IDuser!));
+  }
 
-  
-    nameLanguage = ""
-    timeout =7000;
-    IDuser = localStorage.getItem("ID");
-    languageName = "";
-    dateInfo = "";
+  changePage(link: string) {
+    this.$router.push({ name: link });
+  }
 
-         getUserData(userId: number) {
-         this.$store.dispatch("user/getUserData", userId).then(() => {
-            if (localStorage.getItem("Language")=="1"){
-              this.nameLanguage="English";
-            } else if (localStorage.getItem("Language")=="2"){ 
-              this.nameLanguage="Español";
-            }  
-            })
-         }
-          created() {
-            this.getUserData(parseInt(this.IDuser!));
+  rules: {} = {
+    required: (value: string) =>
+      (!!value && value !== "" && value !== undefined) || "Required",
+    passwordRules: [(v: string) => !!v || "Password is required"],
+    emailRules: [
+      (v: string) => !!v || "E-mail is required",
+      (v: string) => /.+@.+\..+/.test(v) || "E-mail is required",
+    ],
+  };
 
-          }
-    
-      changePage(link: string) {
-         this.$router.push({ name: link });
-       }
+  $refs!: {
+    form: any;
+  };
 
-    rules: {} = {
-        required: (value: string) =>
-        (!!value && value !== "" && value !== undefined) || "Required",
-        passwordRules: [(v: string) =>!!v || "Password is required"],
-        emailRules: [ 
-            (v:string) => !!v || "E-mail is required",
-            (v:string) => /.+@.+\..+/.test(v) || "E-mail is required",
-        ],
-    };
-
-    $refs!: {
-        form:any;
-    };
-
-     formatDate(date: string) {
+  formatDate(date: string) {
     return moment(date).format("YYYY-MM-DD");
   }
- 
-     mounted() {
+
+  mounted() {
     this.translate();
   }
-    get translator() {
+  get translator() {
     return this.$store.state.translate.languageTexts;
   }
 
@@ -307,7 +273,11 @@ export default class Profile extends Vue {
     this.translator
       .filter(
         (term: { context: string; name: string; translation: string }) => {
-          return term.context == "signup" || term.context == "general" || term.context == "profile";
+          return (
+            term.context == "signup" ||
+            term.context == "general" ||
+            term.context == "profile"
+          );
         }
       )
       .forEach(
@@ -315,7 +285,7 @@ export default class Profile extends Vue {
           if (term.name == "signupFirstName") {
             this.firstName = term.translation;
           } else if (term.name == "signupSecondName") {
-            this.secondName= term.translation;
+            this.secondName = term.translation;
           } else if (term.name == "signupSecondNameP") {
             this.secondNameP = term.translation;
           } else if (term.name == "signupLastName") {
@@ -325,7 +295,7 @@ export default class Profile extends Vue {
           } else if (term.name == "signupSecondLastNameP") {
             this.secondLastNameP = term.translation;
           } else if (term.name == "signupIdentification") {
-            this.identification= term.translation;
+            this.identification = term.translation;
           } else if (term.name == "signupBirthday") {
             this.birthday = term.translation;
           } else if (term.name == "signupEmail") {
@@ -339,7 +309,7 @@ export default class Profile extends Vue {
           } else if (term.name == "signupLanguageInput") {
             this.languageInput = term.translation;
           } else if (term.name == "signupGoBack") {
-            this.goBack= term.translation;
+            this.goBack = term.translation;
           } else if (term.name == "signupButton") {
             this.buttonSignup = term.translation;
           } else if (term.name == "signupTermCondition") {
@@ -359,17 +329,16 @@ export default class Profile extends Vue {
           }
         }
       );
-  } 
-    } 
+  }
+}
 </script>
 
 <style>
 .bg {
-        /* background-image: url('../assets/bg-login.jpg');*/
-         min-height:100%;
-         background-color: #f7f7f7;
-         background-size:cover;
-    }
+  min-height: 100%;
+  background-color: #f7f7f7;
+  background-size: cover;
+}
 .clickable {
   cursor: pointer;
 }
