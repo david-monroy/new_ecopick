@@ -433,10 +433,9 @@
                             class="pa-0 ma-0"
                             solo
                             dense
-                            v-model="Order.packages.cost"
                             disabled
                             suffix="$"
-                            :value="Order.packages.cost"
+                            :label="orderPackage.cost"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="3"></v-col>
@@ -452,7 +451,6 @@
                           class="pa-0 ma-0"
                           solo
                           dense
-                          v-model="ShipmentExtra"
                           disabled
                           suffix="$"
                           :label="ShipmentExtra"
@@ -484,7 +482,6 @@
                           class="pa-0 ma-0"
                           solo
                           dense
-                          v-model="Order.shipment.total"
                           disabled
                           suffix="$"
                           :value="Order.shipment.total"
@@ -782,7 +779,7 @@ export default class Shipment extends Vue {
   PackageDescriptionLabel = "Description";
 
   Step3 = "Costs";
-  ShipmentCostLabel = "Ship Cost";
+  ShipmentCostLabel = "Shipment surcharges";
   ShipmentCost = "0";
   PackageCostLabel = "Package 1";
   TotalShipment = "100";
@@ -925,7 +922,7 @@ export default class Shipment extends Vue {
   ) {
     this.GrossWeight = this.CostBase * PackWeight;
     this.DimensionalWeight =
-      this.CostBase * PackWidth * PackLenght * PackHeight;
+      ((this.CostBase * PackWidth * PackLenght * PackHeight)/5000).toFixed(2);
     if (this.GrossWeight > this.DimensionalWeight) {
       return (
         this.GrossWeight +
@@ -934,7 +931,7 @@ export default class Shipment extends Vue {
       );
     } else {
       return (
-        (this.DimensionalWeight / 5000)+
+        this.DimensionalWeight +
         this.characteristics.filter((c) => c.ch_id == PackCharacteristic)[0]
           .ch_charge
       );
