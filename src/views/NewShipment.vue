@@ -617,7 +617,7 @@
                 </v-container>
               </v-card>
 
-              <v-btn color="normal" @click="prueba()">
+              <v-btn color="normal" @click="searchRoute()">
                 {{ Continuebtn }}
               </v-btn>
 
@@ -665,6 +665,7 @@ export default class Shipment extends Vue {
   PackTotal: any;
   OptionTotal: any;
   Subtotal: any;
+  trackingID : any;
 
   characteristics!: {
     ch_id: number;
@@ -804,8 +805,11 @@ export default class Shipment extends Vue {
     form2: any;
   };
 
-  prueba() {
+  searchRoute() {
     console.log("order", this.Order);
+     this.$store.dispatch("NewShipment/getOrder", this.Order).then(() => {
+      this.trackingID = this.$store.state.NewShipment.trackingID;
+    });
   }
 
   beforeMount() {

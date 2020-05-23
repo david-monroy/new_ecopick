@@ -13,6 +13,7 @@ export default {
   offices: [],
   discounts: [],
   basecost: [],
+  order: [],
   },
   // -----------------------------------------------------------------
   getters: {
@@ -68,6 +69,12 @@ export default {
   },
     getBaseCost: async (context: any) => {
       await NewShipmentService.getBaseCost().then((response:any) => {
+          context.commit("setBaseCost", response.data)
+      }
+      )
+    },
+    getOrder: async (context: any, order:) => {
+      await NewShipmentService.getOrder().then((response:any) => {
           context.commit("setBaseCost", response.data)
       }
       )
