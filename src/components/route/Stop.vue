@@ -1,14 +1,13 @@
 <template>
   <v-container fluid>
     <v-row v-for="(routeStop, i) in route" :key="i">
-      <v-col cols="4"
-        ><p class="mb-0 body-2">{{ formatDate(routeStop.date).date }}</p>
-        <p class="body-2">{{ formatDate(routeStop.date).hour }}</p></v-col
-      ><v-divider vertical inset color="teal"></v-divider
-      ><v-col
-        ><p class="subtitle-1 font-weight-medium mb-0">
-          {{ routeStop.status }}
-        </p>
+      <v-col cols="4">
+        <p class="mb-0 body-2">{{ formatDate(routeStop.date).date }}</p>
+        <p class="body-2">{{ formatDate(routeStop.date).hour }}</p>
+      </v-col>
+      <v-divider vertical inset color="teal"></v-divider>
+      <v-col>
+        <p class="subtitle-1 font-weight-medium mb-0">{{ routeStop.status }}</p>
         <p class="body-2 font-italic">
           {{
             routeStop.primaryline +
@@ -18,8 +17,8 @@
             routeStop.city
           }}
         </p>
-      </v-col></v-row
-    >
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -49,8 +48,13 @@ export default class Map extends Vue {
   date = "Date";
 
   formatDate(date: string) {
-    const lan = localStorage.getItem("lan");
-    moment.locale(lan);
+    const lan = localStorage.getItem("Lang");
+    if (lan !== null) {
+      moment.locale(lan);
+    } else {
+      moment.locale("en-us");
+    }
+
     return {
       date: moment(date).format("dddd, MMMM DD YYYY"),
       hour: moment(date).format("HH:mm"),

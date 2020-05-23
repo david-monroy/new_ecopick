@@ -13,7 +13,8 @@
       class="mr-auto mr-md-4 transition-swing"
       max-width="450"
       max-height="38"
-      ><v-text-field
+    >
+      <v-text-field
         class="hidden-sm-and-down"
         prepend-inner-icon="mdi-magnify"
         clearable
@@ -24,8 +25,8 @@
         :label="search"
         v-model="trackingID"
         @keyup.enter="searchShipment()"
-      ></v-text-field
-    ></v-responsive>
+      ></v-text-field>
+    </v-responsive>
     <v-spacer></v-spacer>
     <v-menu height="40">
       <template v-slot:activator="{ on }">
@@ -84,15 +85,23 @@
           <v-list-item-title>{{ buttonDiscounts }}</v-list-item-title>
         </v-list-item>
       </v-list>
+      <v-list class="hidden-md-and-up">
+        <v-list-item @click="changePage('Login')">
+          <v-list-item-title>{{ signOut }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
     </v-menu>
-    <Translate /> 
-    <v-btn text small class="option font-weight-light mx-2" @click="changePage('Login')">
-       <v-icon>
-       mdi-exit-to-app
-      </v-icon>
-      <p class="hidden-sm-and-down ma-0"> 
-       Sign out</p>
-      </v-btn>
+    <Translate />
+    <v-btn
+      v-if="activeUser !== null"
+      text
+      small
+      class="option font-weight-light mx-2"
+      @click="changePage('Login')"
+    >
+      <v-icon>mdi-exit-to-app</v-icon>
+      <p class="hidden-sm-and-down ma-0">{{ signOut }}</p>
+    </v-btn>
   </v-app-bar>
 </template>
 
@@ -113,6 +122,7 @@ export default class Navbar extends Vue {
   buttonProfile = "Profile";
   buttonDiscounts = "Discounts";
   signUp = "Sign Up";
+  signOut = "Sign Out";
   logIn = "Log In";
   // // Search
   trackingID = "";
@@ -124,9 +134,9 @@ export default class Navbar extends Vue {
 
   // Computed properties
   get activeUser() {
-    const userEmail = localStorage.getItem("Email");
-    if (userEmail !== null) {
-      return userEmail.split("@")[0];
+    const name = localStorage.getItem("Name");
+    if (name !== null) {
+      return name;
     } else {
       return null;
     }
@@ -135,7 +145,7 @@ export default class Navbar extends Vue {
   // Metodos
   // // Redirección
   changePage(link: string) {
-    if (link == "Login"){
+    if (link == "Login") {
       localStorage.clear();
     }
     this.$router.push({ name: link });
@@ -171,6 +181,8 @@ export default class Navbar extends Vue {
             this.search = term.translation;
           } else if (term.name == "generalSignUp") {
             this.signUp = term.translation;
+          } else if (term.name == "generalSignOut") {
+            this.signOut = term.translation;
           } else if (term.name == "generalLogIn") {
             this.logIn = term.translation;
           }

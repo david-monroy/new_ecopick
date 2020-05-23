@@ -1,17 +1,14 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-// import { VueEasyJwt } from "vue-easy-jwt";
-// const jwt = new VueEasyJwt();
+import { VueEasyJwt } from "vue-easy-jwt";
+const jwt = new VueEasyJwt();
 
 //Componentes
 import Home from "../views/Home.vue";
-import SignUp  from "../views/SignUp.vue";
+import SignUp from "../views/SignUp.vue";
 import DetailShipment from "../views/DetailShipment.vue";
 import Profile from "../views/Profile.vue";
-
-
 import RecoverPassword from "../views/RecoverPassword.vue";
-
 import Login from "../views/Login.vue";
 
 Vue.use(VueRouter);
@@ -63,7 +60,7 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    path: "/shipments/new",
+    path: "/shipment/new",
     name: "NewShipment",
     // component: Home,
     meta: {
@@ -105,5 +102,20 @@ const router = new VueRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  to.matched.some((route) => {
+    if (route.meta.requiresAuth) {
+      const token: any = localStorage.getItem("token");
+      if (jwt.isExpired(token)) {
+        localStorage.clear();
+        next({ path: "/login" });
+      } else {
+        next();
+      }
+    } else {
+      next();
+    }
+  });
+});
 
 export default router;

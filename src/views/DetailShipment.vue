@@ -145,11 +145,11 @@ export default class DetailShipment extends Vue {
       });
   }
 
-  getShipment(trackingId: string) {
+  getShipment() {
     this.$store
       .dispatch("shipment/getShipment", this.$route.params.id)
-      .then((response: any) => {
-        this.$store.dispatch("user/getUser", this.shipment.userid);
+      .then(() => {
+        this.$store.dispatch("user/getUserData", this.shipment.userid);
         this.$store.dispatch("invoice/getInvoice", this.$route.params.id);
         this.getRoute(this.$route.params.id);
         this.noContent = "content";
@@ -160,7 +160,7 @@ export default class DetailShipment extends Vue {
   }
 
   created() {
-    this.getShipment(this.$route.params.id);
+    this.getShipment();
   }
 
   get translator() {

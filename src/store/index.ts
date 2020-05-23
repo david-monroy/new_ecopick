@@ -6,8 +6,6 @@ import translate from "./modules/translateModule";
 import invoice from "./modules/invoiceModule";
 import shipment from "./modules/shipmentModule";
 
-import user from "./modules/userModule";
-
 Vue.use(Vuex);
 
 export default new Vuex.Store({
