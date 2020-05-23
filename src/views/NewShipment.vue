@@ -347,16 +347,22 @@
                       <v-row align="center">
                         <v-col cols="4" class="text-start pl-10"
                           ><p class="my-0">
-                            {{ WidthLabel + ": " + orderPackage.width + "cm"}}
+                            {{ WidthLabel + ": " + orderPackage.width + "cm" }}
                           </p>
                           <p class="my-0">
-                            {{ HeightLabel + ": " + orderPackage.height + "cm" }}
+                            {{
+                              HeightLabel + ": " + orderPackage.height + "cm"
+                            }}
                           </p>
                           <p class="my-0">
-                            {{ LengthLabel + ": " + orderPackage.length + "cm"}}
+                            {{
+                              LengthLabel + ": " + orderPackage.length + "cm"
+                            }}
                           </p>
                           <p class="my-0">
-                            {{ WeightLabel + ": " + orderPackage.weight + "lbs"}}
+                            {{
+                              WeightLabel + ": " + orderPackage.weight + "lbs"
+                            }}
                           </p></v-col
                         >
                         <v-col class="text-start pl-5"
@@ -406,7 +412,7 @@
                   <!--Títle -->
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
-                    <v-col cols="6" class="align-center" justify="center">
+                    <v-col  cols="12" md="6" class="align-center" justify="center">
                       <p class="display-2 white--text">
                         {{ NewShipmentTitle }}
                       </p>
@@ -416,7 +422,7 @@
                   <!--Form 1-->
                   <form>
                     <!--Packages Cost-->
-                    <div>
+                    <div v-for="(orderPackage, i) in Order.packages" :key="i">
                       <v-row>
                         <v-col cols="3"></v-col>
                         <v-col cols="3">
@@ -430,15 +436,14 @@
                             v-model="Order.packages.cost"
                             disabled
                             suffix="$"
-                            :label="PackageTotal"
+                            :value="Order.packages.cost"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="3"></v-col>
                       </v-row>
                     </div>
                     <v-divider></v-divider>
-                    <!--Ship-->
-                    <v-row>
+                     <v-row>
                       <v-col cols="3">
                         <v-subheader>{{ ShipmentCostLabel }}</v-subheader>
                       </v-col>
@@ -447,10 +452,10 @@
                           class="pa-0 ma-0"
                           solo
                           dense
-                          v-model="ShipmentCost"
+                          v-model="ShipmentExtra"
                           disabled
                           suffix="$"
-                          :label="ShipmentCost"
+                          :label="ShipmentExtra"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6">
@@ -462,18 +467,19 @@
                           item-value="di_id"
                           item-text="di_name"
                           :label="DiscountLabel"
+                          v-on="CalculateTotal(di_id)"
                         ></v-select>
                       </v-col>
                     </v-row>
                     <!--Total-->
                     <v-row>
-                      <v-col cols="3"></v-col>
+                      <v-col cols="2"></v-col>
                       <v-col cols="3">
                         <v-subheader class="title font-weight-black"
                           >TOTAL</v-subheader
                         >
                       </v-col>
-                      <v-col cols="3">
+                      <v-col cols="4">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -481,7 +487,7 @@
                           v-model="Order.shipment.total"
                           disabled
                           suffix="$"
-                          :label="TotalShipment"
+                          :value="Order.shipment.total"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="3"></v-col>
@@ -731,11 +737,18 @@ export default class Shipment extends Vue {
     },
     packages: [],
     options: [],
-    discount: 0,
+    discount: null,
   };
   selectedOptions = [];
 
   UserName = localStorage.getItem("Name");
+
+  ChargebyOptions!: number;
+  GrossWeight!: any;
+  DimensionalWeight!: any;
+  OptionsCharge: number[] = [];
+  CostBase = 2;
+  OptionsTotal: any;
 
   NewShipmentTitle = "Your Order";
   OriginTitle = "ORIGIN";
@@ -858,6 +871,9 @@ export default class Shipment extends Vue {
         console.log("Correct data / Form 1");
         for (let i = 0; i < this.selectedOptions.length; i++) {
           this.Order.options.push({ order: this.selectedOptions[i] });
+          this.OptionsTotal = this.CalculateOptionsCharge(
+            this.selectedOptions[i]
+          );
         }
         this.e1 = page;
       } else {
@@ -866,6 +882,7 @@ export default class Shipment extends Vue {
     } else if (page == 3) {
       if (this.Order.packages.length > 0) {
         console.log("Has packages / Form 2");
+        this.CalculateTotal(0);
         this.e1 = page;
       } else {
         this.$refs.form2.validate();
@@ -887,32 +904,80 @@ export default class Shipment extends Vue {
         weight: this.PackageDetails.weight,
         characteristics: this.PackageDetails.characteristics,
         description: this.PackageDetails.description,
-        cost: this.CalcultePackageTotal(this.PackageDetails.weight,this.PackageDetails.height, this.PackageDetails.width, this.PackageDetails.length,this.PackageDetails.characteristics),
+        cost: this.CalculatePackageTotal(
+          this.PackageDetails.weight,
+          this.PackageDetails.height,
+          this.PackageDetails.width,
+          this.PackageDetails.length,
+          this.PackageDetails.characteristics
+        ),
       });
       this.$refs.form2.reset();
     }
   }
 
-  ChargebyOptions!: number;
-  GrossWeight!: any;
-  DimensionalWeight!: any;
-  OptionsCharge: any;
-  CostBase = 2;
-
-  CalcultePackageTotal(
+  CalculatePackageTotal(
     PackWeight: any,
     PackHeight: any,
     PackWidth: any,
     PackLenght: any,
-    PackCharacteristic: any, 
+    PackCharacteristic: any
   ) {
     this.GrossWeight = this.CostBase * PackWeight;
     this.DimensionalWeight =
       this.CostBase * PackWidth * PackLenght * PackHeight;
     if (this.GrossWeight > this.DimensionalWeight) {
-      return this.GrossWeight + this.characteristics.filter((c) => c.ch_id == PackCharacteristic)[0].ch_charge;
+      return (
+        this.GrossWeight +
+        this.characteristics.filter((c) => c.ch_id == PackCharacteristic)[0]
+          .ch_charge
+      );
     } else {
-      return this.DimensionalWeight + this.characteristics.filter((c) => c.ch_id == PackCharacteristic)[0].ch_charge;
+      return (
+        (this.DimensionalWeight / 5000)+
+        this.characteristics.filter((c) => c.ch_id == PackCharacteristic)[0]
+          .ch_charge
+      );
+    }
+  }
+
+  CalculateOptionsCharge(i: number) {
+    this.OptionsCharge.push(
+      this.options.filter((o) => o.op_id == i)[0].op_charge
+    );
+  }
+ShipmentExtra: any;
+ 
+  CalculateOptionsTotal() {
+    if (this.OptionsCharge != null) {
+      this.ShipmentExtra = this.OptionsCharge.reduce(
+        (total:any, num: any) => total + num,
+        0
+      ).toFixed(2);
+      return this.ShipmentExtra;
+    } else {
+      return 1;
+    }
+  }
+
+ CalculatePackagesTotal() {
+    return ( this.Order.packages
+      .reduce((acc:any, item: { cost: number|null }) => acc + item.cost, 0)
+      .toFixed(2));
+  }
+
+  PackTotal : any;
+  OptionTotal: any;
+  example: any;
+  CalculateTotal(i: number) {
+    this.OptionTotal = parseFloat(this.CalculateOptionsTotal());
+    this.PackTotal = parseFloat(this.CalculatePackagesTotal());
+    if (this.Order.discount == null) {
+      this.Order.shipment.total = this.OptionTotal + this.PackTotal;
+    } else {
+      this.example = ((this.OptionTotal + this.PackTotal) * this.discounts.filter((d) => d.di_id == i)[0]
+          .di_percentage).toFixed(2);
+      this.Order.shipment.total = this.example;
     }
   }
 
