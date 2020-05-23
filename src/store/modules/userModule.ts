@@ -5,16 +5,12 @@ export default {
   namespaced: true,
   // -----------------------------------------------------------------
   state: {
-    user: {},
     userData: {},
   },
   // -----------------------------------------------------------------
   getters: {},
   // -----------------------------------------------------------------
   mutations: {
-    setUser(state: {}, user: {}) {
-      Vue.set(state, "user", user);
-    },
     setUserData(state: {}, userData: {}) {
       Vue.set(state, "userData", userData);
     },
