@@ -412,7 +412,12 @@
                   <!--Títle -->
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
-                    <v-col  cols="12" md="6" class="align-center" justify="center">
+                    <v-col
+                      cols="12"
+                      md="6"
+                      class="align-center"
+                      justify="center"
+                    >
                       <p class="display-2 white--text">
                         {{ NewShipmentTitle }}
                       </p>
@@ -442,7 +447,7 @@
                       </v-row>
                     </div>
                     <v-divider></v-divider>
-                     <v-row>
+                    <v-row>
                       <v-col cols="3">
                         <v-subheader>{{ ShipmentCostLabel }}</v-subheader>
                       </v-col>
@@ -453,7 +458,7 @@
                           dense
                           disabled
                           suffix="$"
-                          :label="ShipmentExtra"
+                          :label="ShipmentSurcharges"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6">
@@ -647,6 +652,18 @@ export default class Shipment extends Vue {
   $store: any;
   $router: any;
   e1 = 1;
+  selectedOptions = [];
+
+  //UserName = localStorage.getItem("Name");
+
+  GrossWeight!: any;
+  DimensionalWeight!: any;
+  OptionsCharge: number[] = [];
+  CostBase = 2;
+  OptionsTotal: any;
+  PackTotal: any;
+  OptionTotal: any;
+  Subtotal: any;
 
   characteristics!: {
     ch_id: number;
@@ -736,63 +753,6 @@ export default class Shipment extends Vue {
     options: [],
     discount: null,
   };
-  selectedOptions = [];
-
-  UserName = localStorage.getItem("Name");
-
-  ChargebyOptions!: number;
-  GrossWeight!: any;
-  DimensionalWeight!: any;
-  OptionsCharge: number[] = [];
-  CostBase = 2;
-  OptionsTotal: any;
-
-  NewShipmentTitle = "Your Order";
-  OriginTitle = "ORIGIN";
-  DestinationTitle = "DESTINATION";
-
-  Step1 = "Origin/Destination";
-  PhoneLabel = "Phone";
-  EmailLabel = "Email";
-  ZipCodeLabel = "Zip Code";
-  CityLabel = "City";
-  StateLabel = "State";
-  DirectionLabel1 = "Address Line";
-  DirectionLabel2 = "Address Line (cont)";
-  ReceiverNameLabel = "Name";
-  ReceiverLastNameLabel = "Last Name";
-  OfficeLabel = "Select an origin office";
-  Offices = "";
-
-  EmailValidation = "Email is incorrect";
-  PurposeLabel = "Purpose of Shipment";
-
-  Step2 = "Packages";
-  WidthLabel = "Width";
-  HeightLabel = "Height";
-  LengthLabel = "Length";
-  WeightLabel = "Weight";
-  CharacteristicLabel = "Characteristic";
-  PackageTotal = "20$";
-  PackageCharacteristics = [];
-  AddPackage = "Add package";
-  PackageDescriptionLabel = "Description";
-
-  Step3 = "Costs";
-  ShipmentCostLabel = "Shipment surcharges";
-  ShipmentCost = "0";
-  PackageCostLabel = "Package 1";
-  TotalShipment = "100";
-  DiscountLabel = "Select one of your discounts";
-
-  Step4 = "Confirmation";
-
-  Continuebtn = "Continue";
-  Cancelbtn = "Cancel";
-  ItemValidation = "This Item is required";
-  ZipCodeValidation = "The zip code must be 5 digits";
-  PhoneValidation = "The phone must be 10 digits";
-  ZeroValidation = "Zero is not valid data";
 
   PackageDetails: {
     width: number | null;
@@ -921,8 +881,10 @@ export default class Shipment extends Vue {
     PackCharacteristic: any
   ) {
     this.GrossWeight = this.CostBase * PackWeight;
-    this.DimensionalWeight =
-      ((this.CostBase * PackWidth * PackLenght * PackHeight)/5000).toFixed(2);
+    this.DimensionalWeight = (
+      (this.CostBase * PackWidth * PackLenght * PackHeight) /
+      5000
+    ).toFixed(2);
     if (this.GrossWeight > this.DimensionalWeight) {
       return (
         this.GrossWeight +
@@ -943,38 +905,37 @@ export default class Shipment extends Vue {
       this.options.filter((o) => o.op_id == i)[0].op_charge
     );
   }
-ShipmentExtra: any;
- 
+  ShipmentSurcharges: any;
+
   CalculateOptionsTotal() {
     if (this.OptionsCharge != null) {
-      this.ShipmentExtra = this.OptionsCharge.reduce(
-        (total:any, num: any) => total + num,
+      this.ShipmentSurcharges = this.OptionsCharge.reduce(
+        (total: any, num: any) => total + num,
         0
       ).toFixed(2);
-      return this.ShipmentExtra;
+      return this.ShipmentSurcharges;
     } else {
       return 1;
     }
   }
 
- CalculatePackagesTotal() {
-    return ( this.Order.packages
-      .reduce((acc:any, item: { cost: number|null }) => acc + item.cost, 0)
-      .toFixed(2));
+  CalculatePackagesTotal() {
+    return this.Order.packages
+      .reduce((acc: any, item: { cost: number | null }) => acc + item.cost, 0)
+      .toFixed(2);
   }
 
-  PackTotal : any;
-  OptionTotal: any;
-  example: any;
   CalculateTotal(i: number) {
     this.OptionTotal = parseFloat(this.CalculateOptionsTotal());
     this.PackTotal = parseFloat(this.CalculatePackagesTotal());
     if (this.Order.discount == null) {
       this.Order.shipment.total = this.OptionTotal + this.PackTotal;
     } else {
-      this.example = ((this.OptionTotal + this.PackTotal) * this.discounts.filter((d) => d.di_id == i)[0]
-          .di_percentage).toFixed(2);
-      this.Order.shipment.total = this.example;
+      this.Subtotal = (
+        (this.OptionTotal + this.PackTotal) *
+        this.discounts.filter((d) => d.di_id == i)[0].di_percentage
+      ).toFixed(2);
+      this.Order.shipment.total = this.Subtotal;
     }
   }
 
@@ -982,55 +943,47 @@ ShipmentExtra: any;
     this.Order.packages.splice(index, 1);
   }
 
-  /* Characteristicname = "";
-  getCharacteristic(id: number) {
-    if (id == 1){
-      this.Characteristicname = "Fragile";
-    }
-    if (id == 2){
-      this.Characteristicname =  "Flammable";
-    }
-    if (id == 3){
-      this.Characteristicname = "Living Animal";
-    }
-    if (id == 4){
-     this.Characteristicname = "Food";
-    }
-    return this.Characteristicname;
-   // return this.characteristics.filter((c) => c.ch_id == id)[0].ch_name;
-  }*/
+  NewShipmentTitle = "Your Order";
+  DestinationTitle = "DESTINATION";
 
-  /*get total() {
-    if (this.Order.discount == 0) {
-      return this.Order.packages.reduce(
-        (acc, item: { cost: number }) => acc + item.cost,
-        0
-      );
-    } else {
-      return (
-        this.Order.packages.reduce(
-          (acc, item: { pa_cost: number }) => acc + item.pa_cost,
-          0
-        ) * this.discount
-      );
-    }
-  }
-  get packagesGrossWeight() {
-    return this.packages
-      .reduce((acc, item: { pa_weight: number }) => acc + item.pa_weight, 0)
-      .toFixed(2);
-  }
-  get packagesDimensionalWeight() {
-    return (
-      this.packages.reduce(
-        (
-          acc,
-          item: { pa_width: number; pa_height: number; pa_length: number }
-        ) => acc + item.pa_width * item.pa_height * item.pa_length,
-        0
-      ) / 5000
-    ).toFixed(2);
-  }*/
+  Step1 = "Origin/Destination";
+  PhoneLabel = "Phone";
+  EmailLabel = "Email";
+  ZipCodeLabel = "Zip Code";
+  CityLabel = "City";
+  StateLabel = "State";
+  DirectionLabel1 = "Address Line";
+  DirectionLabel2 = "Address Line (cont)";
+  ReceiverNameLabel = "Name";
+  ReceiverLastNameLabel = "Last Name";
+  OfficeLabel = "Select an origin office";
+  PurposeLabel = "Purpose of Shipment";
+
+  EmailValidation = "Email is incorrect";
+  ItemValidation = "This Item is required";
+  ZipCodeValidation = "The zip code must be 5 digits";
+  PhoneValidation = "The phone must be 10 digits";
+  ZeroValidation = "Zero is not valid data";
+
+  Step2 = "Packages";
+  WidthLabel = "Width";
+  HeightLabel = "Height";
+  LengthLabel = "Length";
+  WeightLabel = "Weight";
+  CharacteristicLabel = "Characteristic";
+  PackageCostLabel = "Package Cost";
+  AddPackage = "Add package";
+  PackageDescriptionLabel = "Description";
+
+  Step3 = "Costs";
+  ShipmentCostLabel = "Shipment surcharges";
+
+  DiscountLabel = "Select one of your discounts";
+
+  Step4 = "Confirmation";
+
+  Continuebtn = "Continue";
+  Cancelbtn = "Cancel";
 
   mounted() {
     this.translate();
@@ -1098,20 +1051,22 @@ ShipmentExtra: any;
             this.LengthLabel = term.translation;
           } else if (term.name == "packageAdd") {
             this.AddPackage = term.translation;
-          } else if (term.name == "ShipmentStep3") {
+          }else if (term.name == "packageCost") {
+            this.PackageCostLabel = term.translation;
+          }  
+          else if (term.name == "ShipmentStep3") {
             this.Step3 = term.translation;
           } else if (term.name == "ShipmentCost") {
             this.ShipmentCostLabel = term.translation;
-          } else if (term.name == "packageCost") {
-            this.PackageCostLabel = term.translation;
           } else if (term.name == "ShipmentConfirmation") {
             this.Step4 = term.translation;
           } else if (term.name == "packageDescription") {
             this.PackageDescriptionLabel = term.translation;
-          } else if (term.name == "generalEmailRule") {
-            this.EmailValidation = term.translation;
-          } else if (term.name == "generalItemValidation") {
-            this.ItemValidation = term.translation;
+          } else if (term.name == "generalState") {
+            this.StateLabel = term.translation;
+          
+          } else if (term.name == "ShipmentDiscount") {
+            this.DiscountLabel = term.translation;
           }
         }
       );
