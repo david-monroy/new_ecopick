@@ -58,7 +58,10 @@ import Invoice from "../../views/Invoice.vue";
 
 @Component({
   components: { VueHtml2pdf, Invoice },
-  computed: { ...mapState("user", { user: "userData" }) },
+  computed: {
+    ...mapState("user", { user: "userData" }),
+    ...mapState("shipment", ["shipment"]),
+  },
 })
 export default class ButtonInvoice extends Vue {
   $route: any;
@@ -72,11 +75,16 @@ export default class ButtonInvoice extends Vue {
     email: string;
     language: number;
   };
+  shipment!: {
+    userid: number;
+  };
   loading = false;
   checkbox = false;
   mounted() {
     if (localStorage.getItem("ID") != null) {
       this.condition = false;
+      this.$store.dispatch("invoice/getInvoice", this.$route.params.id);
+      this.$store.dispatch("user/getUserData", this.shipment.userid);
     }
   }
   downloadInvoice() {

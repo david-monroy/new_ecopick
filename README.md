@@ -16,6 +16,7 @@ Repositorio para el desarrollo del portal del cliente de Mr.Postel.
 1. Seguir los pasos que indica la API REST en su README.md
 2. Iniciar el servidor de la API REST
 3. Agregar un archivo .env en el root del proyecto
+4. Al probar de forma local, asegurarse de conectar todos los dispositivos que se utilizarán a la misma red
 
 > Deberá contactar a los desarrolladores para obtener las llaves necesarias para tener acceso completo a todas las funcionalidades.
 
