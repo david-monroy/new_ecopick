@@ -1040,11 +1040,8 @@ export default class Shipment extends Vue {
       this.Order.shipment.total =
         this.OptionTotal + this.PackTotal + this.basecost[0].co_value;
     } else {
-      this.Subtotal =
-        (
-          (this.OptionTotal + this.PackTotal) *
-          this.discounts.filter((d) => d.di_id == i)[0].di_percentage
-        ).toFixed(2) + this.basecost[0].co_value;
+      this.selectedDiscount = ((this.discounts.filter((d) => d.di_id == i)[0].di_percentage ).toFixed(2))
+      this.Subtotal = (this.OptionTotal + this.PackTotal+this.basecost[0].co_value) * (1 - this.selectedDiscount);
       this.Order.shipment.total = this.Subtotal;
     }
   }
