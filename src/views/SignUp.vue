@@ -42,7 +42,6 @@
                   ref="name"
                   v-model="user.firstName"
                   :rules="[rules.required]"
-                  :error-messages="errorMessages"
                   :label="firstName"
                   :placeholder="firstName"
                   required
@@ -86,35 +85,8 @@
                   ref="name"
                   v-model="user.identification"
                   :rules="[rules.required]"
-                  :error-messages="errorMessages"
                   :label="identification"
                   :placeholder="identification"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col>
-                <v-text-field
-                  ref="name"
-                  v-model="user.phoneNumber"
-                  :rules="rules.phoneRules"
-                  :error-messages="errorMessages"
-                  :label="phoneNumber"
-                  :placeholder="phoneNumber"
-                  type="number"
-                  required
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col>
-                <v-text-field
-                  ref="name"
-                  v-model="user.email"
-                  :rules="rules.emailRules"
-                  :error-messages="errorMessages"
-                  :label="email"
-                  :placeholder="email"
                   required
                 ></v-text-field>
               </v-col>
@@ -155,23 +127,23 @@
               <v-col>
                 <v-text-field
                   ref="name"
-                  v-model="user.password"
-                  :rules="[rules.required]"
-                  :error-messages="errorMessages"
-                  :label="password"
-                  :placeholder="password"
+                  v-model="user.email"
+                  :rules="rules.emailRules"
+                  :label="email"
+                  :placeholder="email"
                   required
-                  :type="show2 ? 'text' : 'password'"
-                  name="input-10-2"
-                  class="input-group--focused"
                 ></v-text-field>
               </v-col>
               <v-col>
-                <v-select
-                  :items="items"
-                  :label="languageInput"
-                  v-model="nameLanguage"
-                ></v-select>
+                <v-text-field
+                  ref="name"
+                  v-model="user.phoneNumber"
+                  :rules="rules.phoneRules"
+                  :label="phoneNumber"
+                  :placeholder="phoneNumber"
+                  type="number"
+                  required
+                ></v-text-field>
               </v-col>
             </v-row>
 
@@ -179,21 +151,48 @@
               <v-col>
                 <v-text-field
                   ref="name"
-                  v-model="password2"
+                  v-model="user.password"
                   :rules="[rules.required]"
-                  :error-messages="errorMessages"
-                  :label="passwordc"
-                  :placeholder="passwordc"
+                  :label="password"
+                  :placeholder="password"
                   required
-                  :type="show2 ? 'text' : 'password'"
+                  type="password"
                   name="input-10-2"
                   class="input-group--focused"
                 ></v-text-field>
               </v-col>
+              <v-col>
+                <v-text-field
+                  ref="name"
+                  v-model="password2"
+                  :rules="[rules.required]"
+                  :label="passwordc"
+                  :placeholder="passwordc"
+                  required
+                  type="password"
+                  name="input-10-2"
+                  class="input-group--focused"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-select
+                      :items="items"
+                      v-on="on"
+                      :label="languageInput"
+                      v-model="nameLanguage"
+                    ></v-select>
+                  </template>
+                  <span>{{ languageTooltip }}</span>
+                </v-tooltip>
+              </v-col>
               <v-col cols="12" sm="6">
-                <v-row>
-                  <v-col> </v-col>
-                  <v-col cols="12" sm="10"
+                <v-row align="center" justify="center">
+                  <v-col cols="12" sm="10" align="center"
                     ><v-checkbox
                       v-model="ex4"
                       :label="termCondition"
@@ -306,11 +305,12 @@ export default class SignUp extends Vue {
   snack1 = "User registered successfully";
   snack2 = "User registration error. Try again.";
   snack3 = "Please confirm password correctly";
+  languageTooltip = "This is your notification's and page default language";
   snackDatabase =
     "This email is already in use or date format is invalid. Please verify those fields";
 
   password2 = "";
-  items: Array<string> = ["English", "Spanish"];
+  items: Array<string> = ["English", "Español"];
   nameLanguage = "";
   snackbar = false;
   snackbarError = false;
@@ -321,7 +321,7 @@ export default class SignUp extends Vue {
   searchRoute() {
     if (this.nameLanguage == "English") {
       this.user.idLanguage = 1;
-    } else if (this.nameLanguage == "Spanish") {
+    } else if (this.nameLanguage == "Español") {
       this.user.idLanguage = 2;
     }
     if (this.$refs.form.validate() && this.password2 === this.user.password) {
@@ -367,7 +367,6 @@ export default class SignUp extends Vue {
 
   date: string = new Date().toISOString().substr(0, 10);
   menu1 = false;
-  menu2 = false;
 
   @Watch("date")
   dateChanged() {
@@ -450,6 +449,8 @@ export default class SignUp extends Vue {
             this.goBack = term.translation;
           } else if (term.name == "signupSnack4") {
             this.snackDatabase = term.translation;
+          } else if (term.name == "generalTooltipLanguage") {
+            this.languageTooltip = term.translation;
           }
         }
       );

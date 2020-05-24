@@ -29,4 +29,18 @@ export default {
       },
     });
   },
+  updateUser(user: {}) {
+    return API_URL.put(`/user/`, user, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+  },
+  disableUser(user: {}) {
+    return API_URL.patch(`/user/disable`, user, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+  },
 };
