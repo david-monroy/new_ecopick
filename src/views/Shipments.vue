@@ -56,6 +56,9 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { mapState } from "vuex";
 import moment from "moment";
+import { Watch } from "vue-property-decorator";
+import Translate from "../components/Translate.vue";
+
 
 @Component({
   components: {},
@@ -78,48 +81,58 @@ export default class Home extends Vue {
     user: string;
     packages: number;
   }[];
+  TrackingIDHeader = "Tracking ID";
+  UserHeader = "User";
+  PurposeHeader = "Purpose";
+  OfficeHeader ="Office";
+  StatusHeader = "Status";
+  DateHeader = "Date";
+  PackageHeader = "Packages";
+  DetailHeader ="Detail";
+
+
   search = "";
   headers: {}[] = [
     {
-      text: "Tracking ID",
+      text: this.TrackingIDHeader,
       align: "center",
       sortable: false,
       value: "trackingid",
       class: "teal--text subtitle-1",
     },
     {
-      text: "User",
+      text: this.UserHeader,
       align: "center",
       value: "user",
       class: "teal--text subtitle-1",
     },
     {
-      text: "Purpose",
+      text: this.PurposeHeader,
       align: "center",
       value: "purpose",
       sortable: false,
       class: "teal--text subtitle-1",
     },
     {
-      text: "Office",
+      text: this.OfficeHeader,
       align: "center",
       value: "office",
       class: "teal--text subtitle-1",
     },
     {
-      text: "Status",
+      text: this.StatusHeader,
       align: "center",
       value: "status",
       class: "teal--text subtitle-1",
     },
     {
-      text: "Date",
+      text: this.DateHeader,
       align: "center",
       value: "date",
       class: "teal--text subtitle-1",
     },
     {
-      text: "Packages",
+      text: this.PackageHeader,
       align: "center",
       value: "packages",
       class: "teal--text subtitle-1",
@@ -131,29 +144,11 @@ export default class Home extends Vue {
       class: "teal--text subtitle-1",
     },
     {
-      text: "Detail",
+      text: this.DetailHeader,
       align: "center",
       class: "teal--text subtitle-1",
       value: "actions",
       sortable: false,
-    },
-  ];
-  deliveryStatus: {}[] = [
-    {
-      name: "Out For Delivery",
-      icon: "mdi-package-variant-closed",
-    },
-    {
-      name: "In Transit",
-      icon: "mdi-car-estate",
-    },
-    {
-      name: "Delivered",
-      icon: "mdi-package-variant",
-    },
-    {
-      name: "Total",
-      icon: "mdi-package",
     },
   ];
 
@@ -162,7 +157,6 @@ export default class Home extends Vue {
       .dispatch("AllShipments/getAllShipments", localStorage.getItem("ID"))
       .then(() => {
         this.shipments = this.$store.state.AllShipments.shipments;
-        console.log(this.shipments);
       });
   }
 
@@ -172,6 +166,45 @@ export default class Home extends Vue {
 
   changePage(trackingId: string) {
     this.$router.push({ name: "DetailShipment", params: { id: trackingId } });
+  }
+
+    mounted() {
+    this.translate();
+  }
+
+  get translator() {
+    return this.$store.state.translate.languageTexts;
+  }
+
+  @Watch("translator")
+  translate() {
+    this.translator
+      .filter(
+        (term: { context: string; name: string; translation: string }) => {
+          return term.context == "Shipment" || term.context == "general" || term.context == "route" || term.context == "packages";
+        }
+      )
+      .forEach(
+        (term: { context: string; name: string; translation: string }) => {
+          if (term.name == "ShipmentDetail") {
+            this.DetailHeader = term.translation;
+          } else if (term.name == "packagesStep2") {
+            this.PackageHeader = term.translation;
+          } else if (term.name == "routeDate") {
+            this.DateHeader = term.translation;
+          } else if (term.name == "generalTrackingID") {
+            this.TrackingIDHeader = term.translation;
+          } else if (term.name == "generalUser") {
+            this.UserHeader = term.translation;
+          } else if (term.name == "routeStatus") {
+            this.StatusHeader = term.translation;
+          } else if (term.name == "generalPurpose") {
+            this. PurposeHeader= term.translation;
+          } else if (term.name == "ShipmentOffice") {
+            this.OfficeHeader = term.translation;
+          } 
+        }
+      );
   }
 }
 </script>

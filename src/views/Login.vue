@@ -254,6 +254,8 @@ export default class Login extends Vue {
     ],
   };
 
+
+
   mounted() {
     this.translate();
   }
