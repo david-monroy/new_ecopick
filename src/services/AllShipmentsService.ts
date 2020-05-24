@@ -1,8 +1,8 @@
 import { API_URL } from "./config";
 
 export default {
-  getAllShipments() {
-    return API_URL.get(`/shipment`,{
+  getAllShipments(userID: number) {
+    return API_URL.get(`/shipment/byUser/${userID}`,{
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },

@@ -15,8 +15,8 @@ export default {
   },
   // -----------------------------------------------------------------
   actions: {
-    getAllShipments: async (context: any) => {
-      await AllShipments.getAllShipments().then((response: any) => {
+    getAllShipments: async (context: any, userID:number) => {
+      await AllShipments.getAllShipments(userID).then((response: any) => {
         context.commit("setAllShipments", response.data);
       });
     },

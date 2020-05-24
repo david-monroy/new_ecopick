@@ -24,7 +24,6 @@
                 :headers="headers"
                 :items="shipments"
                 :search="search"
-                :loading="loading"
                 loading-text="Loading... Please wait"
                 no-data-text="We didn't find shipments... Sorry"
               >
@@ -159,10 +158,12 @@ export default class Home extends Vue {
   ];
 
   beforeMount() {
-    this.$store.dispatch("AllShipments/getAllShipments").then(() => {
-      this.shipments = this.$store.state.AllShipments.shipments;
-      console.log(this.shipments);
-    });
+    this.$store
+      .dispatch("AllShipments/getAllShipments", localStorage.getItem("ID"))
+      .then(() => {
+        this.shipments = this.$store.state.AllShipments.shipments;
+        console.log(this.shipments);
+      });
   }
 
   formatDate(date: string) {
