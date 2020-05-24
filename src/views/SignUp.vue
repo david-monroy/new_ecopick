@@ -367,7 +367,6 @@ export default class SignUp extends Vue {
 
   date: string = new Date().toISOString().substr(0, 10);
   menu1 = false;
-  menu2 = false;
 
   @Watch("date")
   dateChanged() {

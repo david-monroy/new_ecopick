@@ -71,25 +71,44 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-            <v-row v-if="!edit">
+            <v-row>
               <v-col>
                 <v-text-field
                   ref="name"
-                  :value="userInfo.identification"
+                  v-model="userInfo.identification"
                   :label="identification"
-                  readonly
+                  :readonly="!edit"
                 ></v-text-field>
               </v-col>
               <v-col>
-                <v-icon class="mt-5 mr-2" color="black" style="float: left;"
+                <v-icon class="mt-5 mr-2" style="float: left;"
                   >mdi-calendar</v-icon
                 >
-                <v-text-field
-                  :value="formatDate(userInfo.birthday)"
-                  :label="birthday"
-                  readonly
+                <v-menu
+                  ref="menu"
+                  v-model="menu"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
                 >
-                </v-text-field>
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      :value="formatDate(userInfo.birthday)"
+                      :label="birthday"
+                      :readonly="!edit"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-if="edit"
+                    v-model="userInfo.birthday"
+                    no-title
+                    @input="menu = false"
+                    max="2002-06-01"
+                  ></v-date-picker>
+                </v-menu>
               </v-col>
             </v-row>
             <v-row>
@@ -189,18 +208,13 @@
               </v-col>
               <v-col></v-col>
             </v-row>
-            <v-row>
+            <v-row v-if="!edit">
               <v-col class="d-flex justify-end">
                 <v-dialog v-model="dialog" persistent max-width="600">
                   <template v-slot:activator="{ on }">
-                    <v-btn
-                      v-if="!edit"
-                      v-on="on"
-                      color="error"
-                      small
-                      outlined
-                      >{{ deleteText }}</v-btn
-                    >
+                    <v-btn v-on="on" color="error" small outlined>{{
+                      deleteText
+                    }}</v-btn>
                   </template>
                   <v-card>
                     <v-card-title
@@ -274,11 +288,14 @@ export default class Profile extends Vue {
   };
   userInfo!: {
     photo: string | null;
+    identification: string;
     email: string;
     password: string;
+    birthday: string;
     phonenumber: string | null;
     language: number;
   };
+  menu = false;
   edit = false;
   updatePassword = false;
   dialog = false;
@@ -325,13 +342,8 @@ export default class Profile extends Vue {
 
   disable() {
     this.$store
-      .dispatch("user/updateUser", {
+      .dispatch("user/disableUser", {
         id: localStorage.getItem("ID"),
-        photo: this.userInfo.photo,
-        email: this.userInfo.email,
-        password: this.userInfo.password,
-        phone: this.userInfo.phonenumber,
-        language: this.language,
         status: "Disabled",
       })
       .then(() => {
@@ -350,12 +362,13 @@ export default class Profile extends Vue {
       if (this.$refs.form.validate()) {
         const user = {
           id: localStorage.getItem("ID"),
+          identification: this.userInfo.identification,
+          birthday: this.userInfo.birthday,
           photo: this.userInfo.photo,
           email: this.userInfo.email,
           password: "",
           phone: this.userInfo.phonenumber,
           language: this.language,
-          status: "Enabled",
         };
         if (this.updatePassword && this.password2 === this.password1) {
           user.password = this.password1;
@@ -368,6 +381,16 @@ export default class Profile extends Vue {
             this.snackbarSuccess = true;
             this.edit = false;
             this.updatePassword = false;
+            if (user.language == "EN") {
+              localStorage.setItem("Language", "1");
+              this.$store.dispatch("translate/translate", { lang: "en-us" });
+            } else if (user.language == "ES") {
+              localStorage.setItem("Language", "2");
+              this.$store.dispatch("translate/translate", { lang: "es-ve" });
+            }
+            if (this.userInfo.photo !== null) {
+              this.hasImage = true;
+            }
           })
           .catch(() => (this.snackbarDatabase = true));
       }

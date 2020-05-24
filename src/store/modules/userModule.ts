@@ -80,5 +80,8 @@ export default {
     updateUser: async function (context: any, user: {}) {
       await userService.updateUser(user);
     },
+    disableUser: async function (context: any, user: {}) {
+      await userService.disableUser(user);
+    },
   },
 };

@@ -36,4 +36,11 @@ export default {
       },
     });
   },
+  disableUser(user: {}) {
+    return API_URL.patch(`/user/disable`, user, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+  },
 };
