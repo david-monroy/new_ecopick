@@ -5,21 +5,21 @@
       <v-col cols="12" md="6" align="center">
         <v-stepper v-model="e1">
           <v-stepper-header class="light-green accent-1">
-            <v-stepper-step color="teal" :complete="e1 > 1" step="1">
-              {{ Step1 }}
-            </v-stepper-step>
+            <v-stepper-step color="teal" :complete="e1 > 1" step="1">{{
+              Step1
+            }}</v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step color="teal" :complete="e1 > 2" step="2">
-              {{ Step2 }}
-            </v-stepper-step>
+            <v-stepper-step color="teal" :complete="e1 > 2" step="2">{{
+              Step2
+            }}</v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step color="teal" :complete="e1 > 3" step="3">
-              {{ Step3 }}
-            </v-stepper-step>
+            <v-stepper-step color="teal" :complete="e1 > 3" step="3">{{
+              Step3
+            }}</v-stepper-step>
 
             <v-divider></v-divider>
 
@@ -228,9 +228,9 @@
                   </v-form>
                 </v-container>
               </v-card>
-              <v-btn color="normal" @click="validate(2)">{{
-                Continuebtn
-              }}</v-btn>
+              <v-btn color="normal" @click="validate(2)">
+                {{ Continuebtn }}
+              </v-btn>
 
               <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
             </v-stepper-content>
@@ -345,8 +345,8 @@
                       class="mt-3"
                     >
                       <v-row align="center">
-                        <v-col cols="4" class="text-start pl-10"
-                          ><p class="my-0">
+                        <v-col cols="4" class="text-start pl-10">
+                          <p class="my-0">
                             {{ WidthLabel + ": " + orderPackage.width + "cm" }}
                           </p>
                           <p class="my-0">
@@ -363,14 +363,14 @@
                             {{
                               WeightLabel + ": " + orderPackage.weight + "lbs"
                             }}
-                          </p></v-col
-                        >
-                        <v-col class="text-start pl-5"
-                          ><p class="my-0">
+                          </p>
+                        </v-col>
+                        <v-col class="text-start pl-5">
+                          <p class="my-0">
                             {{ CharacteristicLabel }}:
                             {{
-                              orderPackage.characteristics !== null
-                                ? orderPackage.characteristics
+                              orderPackage.characteristic !== null
+                                ? orderPackage.characteristic
                                 : ""
                             }}
                           </p>
@@ -384,8 +384,8 @@
                           </p>
                           <p class="my-0">
                             {{ "Total: " + orderPackage.cost }}
-                          </p></v-col
-                        >
+                          </p>
+                        </v-col>
                         <v-col cols="2">
                           <v-btn small color="error" @click="deletePackage(i)">
                             <v-icon class="mr-1 mt-0">mdi-delete</v-icon>
@@ -397,9 +397,9 @@
                 </v-container>
               </v-card>
 
-              <v-btn color="normal" @click="validate(3)">
-                {{ Continuebtn }}
-              </v-btn>
+              <v-btn color="normal" @click="validate(3)">{{
+                Continuebtn
+              }}</v-btn>
 
               <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
             </v-stepper-content>
@@ -470,9 +470,27 @@
                           item-value="di_id"
                           item-text="di_name"
                           :label="DiscountLabel"
-                          v-on="CalculateTotal(di_id)"
+                          v-on="CalculateTotal(Order.discount)"
                         ></v-select>
                       </v-col>
+                    </v-row>
+                    <!--Service cost -->
+                    <v-row>
+                      <v-col cols="2"></v-col>
+                      <v-col cols="3">
+                        <v-subheader>{{ ServiceCostLabel }}</v-subheader>
+                      </v-col>
+                      <v-col cols="4">
+                        <v-text-field
+                          class="pa-0 ma-0"
+                          solo
+                          dense
+                          readonly
+                          suffix="$"
+                          :value="basecost[0].co_value"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="3"></v-col>
                     </v-row>
                     <!--Total-->
                     <v-row>
@@ -617,9 +635,9 @@
                 </v-container>
               </v-card>
 
-              <v-btn color="normal" @click="searchRoute()">
-                {{ Continuebtn }}
-              </v-btn>
+              <v-btn color="normal" @click="searchRoute()">{{
+                Continuebtn
+              }}</v-btn>
 
               <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
             </v-stepper-content>
@@ -636,6 +654,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { Watch } from "vue-property-decorator";
 import { mapState } from "vuex";
+import moment from "moment";
 
 @Component({
   components: {},
@@ -646,6 +665,7 @@ import { mapState } from "vuex";
       "offices",
       "discounts",
       "basecost",
+      "trackingID",
     ]),
   },
 })
@@ -658,13 +678,14 @@ export default class Shipment extends Vue {
   GrossWeight!: any;
   DimensionalWeight!: any;
   OptionsCharge: number[] = [];
-  CostBase = 2;
   OptionsTotal: any;
   PackTotal: any;
   OptionTotal: any;
   Subtotal: any;
   trackingID: any;
   userID: any;
+  selectedDiscount: any;
+  ShipmentSurcharges: any;
 
   characteristics!: {
     ch_id: number;
@@ -725,7 +746,7 @@ export default class Shipment extends Vue {
       height: number | null;
       length: number | null;
       weight: number | null;
-      characteristics: number | null;
+      characteristic: number | null;
       description: string | null;
       cost: number | null;
     }[];
@@ -743,7 +764,7 @@ export default class Shipment extends Vue {
       zipCode: null,
       city: "",
       state: "",
-      country: "",
+      country: "United States",
       primaryLine: "",
       secondaryLine: "",
     },
@@ -751,14 +772,14 @@ export default class Shipment extends Vue {
       date: "",
       total: 0,
       office: 0,
-      user: this.userID,
+      user: 0,
       purpose: "",
     },
     packages: [],
     options: [],
     discount: null,
   };
-  
+
   PackageDetails: {
     width: number | null;
     height: number | null;
@@ -785,9 +806,7 @@ export default class Shipment extends Vue {
       (v: string) => /.+@.+\..+/.test(v) || this.EmailValidation,
     ],
     item: [(v: string) => !!v || this.ItemValidation],
-    numericitem: [
-      (v: number) => !!v || this.ItemValidation,
-    ],
+    numericitem: [(v: number) => !!v || this.ItemValidation],
     ZipCodeRules: [
       (v: number) => !!v || this.ItemValidation,
       (v: number) => (v > 9999 && v < 100000) || this.ZipCodeValidation,
@@ -804,23 +823,24 @@ export default class Shipment extends Vue {
   };
 
   searchRoute() {
-    if (localStorage.getItem("ID") != null){
+    if (localStorage.getItem("ID") != null) {
       this.userID = localStorage.getItem("ID");
+      this.Order.shipment.user = this.userID;
     }
+    this.Order.shipment.date = moment().format("YYYY-MM-DD HH:mm:ss");
     console.log("order", this.Order);
-     this.$store
-     .dispatch("NewShipment/sendOrder", this.Order)
-     .then((status: any) => {
-      if (status == 200){
-         this.trackingID = this.$store.state.NewShipment.trackingID;
-         console.log ("trackingID", this.trackingID);
-         setTimeout(() => {
-           this.changePage("DetailShipment");
-         },1000);
-      }else if (status == 204){
-        console.log ("Error al registrar");
-      } 
-    });
+    this.$store
+      .dispatch("NewShipment/sendOrder", this.Order)
+      .then((status: any) => {
+        if (status == 200) {
+          this.trackingID = this.$store.state.NewShipment.trackingID;
+          setTimeout(() => {
+            this.changePage("DetailShipment");
+          }, 1000);
+        } else if (status == 204) {
+          console.log("Error al registrar");
+        }
+      });
   }
 
   beforeMount() {
@@ -833,37 +853,35 @@ export default class Shipment extends Vue {
     this.$store.dispatch("NewShipment/getOffices").then(() => {
       this.offices = this.$store.state.NewShipment.offices;
     });
-    this.$store.dispatch("NewShipment/getDiscounts").then(() => {
-      this.discounts = this.$store.state.NewShipment.discounts;
-    });
-     this.$store.dispatch("NewShipment/getBaseCost").then(() => {
+    this.$store
+      .dispatch("NewShipment/getDiscounts", localStorage.getItem("ID"))
+      .then(() => {
+        this.discounts = this.$store.state.NewShipment.discounts;
+      });
+    this.$store.dispatch("NewShipment/getBaseCost").then(() => {
       this.basecost = this.$store.state.NewShipment.basecost;
-      console.log ("basecost", this.basecost);
     });
   }
 
   validate(page: number) {
     if (page == 2) {
       if (this.$refs.form1.validate()) {
-        console.log("Correct data / Form 1");
-        for (let i = 0; i < this.selectedOptions.length; i++) {
-          this.Order.options.push({ order: this.selectedOptions[i] });
-          this.OptionsTotal = this.CalculateOptionsCharge(
-            this.selectedOptions[i]
-          );
+        if (this.selectedOptions != null) {
+          for (let i = 0; i < this.selectedOptions.length; i++) {
+            this.Order.options.push({ option: this.selectedOptions[i] });
+            this.OptionsTotal = this.CalculateOptionsCharge(
+              this.selectedOptions[i]
+            );
+          }
         }
         this.e1 = page;
-      } else {
-        console.log("Invalid Data / Form 1");
       }
     } else if (page == 3) {
       if (this.Order.packages.length > 0) {
-        console.log("Has packages / Form 2");
         this.CalculateTotal(0);
         this.e1 = page;
       } else {
         this.$refs.form2.validate();
-        console.log("No packages / Form 2");
       }
     }
   }
@@ -879,7 +897,7 @@ export default class Shipment extends Vue {
         height: this.PackageDetails.height,
         length: this.PackageDetails.length,
         weight: this.PackageDetails.weight,
-        characteristics: this.PackageDetails.characteristics,
+        characteristic: this.PackageDetails.characteristics,
         description: this.PackageDetails.description,
         cost: this.CalculatePackageTotal(
           this.PackageDetails.weight,
@@ -893,6 +911,7 @@ export default class Shipment extends Vue {
     }
   }
 
+  characteristicCharge: any;
   CalculatePackageTotal(
     PackWeight: any,
     PackHeight: any,
@@ -900,32 +919,35 @@ export default class Shipment extends Vue {
     PackLenght: any,
     PackCharacteristic: any
   ) {
-    this.GrossWeight = this.CostBase * PackWeight;
+    if (PackCharacteristic != null) {
+      this.characteristicCharge = this.characteristics.filter(
+        (c) => c.ch_id == PackCharacteristic
+      )[0].ch_charge;
+    } else {
+      this.characteristicCharge = 0;
+    }
+
+    this.GrossWeight = this.basecost[1].co_value * PackWeight;
     this.DimensionalWeight = (
-      (this.CostBase * PackWidth * PackLenght * PackHeight) /
+      (this.basecost[1].co_value * PackWidth * PackLenght * PackHeight) /
       5000
     ).toFixed(2);
     if (this.GrossWeight > this.DimensionalWeight) {
-      return (
-        this.GrossWeight +
-        this.characteristics.filter((c) => c.ch_id == PackCharacteristic)[0]
-          .ch_charge
-      );
+      return this.GrossWeight + this.characteristicCharge;
     } else {
-      return (
-        this.DimensionalWeight +
-        this.characteristics.filter((c) => c.ch_id == PackCharacteristic)[0]
-          .ch_charge
-      );
+      return this.DimensionalWeight + this.characteristicCharge;
     }
   }
 
   CalculateOptionsCharge(i: number) {
-    this.OptionsCharge.push(
-      this.options.filter((o) => o.op_id == i)[0].op_charge
-    );
+    if (this.selectedOptions != null) {
+      this.OptionsCharge.push(
+        this.options.filter((o) => o.op_id == i)[0].op_charge
+      );
+    } else {
+      this.OptionsCharge = [];
+    }
   }
-  ShipmentSurcharges: any;
 
   CalculateOptionsTotal() {
     if (this.OptionsCharge != null) {
@@ -949,12 +971,14 @@ export default class Shipment extends Vue {
     this.OptionTotal = parseFloat(this.CalculateOptionsTotal());
     this.PackTotal = parseFloat(this.CalculatePackagesTotal());
     if (this.Order.discount == null) {
-      this.Order.shipment.total = this.OptionTotal + this.PackTotal;
+      this.Order.shipment.total =
+        this.OptionTotal + this.PackTotal + this.basecost[0].co_value;
     } else {
-      this.Subtotal = (
-        (this.OptionTotal + this.PackTotal) *
-        this.discounts.filter((d) => d.di_id == i)[0].di_percentage
-      ).toFixed(2);
+      this.Subtotal =
+        (
+          (this.OptionTotal + this.PackTotal) *
+          this.discounts.filter((d) => d.di_id == i)[0].di_percentage
+        ).toFixed(2) + this.basecost[0].co_value;
       this.Order.shipment.total = this.Subtotal;
     }
   }
@@ -997,8 +1021,8 @@ export default class Shipment extends Vue {
 
   Step3 = "Costs";
   ShipmentCostLabel = "Shipment surcharges";
-
   DiscountLabel = "Select one of your discounts";
+  ServiceCostLabel = "Service's cost";
 
   Step4 = "Confirmation";
 
@@ -1071,10 +1095,9 @@ export default class Shipment extends Vue {
             this.LengthLabel = term.translation;
           } else if (term.name == "packageAdd") {
             this.AddPackage = term.translation;
-          }else if (term.name == "packageCost") {
+          } else if (term.name == "packageCost") {
             this.PackageCostLabel = term.translation;
-          }  
-          else if (term.name == "ShipmentStep3") {
+          } else if (term.name == "ShipmentStep3") {
             this.Step3 = term.translation;
           } else if (term.name == "ShipmentCost") {
             this.ShipmentCostLabel = term.translation;
@@ -1084,9 +1107,10 @@ export default class Shipment extends Vue {
             this.PackageDescriptionLabel = term.translation;
           } else if (term.name == "generalState") {
             this.StateLabel = term.translation;
-          
           } else if (term.name == "ShipmentDiscount") {
             this.DiscountLabel = term.translation;
+          } else if (term.name == "ShipmentServiceCost") {
+            this.ServiceCostLabel = term.translation;
           }
         }
       );

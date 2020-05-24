@@ -65,13 +65,12 @@ export default {
       }
       )
   },
-    getDiscounts: async (context: any) => {
-      await NewShipmentService.getDiscounts().then((response:any) => {
+    getDiscounts: async (context: any, userID: number) => {
+      await NewShipmentService.getDiscounts(userID).then((response:any) => {
           context.commit("setDiscounts", response.data)
       }
       )
-    }
-  },
+    },
     getBaseCost: async (context: any) => {
       await NewShipmentService.getBaseCost().then((response:any) => {
           context.commit("setBaseCost", response.data)
@@ -93,6 +92,7 @@ export default {
           });
       });
     },
+  }
 };
 
 //this.$store.dispatch("example/nombre_action").then(() => {}); para llamar a un action
