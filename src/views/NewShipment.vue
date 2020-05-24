@@ -239,11 +239,11 @@
                   </v-form>
                 </v-container>
               </v-card>
+
+              <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
               <v-btn color="normal" @click="validate(2)">
                 {{ Continuebtn }}
               </v-btn>
-
-              <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
             </v-stepper-content>
 
             <!--Packages-->
@@ -412,12 +412,23 @@
                   </v-form>
                 </v-container>
               </v-card>
-
-              <v-btn color="normal" @click="validate(3)">{{
-                Continuebtn
-              }}</v-btn>
-
-              <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
+              <v-row>
+                <v-col cols="2" align="left" justify="left">
+                  <v-btn text small @click="e1 = 1">
+                    <v-icon class="mr-1 mt-0">mdi-chevron-left</v-icon>
+                    <p class="mt-5 hidden-sm-and-down">{{ GoBack }}</p>
+                  </v-btn>
+                </v-col>
+                <v-col cols="8" class="ml-1" align="center" justify="center">
+                  <v-btn text @click="changePage('Home')">{{
+                    Cancelbtn
+                  }}</v-btn>
+                  <v-btn color="normal" @click="validate(3)">{{
+                    Continuebtn
+                  }}</v-btn>
+                </v-col>
+                <v-col cols="2"></v-col>
+              </v-row>
             </v-stepper-content>
 
             <!--Costs-->
@@ -531,10 +542,22 @@
                   </form>
                 </v-container>
               </v-card>
-              <v-row justify="center">
-                <v-btn color="normal" @click="e1 = 4">{{ Continuebtn }}</v-btn>
-
-                <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
+              <v-row>
+                <v-col cols="2" align="left" justify="left">
+                  <v-btn text small @click="e1 = 2">
+                    <v-icon class="mr-1 mt-0">mdi-chevron-left</v-icon>
+                    <p class="mt-5 hidden-sm-and-down">{{ GoBack }}</p>
+                  </v-btn>
+                </v-col>
+                <v-col cols="8" class="ml-1" align="center" justify="center">
+                  <v-btn text @click="changePage('Home')">{{
+                    Cancelbtn
+                  }}</v-btn>
+                  <v-btn color="normal" @click="e1 = 4">{{
+                    Continuebtn
+                  }}</v-btn>
+                </v-col>
+                <v-col cols="2"></v-col>
               </v-row>
             </v-stepper-content>
 
@@ -650,21 +673,36 @@
                   </form>
                 </v-container>
               </v-card>
-
-              <v-btn color="normal" @click="searchRoute()">{{
-                Continuebtn
-              }}</v-btn>
-
-              <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
+              <v-row>
+                <v-col cols="2" align="left" justify="left">
+                  <v-btn text small @click="e1 = 3">
+                    <v-icon class="mr-1 mt-0">mdi-chevron-left</v-icon>
+                    <p class="mt-5 hidden-sm-and-down">{{ GoBack }}</p>
+                  </v-btn>
+                </v-col>
+                <v-col cols="8" class="ml-1" align="center" justify="center">
+                  <v-btn text @click="changePage('Home')">{{
+                    Cancelbtn
+                  }}</v-btn>
+                  <v-btn color="normal" @click="searchRoute()">{{
+                    Continuebtn
+                  }}</v-btn>
+                </v-col>
+                <v-col cols="2"></v-col>
+              </v-row>
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
       </v-col>
       <v-col class="hidden-sm-and-down" cols="3"></v-col>
     </v-row>
-    <v-snackbar v-model="snackbar" color="danger">
+    <v-snackbar v-model="snackbar" color="red">
       {{ snackRegister }}
       <v-btn dark text @click="snackbar = false">{{ close }}</v-btn>
+    </v-snackbar>
+    <v-snackbar v-model="snackbar2" color="success">
+      {{ snackRegisterSuccess }}
+      <v-btn dark text @click="snackbar2 = false">{{ close }}</v-btn>
     </v-snackbar>
   </v-container>
 </template>
@@ -692,7 +730,7 @@ import moment from "moment";
 export default class Shipment extends Vue {
   $store: any;
   $router: any;
-  e1 = 2;
+  e1 = 1;
   selectedOptions = [];
 
   GrossWeight!: any;
@@ -707,6 +745,7 @@ export default class Shipment extends Vue {
   selectedDiscount: any;
   ShipmentSurcharges: any;
   snackbar = false;
+  snackbar2 = false;
 
   characteristics!: {
     ch_id: number;
@@ -857,12 +896,13 @@ export default class Shipment extends Vue {
       .then((status: any) => {
         if (status == 201) {
           this.trackingID = this.$store.state.NewShipment.trackingID;
+          this.snackbar2 = true;
           setTimeout(() => {
             this.$router.push({
               name: "DetailShipment",
               params: { id: this.trackingID.trackingid },
             });
-          }, 1000);
+          }, 3000);
         } else {
           this.snackbar = true;
         }
@@ -1016,6 +1056,7 @@ export default class Shipment extends Vue {
   NewShipmentTitle = "Your Order";
   DestinationTitle = "DESTINATION";
   ReceiverData = "Receiver data";
+  GoBack = "Go to back";
 
   Step1 = "Origin/Destination";
   PhoneLabel = "Phone";
@@ -1056,6 +1097,7 @@ export default class Shipment extends Vue {
   Continuebtn = "Continue";
   Cancelbtn = "Cancel";
   snackRegister = "Ups! There are a problem. Try again";
+  snackRegisterSuccess = "The Shipment was register successfully"
 
   mounted() {
     this.translate();
@@ -1141,6 +1183,14 @@ export default class Shipment extends Vue {
             this.ServiceCostLabel = term.translation;
           } else if (term.name == "ShipmentReceiverData") {
             this.ReceiverData = term.translation;
+          } else if (term.name == "generalGoBack") {
+            this.GoBack = term.translation;
+          }
+          else if (term.name == "ShipmentRegisterError") {
+            this.snackRegister = term.translation;
+          }
+          else if (term.name == "ShipmentRegisterSuccess") {
+            this.snackRegisterSuccess= term.translation;
           }
         }
       );
