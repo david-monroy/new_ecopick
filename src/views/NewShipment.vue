@@ -659,7 +659,7 @@ import moment from "moment";
 export default class Shipment extends Vue {
   $store: any;
   $router: any;
-  e1 = 2;
+  e1 = 1;
   selectedOptions = [];
 
   GrossWeight!: any;
