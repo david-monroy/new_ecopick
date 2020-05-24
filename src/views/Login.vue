@@ -110,7 +110,7 @@
           <v-row>
             <v-col> </v-col>
             <v-col>
-              <v-btn rounded color="red accent-4" dark
+              <v-btn rounded color="red accent-4" dark @click="FederatedSignUpGoogle()"
                 ><v-icon class="mr-1" p-0>mdi-google</v-icon>Google</v-btn
               >
             </v-col>
@@ -253,6 +253,36 @@ export default class Login extends Vue {
       (v: string) => /.+@.+\..+/.test(v) || "E-mail is required",
     ],
   };
+
+  //-------------------------------------------------
+
+    errors: string[] = [];
+    showErrors(errors: any) {
+    this.errors = errors;
+    this.snackbarError = true;
+    }
+
+   get getStatus() {
+    return this.$store.getters["user/getLoginStatus"];
+  }
+
+  FederatedSignUpGoogle() {
+    this.errors.splice(0);
+    if (this.errors.length == 0) {
+      this.$store
+        .dispatch("user/federatedSignUpGoogle", { provider: "google" })
+        .then(() => {
+          if (this.getStatus.registered == false) {
+            this.errors.push("This email is already in use");
+            this.showErrors(this.errors);
+          } else {
+            this.$router.push("/");
+          }
+        });
+    }
+  }
+
+  //-------------------------------------------------
 
   mounted() {
     this.translate();
