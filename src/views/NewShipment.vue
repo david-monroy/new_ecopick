@@ -5,21 +5,15 @@
       <v-col cols="12" md="6" align="center">
         <v-stepper v-model="e1">
           <v-stepper-header class="light-green accent-1">
-            <v-stepper-step color="teal" :complete="e1 > 1" step="1">{{
-              Step1
-            }}</v-stepper-step>
+            <v-stepper-step color="teal" :complete="e1 > 1" step="1">{{ Step1 }}</v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step color="teal" :complete="e1 > 2" step="2">{{
-              Step2
-            }}</v-stepper-step>
+            <v-stepper-step color="teal" :complete="e1 > 2" step="2">{{ Step2 }}</v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step color="teal" :complete="e1 > 3" step="3">{{
-              Step3
-            }}</v-stepper-step>
+            <v-stepper-step color="teal" :complete="e1 > 3" step="3">{{ Step3 }}</v-stepper-step>
 
             <v-divider></v-divider>
 
@@ -36,9 +30,7 @@
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
                     <v-col class="align-center" justify="center">
-                      <p class="display-2 white--text">
-                        {{ NewShipmentTitle }}
-                      </p>
+                      <p class="display-2 white--text">{{ NewShipmentTitle }}</p>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
@@ -50,9 +42,7 @@
                         <p
                           class="body-1 font-weight-light align-center white--text"
                           justify="center"
-                        >
-                          {{ DestinationTitle }}
-                        </p>
+                        >{{ ReceiverData }}</p>
                       </v-col>
                     </v-row>
                     <!--Receiver -->
@@ -117,6 +107,15 @@
                           :rules="rules.emailRules"
                           :label="EmailLabel"
                         ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <!--Title 3 -->
+                    <v-row>
+                      <v-col>
+                        <p
+                          class="body-1 font-weight-light align-center white--text"
+                          justify="center"
+                        >{{ DestinationTitle }}</p>
                       </v-col>
                     </v-row>
                     <!--Direction 3 -->
@@ -229,7 +228,9 @@
                 </v-container>
               </v-card>
               <v-btn color="normal" @click="validate(2)">
-                {{ Continuebtn }}
+                {{
+                Continuebtn
+                }}
               </v-btn>
 
               <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
@@ -244,9 +245,7 @@
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
                     <v-col class="align-center" justify="center">
-                      <p class="display-2 white--text">
-                        {{ NewShipmentTitle }}
-                      </p>
+                      <p class="display-2 white--text">{{ NewShipmentTitle }}</p>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
@@ -346,48 +345,49 @@
                     >
                       <v-row align="center">
                         <v-col cols="4" class="text-start pl-10">
-                          <p class="my-0">
-                            {{ WidthLabel + ": " + orderPackage.width + "cm" }}
-                          </p>
+                          <p class="my-0">{{ WidthLabel + ": " + orderPackage.width + "cm" }}</p>
                           <p class="my-0">
                             {{
-                              HeightLabel + ": " + orderPackage.height + "cm"
+                            HeightLabel + ": " + orderPackage.height + "cm"
                             }}
                           </p>
                           <p class="my-0">
                             {{
-                              LengthLabel + ": " + orderPackage.length + "cm"
+                            LengthLabel + ": " + orderPackage.length + "cm"
                             }}
                           </p>
                           <p class="my-0">
                             {{
-                              WeightLabel + ": " + orderPackage.weight + "lbs"
+                            WeightLabel + ": " + orderPackage.weight + "lbs"
                             }}
                           </p>
                         </v-col>
-                        <v-col class="text-start pl-5">
+                        <v-col cols="4" class="text-start pl-5">
                           <p class="my-0">
                             {{ CharacteristicLabel }}:
                             {{
-                              orderPackage.characteristic !== null
-                                ? orderPackage.characteristic
-                                : ""
+                            orderPackage.characteristic !== null
+                            ? orderPackage.characteristic
+                            : ""
                             }}
                           </p>
                           <p class="my-0">
                             {{ PackageDescriptionLabel }}:
                             {{
-                              orderPackage.description !== null
-                                ? orderPackage.description
-                                : ""
+                            orderPackage.description !== null
+                            ? orderPackage.description
+                            : ""
                             }}
                           </p>
-                          <p class="my-0">
-                            {{ "Total: " + orderPackage.cost }}
-                          </p>
+                          <p class="my-0">{{ "Total: " + orderPackage.cost }}</p>
                         </v-col>
-                        <v-col cols="2">
-                          <v-btn small color="error" @click="deletePackage(i)">
+                        <v-col cols="4">
+                          <v-btn
+                            small
+                            color="error"
+                            class=".d-none .d-md-flex mr-10"
+                            @click="deletePackage(i)"
+                          >
                             <v-icon class="mr-1 mt-0">mdi-delete</v-icon>
                           </v-btn>
                         </v-col>
@@ -397,9 +397,7 @@
                 </v-container>
               </v-card>
 
-              <v-btn color="normal" @click="validate(3)">{{
-                Continuebtn
-              }}</v-btn>
+              <v-btn color="normal" @click="validate(3)">{{ Continuebtn }}</v-btn>
 
               <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
             </v-stepper-content>
@@ -412,15 +410,8 @@
                   <!--Títle -->
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
-                    <v-col
-                      cols="12"
-                      md="6"
-                      class="align-center"
-                      justify="center"
-                    >
-                      <p class="display-2 white--text">
-                        {{ NewShipmentTitle }}
-                      </p>
+                    <v-col cols="12" md="6" class="align-center" justify="center">
+                      <p class="display-2 white--text">{{ NewShipmentTitle }}</p>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
@@ -496,9 +487,7 @@
                     <v-row>
                       <v-col cols="2"></v-col>
                       <v-col cols="3">
-                        <v-subheader class="title font-weight-black"
-                          >TOTAL</v-subheader
-                        >
+                        <v-subheader class="title font-weight-black">TOTAL</v-subheader>
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
@@ -531,9 +520,7 @@
                   <v-row class="align-center">
                     <v-col cols="3"></v-col>
                     <v-col class="align-center" justify="center">
-                      <p class="display-2 white--text">
-                        {{ NewShipmentTitle }}
-                      </p>
+                      <p class="display-2 white--text">{{ NewShipmentTitle }}</p>
                     </v-col>
                     <v-col cols="3"></v-col>
                   </v-row>
@@ -545,9 +532,7 @@
                         <p
                           class="body-1 font-weight-light align-center white--text"
                           justify="center"
-                        >
-                          {{ DestinationTitle }}
-                        </p>
+                        >{{ DestinationTitle }}</p>
                       </v-col>
                     </v-row>
                     <!--Receiver -->
@@ -635,9 +620,7 @@
                 </v-container>
               </v-card>
 
-              <v-btn color="normal" @click="searchRoute()">{{
-                Continuebtn
-              }}</v-btn>
+              <v-btn color="normal" @click="searchRoute()">{{ Continuebtn }}</v-btn>
 
               <v-btn text @click="changePage('Home')">{{ Cancelbtn }}</v-btn>
             </v-stepper-content>
@@ -646,6 +629,10 @@
       </v-col>
       <v-col class="hidden-sm-and-down" cols="3"></v-col>
     </v-row>
+    <v-snackbar v-model="snackbar" color="danger">
+      {{ snackRegister }}
+      <v-btn dark text @click="snackbar = false">{{ close }}</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -672,7 +659,7 @@ import moment from "moment";
 export default class Shipment extends Vue {
   $store: any;
   $router: any;
-  e1 = 1;
+  e1 = 2;
   selectedOptions = [];
 
   GrossWeight!: any;
@@ -686,6 +673,7 @@ export default class Shipment extends Vue {
   userID: any;
   selectedDiscount: any;
   ShipmentSurcharges: any;
+  snackbar = false;
 
   characteristics!: {
     ch_id: number;
@@ -828,17 +816,19 @@ export default class Shipment extends Vue {
       this.Order.shipment.user = this.userID;
     }
     this.Order.shipment.date = moment().format("YYYY-MM-DD HH:mm:ss");
-    console.log("order", this.Order);
     this.$store
       .dispatch("NewShipment/sendOrder", this.Order)
       .then((status: any) => {
-        if (status == 200) {
+        if (status == 201) {
           this.trackingID = this.$store.state.NewShipment.trackingID;
           setTimeout(() => {
-            this.changePage("DetailShipment");
+            this.$router.push({
+              name: "DetailShipment",
+              params: { id: this.trackingID.trackingid },
+            });
           }, 1000);
-        } else if (status == 204) {
-          console.log("Error al registrar");
+        } else {
+          this.snackbar = true;
         }
       });
   }
@@ -910,7 +900,6 @@ export default class Shipment extends Vue {
       this.$refs.form2.reset();
     }
   }
-
   characteristicCharge: any;
   CalculatePackageTotal(
     PackWeight: any,
@@ -989,6 +978,7 @@ export default class Shipment extends Vue {
 
   NewShipmentTitle = "Your Order";
   DestinationTitle = "DESTINATION";
+  ReceiverData = "Receiver data";
 
   Step1 = "Origin/Destination";
   PhoneLabel = "Phone";
@@ -1028,6 +1018,7 @@ export default class Shipment extends Vue {
 
   Continuebtn = "Continue";
   Cancelbtn = "Cancel";
+  snackRegister = "Ups! There are a problem. Try again";
 
   mounted() {
     this.translate();
@@ -1111,6 +1102,8 @@ export default class Shipment extends Vue {
             this.DiscountLabel = term.translation;
           } else if (term.name == "ShipmentServiceCost") {
             this.ServiceCostLabel = term.translation;
+          } else if (term.name == "ShipmentReceiverData") {
+            this.ReceiverData = term.translation;
           }
         }
       );
