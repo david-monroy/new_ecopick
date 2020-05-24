@@ -61,7 +61,7 @@ import moment from "moment";
 @Component({
   components: {},
   computed: {
-    ...mapState("allShipments", ["shipments"]),
+    ...mapState("AllShipments", ["shipments"]),
   },
 })
 export default class Home extends Vue {
@@ -164,19 +164,6 @@ export default class Home extends Vue {
       console.log(this.shipments);
     });
   }
-
-  /*getAllShipments(userId: any) {
-    console.log("USER", userId);
-    this.$store
-      .dispatch("Allshipments/getAllShipments/", userId)
-      .then(() => {
-        this.loading = false;
-      })
-      .catch(() => {
-        this.loading = false;
-      });
-  }
-*/
 
   formatDate(date: string) {
     return moment(date).format("YYYY-MM-DD");

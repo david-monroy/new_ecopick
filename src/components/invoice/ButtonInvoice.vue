@@ -49,12 +49,17 @@ import Invoice from "../../views/Invoice.vue";
 
 @Component({
   components: { VueHtml2pdf, Invoice },
-  computed: { ...mapState("user", ["user"]) },
+  computed: { ...mapState("user", { user: "userData" }) },
 })
 export default class ButtonInvoice extends Vue {
   invoiceDownload = "Download invoice";
   invoiceCheckbox = "Send copy to email";
-  user!: { name: string; email: string };
+  user!: {
+    firstname: string;
+    lastname: string;
+    email: string;
+    language: number;
+  };
   loading = false;
   checkbox = false;
   downloadInvoice() {
@@ -68,8 +73,9 @@ export default class ButtonInvoice extends Vue {
       const filename = "invoice.pdf";
       const formData = new FormData();
       formData.append("file", blobPdf, filename);
-      formData.append("userName", this.user.name);
-      formData.append("userEmail", this.user.email);
+      formData.append("name", this.user.firstname);
+      formData.append("email", this.user.email);
+      formData.append("language", this.user.language.toString());
       this.$store.dispatch("invoice/sendInvoice", formData);
     }
   }
@@ -102,7 +108,6 @@ export default class ButtonInvoice extends Vue {
 
 <style lang="scss" scoped>
 .size-md {
-  width: 60%;
   margin: 0 auto;
 }
 </style>

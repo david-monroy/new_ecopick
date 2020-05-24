@@ -1,17 +1,17 @@
 import { API_URL } from "./config";
 
 export default {
-  getInvoice(trackingId: any) {
+  getInvoice(trackingId: string) {
     return API_URL.get(`/shipment/${trackingId}/invoice`, {
       headers: {
-        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOiIyMDIwLTA1LTE1VDEyOjUzOjQ4Ljc5MloiLCJleHAiOiIyMDIwLTA1LTE2VDEyOjUzOjQ4Ljc5MloifQ.gAq2dxRY39J1nPNr0vVr6tLAq0RM9RlU7CsjstjQ298`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
   },
   sendInvoice(formData: FormData) {
     return API_URL.post(`/user/sendAttachment`, formData, {
       headers: {
-        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOiIyMDIwLTA1LTE1VDEyOjUzOjQ4Ljc5MloiLCJleHAiOiIyMDIwLTA1LTE2VDEyOjUzOjQ4Ljc5MloifQ.gAq2dxRY39J1nPNr0vVr6tLAq0RM9RlU7CsjstjQ298`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
   },

@@ -169,7 +169,7 @@ export default class Map extends Vue {
   border: none;
   cursor: pointer;
   padding: 0;
-  background-image: url("../assets/marker.png");
+  background-image: url("../../assets/marker.png");
   background-size: contain;
   width: 30px;
   height: 50px;
@@ -177,6 +177,6 @@ export default class Map extends Vue {
 }
 #map {
   width: 100%;
-  height: 100%;
+  height: 98%;
 }
 </style>
