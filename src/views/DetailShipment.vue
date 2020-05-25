@@ -149,8 +149,6 @@ export default class DetailShipment extends Vue {
     this.$store
       .dispatch("shipment/getShipment", this.$route.params.id)
       .then(() => {
-        this.$store.dispatch("user/getUserData", this.shipment.userid);
-        this.$store.dispatch("invoice/getInvoice", this.$route.params.id);
         this.getRoute(this.$route.params.id);
         this.noContent = "content";
       })
