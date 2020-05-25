@@ -101,7 +101,7 @@ export default {
       today = `${yyyy}-${mm}-${dd}`;
 
       const userData: any = {
-                identification: "12345596566",
+                identification: "12h34",
                 firstName: "",
                 secondName: "",
                 lastName: "",
@@ -147,9 +147,10 @@ export default {
       await userService.createUserRoute(userData).then((response: any) => {
         if (response.data.status == 201){
           context.commit("setStatus", {registered: true});
-        } else {
-          context.commit("setStatus", {registered: false}); //el correo ya esta usado
-        }
+        } 
+      }).catch((error) => {
+        console.log(error);
+        context.commit("setStatus", {registered: false}); //el correo ya esta usado
       });
 
       await userService.validateUserRoute({email: userData.email, password: null}).then((response: any)=>{

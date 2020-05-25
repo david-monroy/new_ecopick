@@ -173,6 +173,10 @@
       {{ snack4 }}
       <v-btn dark text @click="snackbarError3 = false">{{ close }}</v-btn>
     </v-snackbar>
+    <v-snackbar v-model="snackbarGoogle" top:timeout="timeout" color="error">
+      {{ snack5 }}
+      <v-btn dark text @click="snackbarGoogle = false">{{ close }}</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -205,12 +209,14 @@ export default class Login extends Vue {
   snack2 = "Please ingress your email and password";
   snack3 = "Invalid email or password. Try again.";
   snack4 = "This user doesn't have permission to access or it's disabled.";
+  snack5 = "Prueba";
   close = "Close";
 
   snackbar = false;
   snackbarError = false;
   snackbarError2 = false;
   snackbarError3 = false;
+  snackbarGoogle = false;
   timeout = 7000;
 
   $refs!: {
@@ -273,10 +279,18 @@ export default class Login extends Vue {
         .dispatch("user/federatedSignUpGoogle", { provider: "google" })
         .then(() => {
           if (this.getStatus.registered == false) {
-            this.errors.push("This email is already in use");
-            this.showErrors(this.errors);
+            //this.errors.push("This email is already in use");
+            //this.showErrors(this.errors);
+            this.snackbar = true;
+            setTimeout(() => {
+              this.changePage("Home");
+            }, 1000);
           } else {
-            this.$router.push("/");
+            //this.changePage("Profile");
+            this.snackbarGoogle = true;
+            this.$router.push({ name: 'Profile', props: {
+              popUpGoogle: true
+            }  });
           }
         });
     }
