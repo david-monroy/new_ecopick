@@ -108,11 +108,14 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(to, from, next);
   to.matched.some((route) => {
     if (route.meta.requiresAuth) {
       const token: any = localStorage.getItem("token");
-      if (jwt.isExpired(token)) {
+      const decoded: any = jwt.decodeToken(token);
+      const tokenExp: any = new Date(decoded.exp);
+      const actualDate = new Date();
+
+      if (tokenExp <= actualDate || token === null) {
         localStorage.clear();
         next({ path: "/login" });
       } else {

@@ -50,7 +50,6 @@ export default {
           .validateUserRoute(user)
           .then((response: any) => {
             if (response.data !== "") {
-              context.commit("setLoginRoute", response.data);
               localStorage.setItem("token", response.data.token);
               localStorage.setItem(
                 "Name",
