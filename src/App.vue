@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <Navbar v-if="!$route.meta.hideBasicComponents" />
-    <v-content class="bg">
+    <v-content class="bg-color">
       <router-view></router-view>
     </v-content>
     <Footer v-if="!$route.meta.hideBasicComponents" />
@@ -24,9 +24,7 @@ export default class App extends Vue {}
 </script>
 
 <style scoped>
-.bg {
-  min-height: 100%;
+.bg-color {
   background-color: #f7f7f7;
-  background-size: cover;
 }
 </style>

@@ -45,4 +45,8 @@ export default class DetailShipment extends Vue {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.screen {
+  height: 80vh;
+}
+</style>
