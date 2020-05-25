@@ -85,7 +85,7 @@ export default {
       });
     },
     federatedSignUpGoogle: async(context: any, payload: any) =>{
-      let userEmail: string | null | undefined;
+      let email: string | null | undefined;
       let today: any = new Date();
       let dd: any = today.getDate();
       let mm: any = today.getMonth()+1; 
@@ -101,7 +101,7 @@ export default {
       today = `${yyyy}-${mm}-${dd}`;
 
       const userData: any = {
-                identification: "12345",
+                identification: "12345596566",
                 firstName: "",
                 secondName: "",
                 lastName: "",
@@ -126,11 +126,19 @@ export default {
           payload.provider == "google" ? providerGoogle : providerFacebook
         )
         .then((result) => {
+          if (payload.provider == "google") {
           googleProfile = result.additionalUserInfo?.profile;
           userData.firstName = googleProfile.given_name;
           userData.lastName = googleProfile.family_name;
          // userData.userPhoto = googleProfile.picture;
-          userData.email = googleProfile.email;
+          userData.email = googleProfile.email; }
+          else if (payload.provider == "facebook") {
+          googleProfile = result.additionalUserInfo?.profile;
+          userData.firstName = googleProfile.given_name;
+          userData.lastName = googleProfile.family_name;
+         // userData.userPhoto = googleProfile.picture;
+          userData.email = googleProfile.email; 
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -144,12 +152,9 @@ export default {
         }
       });
 
-      await userService.validateUserRoute({userEmail: userData.userEmail, userPassword: null}).then((response: any)=>{
-        if (response.data.status == 200) {
-         /*userInLs.userName = response.data.user[0].user_first_name;
-          userInLs.userLastName = response.data.user[0].user_first_lastname;
-          userInLs.userLanguage = response.data.user[0].language_name;
-          userInLs.userPhoto = response.data.user[0].user_photo; */
+      await userService.validateUserRoute({email: userData.email, password: null}).then((response: any)=>{
+        console.log(response.data);
+        if (response.status == 200) {
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("Email", response.data.results[0].us_email);
               localStorage.setItem(
@@ -157,13 +162,17 @@ export default {
                 response.data.results[0].us_fk_language
               );
               localStorage.setItem("ID", response.data.results[0].us_id);
+              localStorage.setItem(
+                "Name",
+                response.data.results[0].us_first_name +
+                  " " +
+                  response.data.results[0].us_last_name
+              );
               if (response.data.results[0].us_fk_language == 1) {
                 localStorage.setItem("Lang", "en-us");
               } else if (response.data.results[0].us_fk_language == 2) {
                 localStorage.setItem("Lang", "es-ve");
               }
-          //localStorage.setItem("userData", JSON.stringify(userInLs));
-          //context.commit("setUser", response.data.user[0]);
         }
       })
     }

@@ -120,7 +120,7 @@
           <v-row>
             <v-col> </v-col>
             <v-col>
-              <v-btn rounded color="indigo darken-2" dark
+              <v-btn rounded color="indigo darken-2" dark @click="FederatedSignUpFacebook()"
                 ><v-icon class="mr-1" p-0>mdi-facebook</v-icon>Facebook</v-btn
               >
             </v-col>
@@ -271,6 +271,22 @@ export default class Login extends Vue {
     if (this.errors.length == 0) {
       this.$store
         .dispatch("user/federatedSignUpGoogle", { provider: "google" })
+        .then(() => {
+          if (this.getStatus.registered == false) {
+            this.errors.push("This email is already in use");
+            this.showErrors(this.errors);
+          } else {
+            this.$router.push("/");
+          }
+        });
+    }
+  }
+
+   FederatedSignUpFacebook() {
+    this.errors.splice(0);
+    if (this.errors.length == 0) {
+      this.$store
+        .dispatch("user/federatedSignUpGoogle", { provider: "facebook" })
         .then(() => {
           if (this.getStatus.registered == false) {
             this.errors.push("This email is already in use");
