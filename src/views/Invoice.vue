@@ -98,11 +98,11 @@
         </td>
         <td>
           <p class="cell-title">{{ grossWeight }}</p>
-          <p class="cell-description">{{ packagesGrossWeight }} kg</p>
+          <p class="cell-description">{{ packagesGrossWeight }} lb</p>
         </td>
         <td>
           <p class="cell-title">{{ dimensionalWeight }}</p>
-          <p class="cell-description">{{ packagesDimensionalWeight }} kg</p>
+          <p class="cell-description">{{ packagesDimensionalWeight }} lb</p>
         </td>
       </tr>
 
@@ -118,7 +118,7 @@
       </tr>
       <tr class="item" v-for="(item, k) in packages" :key="k">
         <td>{{ item.pa_description }}</td>
-        <td>{{ item.pa_weight }} kg</td>
+        <td>{{ item.pa_weight }} lb</td>
         <td>{{ item.characteristic }}</td>
         <td>${{ item.pa_cost }}</td>
       </tr>

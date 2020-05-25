@@ -10,6 +10,7 @@ import DetailShipment from "../views/DetailShipment.vue";
 import Profile from "../views/Profile.vue";
 import RecoverPassword from "../views/RecoverPassword.vue";
 import Login from "../views/Login.vue";
+import NotFound from "../views/NotFound.vue";
 
 Vue.use(VueRouter);
 
@@ -95,6 +96,10 @@ const routes: Array<RouteConfig> = [
       hideBasicComponents: true,
     },
   },
+  {
+    path: "*",
+    component: NotFound,
+  },
 ];
 
 const router = new VueRouter({
@@ -103,6 +108,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  console.log(to, from, next);
   to.matched.some((route) => {
     if (route.meta.requiresAuth) {
       const token: any = localStorage.getItem("token");

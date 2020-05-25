@@ -9,11 +9,7 @@
       @click="changePage('Home')"
     ></v-img>
     <v-spacer></v-spacer>
-    <v-responsive
-      class="mr-auto mr-md-4 transition-swing"
-      max-width="450"
-      max-height="38"
-    >
+    <v-responsive class="mr-auto mr-md-4 transition-swing" max-width="450" max-height="38">
       <v-text-field
         class="hidden-sm-and-down"
         prepend-inner-icon="mdi-magnify"
@@ -47,9 +43,7 @@
     </v-menu>
     <v-menu height="40" v-if="activeUser == null">
       <template v-slot:activator="{ on }">
-        <v-icon class="mr-1 hidden-md-and-up" color="black" v-on="on"
-          >mdi-account-circle-outline</v-icon
-        >
+        <v-icon class="mr-1 hidden-md-and-up" color="black" v-on="on">mdi-account-circle-outline</v-icon>
         <p class="text-option font-weight-light my-0 mx-2 hidden-sm-and-down">
           <v-icon class="mr-1" color="black">mdi-account-circle-outline</v-icon>
           <span>
@@ -185,6 +179,10 @@ export default class Navbar extends Vue {
             this.signOut = term.translation;
           } else if (term.name == "generalLogIn") {
             this.logIn = term.translation;
+          } else if (term.name == "generalButtonProfile") {
+            this.buttonProfile = term.translation;
+          } else if (term.name == "generalButtonDiscounts") {
+            this.buttonDiscounts = term.translation;
           }
         }
       );

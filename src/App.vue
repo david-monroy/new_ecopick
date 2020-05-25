@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <Navbar v-if="!$route.meta.hideBasicComponents" />
-    <v-content>
+    <v-content class="bg">
       <router-view></router-view>
     </v-content>
     <Footer v-if="!$route.meta.hideBasicComponents" />
@@ -22,3 +22,11 @@ import Footer from "./components/Footer.vue";
 })
 export default class App extends Vue {}
 </script>
+
+<style scoped>
+.bg {
+  min-height: 100%;
+  background-color: #f7f7f7;
+  background-size: cover;
+}
+</style>
