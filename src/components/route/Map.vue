@@ -6,9 +6,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { mapState } from "vuex";
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
+import mapboxgl, { LngLatLike } from "mapbox-gl";
 import { Watch } from "vue-property-decorator";
 import moment from "moment";
 
@@ -41,7 +39,7 @@ export default class Map extends Vue {
         date: string;
         status: string;
       };
-      geometry: { type: string; coordinates: number[] };
+      geometry: { type: string; coordinates: LngLatLike };
     }[] = [];
     const routeLine: number[][] = [];
     for (let i = 0; i < this.route.length; i++) {
