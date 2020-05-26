@@ -9,12 +9,14 @@ export default {
     userData: {},
     status: {},
     IsNotFederated: {},
+    Errors: {},
   },
   // -----------------------------------------------------------------
   getters: {
     getLoginUserData: (state: any) => state.user,
     getLoginStatus: (state: any) => state.status,
     getIsNotFederated: (state: any) => state.IsNotFederated,
+    getErrors: (state: any) => state.Errors,
   },
   // -----------------------------------------------------------------
   mutations: {
@@ -26,6 +28,9 @@ export default {
     },
     setIsNotFederated(state: {}, IsNotFederated: any) {
       Vue.set(state, "IsNotFederated", IsNotFederated);
+    },
+    setErrors(state: {}, Errors: any) {
+      Vue.set(state, "Errors", Errors);
     },
   },
   // -----------------------------------------------------------------
@@ -134,6 +139,7 @@ export default {
           userData.lastName = googleProfile.family_name;
          // userData.userPhoto = googleProfile.picture;
           userData.email = googleProfile.email;
+          userEmail.email = googleProfile.email;
           fa.signOut(); }
           else if (payload.provider == "facebook") {
           googleProfile = result.additionalUserInfo?.profile;
@@ -141,6 +147,7 @@ export default {
           userData.lastName = googleProfile.family_name;
          // userData.userPhoto = googleProfile.picture;
           userData.email = googleProfile.email; 
+          userEmail.email = googleProfile.email;
           fa.signOut();
           }
         })
@@ -148,15 +155,14 @@ export default {
           console.log(error);
         });
       
+    if(userData.email!=="") {
+
       await userService.createUserRoute(userData).then((response: any) => {
-        if (response.data.status == 201){
+        if (response.data.status == 201){ 
           context.commit("setStatus", {registered: true});
-          userEmail.email=userData.email;
         } 
       }).catch((error) => {
-        console.log(error);
-        context.commit("setStatus", {registered: false}); //el correo ya esta usado
-        userEmail.email=userData.email;
+          context.commit("setStatus", {registered: false}); //el correo ya esta usado
       });
 
       await userService.validateEmail(userEmail).then((response: any) => {
@@ -165,36 +171,41 @@ export default {
         console.log(error);
       });
 
-    if(userKey.userPassword === null) {
+      if(userKey.userPassword === null) {
 
-      await userService.validateUserRoute({email: userData.email, password: null}).then((response: any)=>{
-        console.log(response.data);
-        if (response.status == 200) {
-              localStorage.setItem("token", response.data.token);
-              localStorage.setItem("Email", response.data.results[0].us_email);
-              localStorage.setItem(
-                "Language",
-                response.data.results[0].us_fk_language
-              );
-              localStorage.setItem("ID", response.data.results[0].us_id);
-              localStorage.setItem(
-                "Name",
-                response.data.results[0].us_first_name +
-                  " " +
-                  response.data.results[0].us_last_name
-              );
-              if (response.data.results[0].us_fk_language == 1) {
-                localStorage.setItem("Lang", "en-us");
-              } else if (response.data.results[0].us_fk_language == 2) {
-                localStorage.setItem("Lang", "es-ve");
-              }
-              context.commit("setIsNotFederated", {NotFederated: false});
-        }
-      })
+          await userService.validateUserRoute({email: userData.email, password: null}).then((response: any)=>{
+            console.log(response.data);
+            if (response.status == 200) {
+                  localStorage.setItem("token", response.data.token);
+                  localStorage.setItem("Email", response.data.results[0].us_email);
+                  localStorage.setItem(
+                    "Language",
+                    response.data.results[0].us_fk_language
+                  );
+                  localStorage.setItem("ID", response.data.results[0].us_id);
+                  localStorage.setItem(
+                    "Name",
+                    response.data.results[0].us_first_name +
+                      " " +
+                      response.data.results[0].us_last_name
+                  );
+                    if (response.data.results[0].us_fk_language == 1) {
+                    localStorage.setItem("Lang", "en-us");
+                  } else if (response.data.results[0].us_fk_language == 2) {
+                    localStorage.setItem("Lang", "es-ve");
+                  }
+                  context.commit("setIsNotFederated", {NotFederated: false});
+                  context.commit("setErrors", {UnexpectedError: false});
+            }
+          })
 
-    } else {
-      context.commit("setIsNotFederated", {NotFederated: true});
-    }
-   },
+          } else {
+            context.commit("setIsNotFederated", {NotFederated: true});
+            context.commit("setErrors", {UnexpectedError: false});
+          }
+      } else {
+        context.commit("setErrors", {UnexpectedError: true});
+      }
+   },  //FINAL METODO FEDERADO
   },
 };

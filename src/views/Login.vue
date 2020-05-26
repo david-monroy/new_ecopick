@@ -169,7 +169,10 @@
     </v-snackbar>
     <v-snackbar v-model="snackbarFederated" top:timeout="timeout" color="error">
       {{ snack5 }}
-      <v-btn dark text @click="snackbarFederated = false">{{ close }}</v-btn>
+    </v-snackbar>
+    <v-snackbar v-model="snackbarUnexpectedError" top:timeout="timeout" color="error">
+      {{ snack6 }}
+      <v-btn dark text @click="snackbarUnexpectedError = false">{{ close }}</v-btn>
     </v-snackbar>
   </v-container>
 </template>
@@ -204,6 +207,7 @@ export default class Login extends Vue {
   snack3 = "Invalid email or password. Try again.";
   snack4 = "This user doesn't have permission to access or it's disabled.";
   snack5 = "This email is already in use. Please ingress your email and password to continue";
+  snack6 = "An unexpected error has ocurred. Try again.";
   close = "Close";
 
   snackbar = false;
@@ -211,6 +215,7 @@ export default class Login extends Vue {
   snackbarError2 = false;
   snackbarError3 = false;
   snackbarFederated = false;
+  snackbarUnexpectedError = false;
   timeout = 7000;
 
   $refs!: {
@@ -270,26 +275,34 @@ export default class Login extends Vue {
     return this.$store.getters["user/getIsNotFederated"];
   }
 
+  get getErrors() {
+    return this.$store.getters["user/getErrors"];
+  }
+
   FederatedSignUpGoogle() {
     this.errors.splice(0);
     if (this.errors.length == 0) {
       this.$store
         .dispatch("user/federatedSignUpGoogle", { provider: "google" })
         .then(() => {
-          if (this.getStatus.registered == false) {
-                if (this.getIsNotFederated.NotFederated == true) {
-                  this.snackbarFederated=true;
-                }
-                else { this.snackbar = true;
-                       setTimeout(() => {
-                       this.changePage("Home");
-                       }, 1000); }
+          if(this.getErrors.UnexpectedError == false){
+              if (this.getStatus.registered == false) {
+                    if (this.getIsNotFederated.NotFederated == true) {
+                      this.snackbarFederated=true;
+                    }
+                    else { this.snackbar = true;
+                          setTimeout(() => {
+                          this.changePage("Home");
+                          }, 1000); }
+            } else {
+              //this.changePage("Profile");  //ojo
+                this.$router.push({ name: 'Profile', params: {
+                federatedPopUp: true
+                }  
+              });
+            }
           } else {
-            //this.changePage("Profile");  //ojo
-            this.$router.push({ name: 'Profile', params: {
-              federatedPopUp: true
-               }  
-            });
+            this.snackbarUnexpectedError = true;
           }
         });
     }
