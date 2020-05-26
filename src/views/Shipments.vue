@@ -18,7 +18,6 @@
               </v-card-title>
               <v-data-table
                 ref="datatable"
-                @current-items="getCurrentShipments"
                 :items-per-page="5"
                 multi-sort
                 :headers="headers"
@@ -101,22 +100,10 @@ export default class Home extends Vue {
       class: "teal--text subtitle-1",
     },
     {
-      text: this.UserHeader,
-      align: "center",
-      value: "user",
-      class: "teal--text subtitle-1",
-    },
-    {
       text: this.PurposeHeader,
       align: "center",
       value: "purpose",
       sortable: false,
-      class: "teal--text subtitle-1",
-    },
-    {
-      text: this.OfficeHeader,
-      align: "center",
-      value: "office",
       class: "teal--text subtitle-1",
     },
     {
@@ -129,12 +116,6 @@ export default class Home extends Vue {
       text: this.DateHeader,
       align: "center",
       value: "date",
-      class: "teal--text subtitle-1",
-    },
-    {
-      text: this.PackageHeader,
-      align: "center",
-      value: "packages",
       class: "teal--text subtitle-1",
     },
     {
@@ -154,11 +135,9 @@ export default class Home extends Vue {
 
   beforeMount() {
     this.$store
-      .dispatch("AllShipments/getAllShipments", localStorage.getItem("ID"))
-      .then(() => {
-        this.shipments = this.$store.state.AllShipments.shipments;
-      });
+      .dispatch("AllShipments/getAllShipments", localStorage.getItem("ID"));
   }
+
 
   formatDate(date: string) {
     return moment(date).format("YYYY-MM-DD");
@@ -188,21 +167,15 @@ export default class Home extends Vue {
         (term: { context: string; name: string; translation: string }) => {
           if (term.name == "ShipmentDetail") {
             this.DetailHeader = term.translation;
-          } else if (term.name == "packagesStep2") {
-            this.PackageHeader = term.translation;
           } else if (term.name == "routeDate") {
             this.DateHeader = term.translation;
           } else if (term.name == "generalTrackingID") {
             this.TrackingIDHeader = term.translation;
-          } else if (term.name == "generalUser") {
-            this.UserHeader = term.translation;
           } else if (term.name == "routeStatus") {
             this.StatusHeader = term.translation;
           } else if (term.name == "generalPurpose") {
             this. PurposeHeader= term.translation;
-          } else if (term.name == "ShipmentOffice") {
-            this.OfficeHeader = term.translation;
-          } 
+          }
         }
       );
   }
