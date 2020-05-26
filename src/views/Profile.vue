@@ -119,7 +119,8 @@
                   :rules="rules.emailRules"
                   :label="email"
                   :placeholder="email"
-                  :readonly="!edit"
+                  readonly
+                  :disabled="edit"
                 ></v-text-field>
               </v-col>
               <v-col>
@@ -154,7 +155,8 @@
               <v-col class="hidden-sm-and-down"> </v-col>
             </v-row>
             <v-row>
-              <v-col v-if="edit && !updatePassword"
+              <v-col
+                v-if="edit && !updatePassword && userInfo.password !== null"
                 ><v-btn @click="updatePassword = true" color="teal" outlined
                   ><v-icon class="mr-2">mdi-lock</v-icon
                   >{{ updatePasswordText }}</v-btn
