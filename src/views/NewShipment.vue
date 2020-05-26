@@ -483,7 +483,7 @@
                           dense
                           readonly
                           suffix="$"
-                          :label="ShipmentSurcharges"
+                          :label="ShipmentSurcharges.toString()"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6">
@@ -742,7 +742,7 @@ export default class Shipment extends Vue {
   trackingID: any;
   userID: any;
   selectedDiscount: any;
-  ShipmentSurcharges: any;
+  ShipmentSurcharges: any = 0;
   snackbar = false;
   snackbar2 = false;
   close = "Close";
@@ -764,8 +764,8 @@ export default class Shipment extends Vue {
 
   basecost!: {
     service: number;
-    shipping: number
-};
+    shipping: number;
+  };
 
   offices!: {
     of_id: number;
@@ -811,7 +811,7 @@ export default class Shipment extends Vue {
       weight: number | null;
       characteristic: number | null;
       description: string | null;
-      cost: number | null;
+      cost: string;
     }[];
     options: {}[];
     discount: number | null;
@@ -913,15 +913,15 @@ export default class Shipment extends Vue {
   }
 
   beforeMount() {
-this.$store.dispatch("NewShipment/getCharacteristics");
-this.$store.dispatch("NewShipment/getOptions");
-this.$store.dispatch("NewShipment/getOffices");
-this.$store.dispatch(
-"NewShipment/getDiscounts",
-localStorage.getItem("ID")
-);
-this.$store.dispatch("NewShipment/getBaseCost");
-}
+    this.$store.dispatch("NewShipment/getCharacteristics");
+    this.$store.dispatch("NewShipment/getOptions");
+    this.$store.dispatch("NewShipment/getOffices");
+    this.$store.dispatch(
+      "NewShipment/getDiscounts",
+      localStorage.getItem("ID")
+    );
+    this.$store.dispatch("NewShipment/getBaseCost");
+  }
 
   validate(page: number) {
     if (page == 2) {
@@ -987,7 +987,7 @@ this.$store.dispatch("NewShipment/getBaseCost");
     }
 
     this.GrossWeight = this.basecost.shipping * PackWeight;
-    
+
     this.DimensionalWeight = (
       (this.basecost.shipping * PackWidth * PackLenght * PackHeight) /
       5000
@@ -1024,18 +1024,20 @@ this.$store.dispatch("NewShipment/getBaseCost");
 
   CalculatePackagesTotal() {
     return this.Order.packages
-      .reduce((acc: any, item: { cost: number | null }) => acc + item.cost, 0)
+      .reduce(
+        (acc: any, item: { cost: string}) =>
+          acc + parseFloat(item.cost),
+        0
+      )
       .toFixed(2);
   }
 
   CalculateTotal(i: number) {
     this.OptionTotal = parseFloat(this.CalculateOptionsTotal());
     this.PackTotal = parseFloat(this.CalculatePackagesTotal());
-    if (i != 0 && i != null){
+    if (i != 0 && i != null) {
       this.discountused = true;
     }
-        console.log ("i", i , this.discountused);
-    console.log ("i", i , this.discountused);
     if (this.Order.discount == null) {
       this.Order.shipment.total =
         this.OptionTotal + this.PackTotal + this.basecost.service;
@@ -1190,10 +1192,9 @@ this.$store.dispatch("NewShipment/getBaseCost");
             this.snackRegister = term.translation;
           } else if (term.name == "ShipmentRegisterSuccess") {
             this.snackRegisterSuccess = term.translation;
+          } else if (term.name == "generalClose") {
+            this.close = term.translation;
           }
-          else if (term.name == "generalClose") {
-          this.close = term.translation;
-}
         }
       );
   }
