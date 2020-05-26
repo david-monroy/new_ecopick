@@ -8,11 +8,13 @@ export default {
   state: {
     userData: {},
     status: {},
+    IsNotFederated: {},
   },
   // -----------------------------------------------------------------
   getters: {
     getLoginUserData: (state: any) => state.user,
     getLoginStatus: (state: any) => state.status,
+    getIsNotFederated: (state: any) => state.IsNotFederated,
   },
   // -----------------------------------------------------------------
   mutations: {
@@ -21,6 +23,9 @@ export default {
     },
     setStatus(state: {}, status: any) {
       Vue.set(state, "status", status);
+    },
+    setIsNotFederated(state: {}, IsNotFederated: any) {
+      Vue.set(state, "IsNotFederated", IsNotFederated);
     },
   },
   // -----------------------------------------------------------------
@@ -93,27 +98,14 @@ export default {
     },
     federatedSignUpGoogle: async(context: any, payload: any) =>{
       let email: string | null | undefined;
-      let today: any = new Date();
-      let dd: any = today.getDate();
-      let mm: any = today.getMonth()+1; 
-      const yyyy = today.getFullYear();
-      if(dd<10) 
-      {
-          dd=`0${dd}`;
-      } 
-      if(mm<10) 
-      {
-          mm=`0${mm}`;
-      }
-      today = `${yyyy}-${mm}-${dd}`;
-
+      
       const userData: any = {
-                identification: "12h34",
+                identification: null,
                 firstName: "",
                 secondName: "",
                 lastName: "",
                 secondLastName: "",
-                birthday: today,
+                birthday: null,
                 email: "",
                 password: null,
                 phoneNumber: null,
@@ -121,12 +113,15 @@ export default {
                 idLanguage: 1,
                 idStatus: 4,
       };
-      const userInLs: any = {
-        userName: "",
-        userLastName: "",
-        userLanguage: "",
-        userPhoto: "",
+
+      const userKey: any = {
+        userPassword: "",
       };
+
+      const userEmail: any = {
+        email: "",
+      };
+
       let googleProfile: any;
       await fa
         .signInWithPopup(
@@ -138,13 +133,15 @@ export default {
           userData.firstName = googleProfile.given_name;
           userData.lastName = googleProfile.family_name;
          // userData.userPhoto = googleProfile.picture;
-          userData.email = googleProfile.email; }
+          userData.email = googleProfile.email;
+          fa.signOut(); }
           else if (payload.provider == "facebook") {
           googleProfile = result.additionalUserInfo?.profile;
           userData.firstName = googleProfile.given_name;
           userData.lastName = googleProfile.family_name;
          // userData.userPhoto = googleProfile.picture;
           userData.email = googleProfile.email; 
+          fa.signOut();
           }
         })
         .catch((error) => {
@@ -154,17 +151,27 @@ export default {
       await userService.createUserRoute(userData).then((response: any) => {
         if (response.data.status == 201){
           context.commit("setStatus", {registered: true});
+          userEmail.email=userData.email;
         } 
       }).catch((error) => {
         console.log(error);
         context.commit("setStatus", {registered: false}); //el correo ya esta usado
+        userEmail.email=userData.email;
       });
+
+      await userService.validateEmail(userEmail).then((response: any) => {
+        userKey.userPassword=response.data[0].us_password;
+      }).catch((error) => {
+        console.log(error);
+      });
+
+    if(userKey.userPassword === null) {
 
       await userService.validateUserRoute({email: userData.email, password: null}).then((response: any)=>{
         console.log(response.data);
         if (response.status == 200) {
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("Email", response.data.results[0].us_email);
+              localStorage.setItem("token", response.data.token);
+              localStorage.setItem("Email", response.data.results[0].us_email);
               localStorage.setItem(
                 "Language",
                 response.data.results[0].us_fk_language
@@ -181,8 +188,13 @@ export default {
               } else if (response.data.results[0].us_fk_language == 2) {
                 localStorage.setItem("Lang", "es-ve");
               }
+              context.commit("setIsNotFederated", {NotFederated: false});
         }
       })
-    },
+
+    } else {
+      context.commit("setIsNotFederated", {NotFederated: true});
+    }
+   },
   },
 };

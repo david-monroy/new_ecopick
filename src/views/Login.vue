@@ -167,9 +167,9 @@
       {{ snack4 }}
       <v-btn dark text @click="snackbarError3 = false">{{ close }}</v-btn>
     </v-snackbar>
-    <v-snackbar v-model="snackbarGoogle" top:timeout="timeout" color="error">
+    <v-snackbar v-model="snackbarFederated" top:timeout="timeout" color="error">
       {{ snack5 }}
-      <v-btn dark text @click="snackbarGoogle = false">{{ close }}</v-btn>
+      <v-btn dark text @click="snackbarFederated = false">{{ close }}</v-btn>
     </v-snackbar>
   </v-container>
 </template>
@@ -203,14 +203,14 @@ export default class Login extends Vue {
   snack2 = "Please ingress your email and password";
   snack3 = "Invalid email or password. Try again.";
   snack4 = "This user doesn't have permission to access or it's disabled.";
-  snack5 = "Prueba";
+  snack5 = "This email is already in use. Please ingress your email and password to continue";
   close = "Close";
 
   snackbar = false;
   snackbarError = false;
   snackbarError2 = false;
   snackbarError3 = false;
-  snackbarGoogle = false;
+  snackbarFederated = false;
   timeout = 7000;
 
   $refs!: {
@@ -266,6 +266,10 @@ export default class Login extends Vue {
     return this.$store.getters["user/getLoginStatus"];
   }
 
+  get getIsNotFederated() {
+    return this.$store.getters["user/getIsNotFederated"];
+  }
+
   FederatedSignUpGoogle() {
     this.errors.splice(0);
     if (this.errors.length == 0) {
@@ -273,18 +277,19 @@ export default class Login extends Vue {
         .dispatch("user/federatedSignUpGoogle", { provider: "google" })
         .then(() => {
           if (this.getStatus.registered == false) {
-            //this.errors.push("This email is already in use");
-            //this.showErrors(this.errors);
-            this.snackbar = true;
-            setTimeout(() => {
-              this.changePage("Home");
-            }, 1000);
+                if (this.getIsNotFederated.NotFederated == true) {
+                  this.snackbarFederated=true;
+                }
+                else { this.snackbar = true;
+                       setTimeout(() => {
+                       this.changePage("Home");
+                       }, 1000); }
           } else {
-            //this.changePage("Profile");
-            this.snackbarGoogle = true;
-            this.$router.push({ name: 'Profile', props: {
-              popUpGoogle: true
-            }  });
+            //this.changePage("Profile");  //ojo
+            this.$router.push({ name: 'Profile', params: {
+              federatedPopUp: true
+               }  
+            });
           }
         });
     }
@@ -354,6 +359,8 @@ export default class Login extends Vue {
             this.goBack = term.translation;
           } else if (term.name == "loginButton") {
             this.buttonLogin = term.translation;
+          } else if (term.name == "loginSnack5") {
+            this.snack5 = term.translation;
           }
         }
       );
