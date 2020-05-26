@@ -492,9 +492,9 @@
                           solo
                           dense
                           :items="discounts"
-                          :disabled="discounts.length == 0"
+                          :disabled="discounts.length == 0 || discountused"
                           item-value="di_id"
-                          item-text="di_name"
+                          item-text="discount"
                           :label="DiscountLabel"
                           v-on="CalculateTotal(Order.discount)"
                         ></v-select>
@@ -746,6 +746,7 @@ export default class Shipment extends Vue {
   snackbar = false;
   snackbar2 = false;
   close = "Close";
+  discountused = false;
 
   characteristics!: {
     ch_id: number;
@@ -777,6 +778,7 @@ export default class Shipment extends Vue {
     di_id: number;
     di_name: string;
     di_percentage: number;
+    discount: string;
   }[];
 
   Order: {
@@ -949,7 +951,6 @@ this.$store.dispatch("NewShipment/getBaseCost");
   }
 
   addPackage() {
-
     if (this.$refs.form2.validate()) {
       this.Order.packages.push({
         width: this.PackageDetails.width,
@@ -1030,6 +1031,11 @@ this.$store.dispatch("NewShipment/getBaseCost");
   CalculateTotal(i: number) {
     this.OptionTotal = parseFloat(this.CalculateOptionsTotal());
     this.PackTotal = parseFloat(this.CalculatePackagesTotal());
+    if (i != 0 && i != null){
+      this.discountused = true;
+    }
+        console.log ("i", i , this.discountused);
+    console.log ("i", i , this.discountused);
     if (this.Order.discount == null) {
       this.Order.shipment.total =
         this.OptionTotal + this.PackTotal + this.basecost.service;
