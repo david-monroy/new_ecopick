@@ -269,13 +269,9 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { Watch } from "vue-property-decorator";
 import { mapState } from "vuex";
-import Translate from "../components/Translate.vue";
 import moment from "moment";
 
 @Component({
-  components: {
-    Translate,
-  },
   computed: {
     ...mapState("user", { userInfo: "userData" }),
   },
@@ -498,10 +494,6 @@ export default class Profile extends Vue {
             this.languageInput = term.translation;
           } else if (term.name == "generalTooltipLanguage") {
             this.languageTooltip = term.translation;
-          } else if (term.name == "signupPassword") {
-            this.password = term.translation;
-          } else if (term.name == "signupPasswordc") {
-            this.passwordc = term.translation;
           } else if (term.name == "profileSnack1") {
             this.snackSuccess = term.translation;
           } else if (term.name == "profileSnack2") {

@@ -261,8 +261,6 @@ export default class Invoice extends Vue {
             this.trackingName = term.translation;
           } else if (term.name == "generalName") {
             this.name = term.translation;
-          } else if (term.name == "generalName") {
-            this.name = term.translation;
           } else if (term.name == "generalIdentification") {
             this.identification = term.translation;
           } else if (term.name == "generalEmail") {

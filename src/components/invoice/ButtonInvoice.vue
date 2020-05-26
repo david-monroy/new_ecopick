@@ -6,7 +6,6 @@
   >
     <VueHtml2pdf
       :show-layout="false"
-      :preview-in-newtab="true"
       :paginate-elements-by-height="1400"
       :filename="'invoice_' + this.$route.params.id"
       :pdf-quality="2"
@@ -51,7 +50,6 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { Watch } from "vue-property-decorator";
 import { mapState } from "vuex";
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import VueHtml2pdf from "vue-html2pdf";
 import Invoice from "../../views/Invoice.vue";
