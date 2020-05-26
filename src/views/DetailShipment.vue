@@ -38,12 +38,7 @@
               </v-row>
               <v-row asign="center" justify="center">
                 <v-col cols="5">
-                  <v-text-field
-                    readonly
-                    dense
-                    :label="OfficeLabel"
-                    :value="this.shipment.office"
-                  ></v-text-field>
+                  <v-text-field readonly dense :label="OfficeLabel" :value="this.shipment.office"></v-text-field>
                 </v-col>
                 <v-col cols="5">
                   <v-text-field
@@ -69,12 +64,7 @@
               </v-row>
               <v-row asign="center" justify="center">
                 <v-col cols="5" v-if="this.shipment.purpose">
-                  <v-text-field
-                    readonly
-                    dense
-                    :label="PurposeLabel"
-                    :value="this.shipment.purpose"
-                  ></v-text-field>
+                  <v-text-field readonly dense :label="PurposeLabel" :value="this.shipment.purpose"></v-text-field>
                 </v-col>
                 <v-col cols="5">
                   <v-text-field
@@ -228,7 +218,6 @@ export default class DetailShipment extends Vue {
         this.$store.dispatch("invoice/getInvoice", this.$route.params.id);
         this.getRoute(this.$route.params.id);
         this.noContent = "content";
-        console.log(this.shipment);
       })
       .catch(() => {
         this.noContent = "noContent";
@@ -247,7 +236,11 @@ export default class DetailShipment extends Vue {
     this.translator
       .filter(
         (term: { context: string; name: string; translation: string }) => {
-          return term.context == "route" || term.context == "general";
+          return (
+            term.context == "route" ||
+            term.context == "general" ||
+            term.context == "Shipment"
+          );
         }
       )
       .forEach(
@@ -260,6 +253,20 @@ export default class DetailShipment extends Vue {
             this.date = term.translation;
           } else if (term.name == "generalTrackingID") {
             this.trackingName = term.translation;
+          } else if (term.name == "generalDestination") {
+            this.DestinationLabel = term.translation;
+          } else if (term.name == "generalUser") {
+            this.UserLabel = term.translation;
+          } else if (term.name == "generalReceiver") {
+            this.ReceiverLabel = term.translation;
+          } else if (term.name == "generalDeliveredDate") {
+            this.DateLabel = term.translation;
+          } else if (term.name == "generalArrivalDate") {
+            this.ArrivalLabel = term.translation;
+          } else if (term.name == "generalPurpose") {
+            this.PurposeLabel = term.translation;
+          } else if (term.name == "ShipmentOffice") {
+            this.OfficeLabel = term.translation;
           }
         }
       );
