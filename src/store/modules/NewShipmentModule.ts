@@ -12,7 +12,7 @@ export default {
   options: [],
   offices: [],
   discounts: [],
-  basecost: [],
+  basecost: {},
   trackingID: [],
   },
   // -----------------------------------------------------------------
@@ -35,7 +35,7 @@ export default {
       Vue.set (state, "discounts", discounts);
     },
 
-    setBaseCost (state:{}, basecost:[]) {
+    setBaseCost (state:{}, basecost:{}) {
       Vue.set (state, "basecost", basecost);
     },
 
@@ -72,10 +72,13 @@ export default {
       )
     },
     getBaseCost: async (context: any) => {
-      await NewShipmentService.getBaseCost().then((response:any) => {
-          context.commit("setBaseCost", response.data)
-      }
-      )
+      await NewShipmentService.getBaseCost().then((response: any) => {
+        const costs = {
+        service: response.data[0].co_value,
+        shipping: response.data[1].co_value,
+        };
+        context.commit("setBaseCost", costs);
+        });
     },
     sendOrder: async function (context: any, Order: {}) {
       return new Promise((resolve, reject) => {

@@ -77,8 +77,6 @@
                           :rules="rules.item"
                           :label="ReceiverLastNameLabel"
                           required
-                          @input="$v.ReceiverLastName.$touch()"
-                          @blur="$v.ReceiverLastName.$touch()"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="4">
@@ -494,6 +492,7 @@
                           solo
                           dense
                           :items="discounts"
+                          :disabled="discounts.length == 0"
                           item-value="di_id"
                           item-text="di_name"
                           :label="DiscountLabel"
@@ -514,7 +513,7 @@
                           dense
                           readonly
                           suffix="$"
-                          :value="basecost[0].co_value"
+                          :value="basecost.service"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="3"></v-col>
@@ -746,6 +745,7 @@ export default class Shipment extends Vue {
   ShipmentSurcharges: any;
   snackbar = false;
   snackbar2 = false;
+  close = "Close";
 
   characteristics!: {
     ch_id: number;
@@ -761,6 +761,11 @@ export default class Shipment extends Vue {
     op_charge_parameter: string;
   }[];
 
+  basecost!: {
+    service: number;
+    shipping: number
+};
+
   offices!: {
     of_id: number;
     of_name: string;
@@ -772,10 +777,6 @@ export default class Shipment extends Vue {
     di_id: number;
     di_name: string;
     di_percentage: number;
-  }[];
-
-  basecost!: {
-    co_value: number;
   }[];
 
   Order: {
@@ -910,24 +911,15 @@ export default class Shipment extends Vue {
   }
 
   beforeMount() {
-    this.$store.dispatch("NewShipment/getCharacteristics").then(() => {
-      this.characteristics = this.$store.state.NewShipment.characteristics;
-    });
-    this.$store.dispatch("NewShipment/getOptions").then(() => {
-      this.options = this.$store.state.NewShipment.options;
-    });
-    this.$store.dispatch("NewShipment/getOffices").then(() => {
-      this.offices = this.$store.state.NewShipment.offices;
-    });
-    this.$store
-      .dispatch("NewShipment/getDiscounts", localStorage.getItem("ID"))
-      .then(() => {
-        this.discounts = this.$store.state.NewShipment.discounts;
-      });
-    this.$store.dispatch("NewShipment/getBaseCost").then(() => {
-      this.basecost = this.$store.state.NewShipment.basecost;
-    });
-  }
+this.$store.dispatch("NewShipment/getCharacteristics");
+this.$store.dispatch("NewShipment/getOptions");
+this.$store.dispatch("NewShipment/getOffices");
+this.$store.dispatch(
+"NewShipment/getDiscounts",
+localStorage.getItem("ID")
+);
+this.$store.dispatch("NewShipment/getBaseCost");
+}
 
   validate(page: number) {
     if (page == 2) {
@@ -957,7 +949,7 @@ export default class Shipment extends Vue {
   }
 
   addPackage() {
-    console.log("Package details", this.PackageDetails);
+
     if (this.$refs.form2.validate()) {
       this.Order.packages.push({
         width: this.PackageDetails.width,
@@ -993,11 +985,13 @@ export default class Shipment extends Vue {
       this.characteristicCharge = 0;
     }
 
-    this.GrossWeight = this.basecost[1].co_value * PackWeight;
+    this.GrossWeight = this.basecost.shipping * PackWeight;
+    
     this.DimensionalWeight = (
-      (this.basecost[1].co_value * PackWidth * PackLenght * PackHeight) /
+      (this.basecost.shipping * PackWidth * PackLenght * PackHeight) /
       5000
     ).toFixed(2);
+
     if (this.GrossWeight > this.DimensionalWeight) {
       return this.GrossWeight + this.characteristicCharge;
     } else {
@@ -1038,10 +1032,14 @@ export default class Shipment extends Vue {
     this.PackTotal = parseFloat(this.CalculatePackagesTotal());
     if (this.Order.discount == null) {
       this.Order.shipment.total =
-        this.OptionTotal + this.PackTotal + this.basecost[0].co_value;
+        this.OptionTotal + this.PackTotal + this.basecost.service;
     } else {
-      this.selectedDiscount = ((this.discounts.filter((d) => d.di_id == i)[0].di_percentage ).toFixed(2))
-      this.Subtotal = (this.OptionTotal + this.PackTotal+this.basecost[0].co_value) * (1 - this.selectedDiscount);
+      this.selectedDiscount = this.discounts
+        .filter((d) => d.di_id == i)[0]
+        .di_percentage.toFixed(2);
+      this.Subtotal =
+        (this.OptionTotal + this.PackTotal + this.basecost.service) *
+        (1 - this.selectedDiscount);
       this.Order.shipment.total = this.Subtotal;
     }
   }
@@ -1094,7 +1092,7 @@ export default class Shipment extends Vue {
   Continuebtn = "Continue";
   Cancelbtn = "Cancel";
   snackRegister = "Ups! There are a problem. Try again";
-  snackRegisterSuccess = "The Shipment was register successfully"
+  snackRegisterSuccess = "The Shipment was register successfully";
 
   mounted() {
     this.translate();
@@ -1182,13 +1180,14 @@ export default class Shipment extends Vue {
             this.ReceiverData = term.translation;
           } else if (term.name == "generalGoBack") {
             this.GoBack = term.translation;
-          }
-          else if (term.name == "ShipmentRegisterError") {
+          } else if (term.name == "ShipmentRegisterError") {
             this.snackRegister = term.translation;
+          } else if (term.name == "ShipmentRegisterSuccess") {
+            this.snackRegisterSuccess = term.translation;
           }
-          else if (term.name == "ShipmentRegisterSuccess") {
-            this.snackRegisterSuccess= term.translation;
-          }
+          else if (term.name == "generalClose") {
+          this.close = term.translation;
+}
         }
       );
   }
