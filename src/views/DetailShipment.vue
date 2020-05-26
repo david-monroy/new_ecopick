@@ -194,9 +194,13 @@ export default class DetailShipment extends Vue {
   ReceiverLabel = "Receiver";
   PurposeLabel = "Purpose";
 
-  formatDate(date: string) {
-    return moment(date).format("YYYY-MM-DD HH:mm");
-  }
+ formatDate(date: string) {
+if (date !== null) {
+return moment(date).format("YYYY-MM-DD HH:mm");
+} else {
+return " ";
+}
+}
 
   getRoute(trackingId: string) {
     this.$store
