@@ -59,6 +59,7 @@ const routes: Array<RouteConfig> = [
       requiresAuth: false,
       hideBasicComponents: false,
     },
+    props: true,
   },
   {
     path: "/shipment/new",

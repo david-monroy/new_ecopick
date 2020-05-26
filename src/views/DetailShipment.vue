@@ -13,7 +13,7 @@
             </p>
           </v-col>
           <v-col>
-            <ButtonInvoice />
+            <ButtonInvoice :sendEmail="sendEmail" />
           </v-col>
           <v-col cols="1" class="hidden-sm-and-down"></v-col>
         </v-row>
@@ -100,7 +100,7 @@ import ButtonInvoice from "../components/invoice/ButtonInvoice.vue";
 import Map from "../components/route/Map.vue";
 import Stop from "../components/route/Stop.vue";
 import { mapState } from "vuex";
-import { Watch } from "vue-property-decorator";
+import { Watch, Prop } from "vue-property-decorator";
 
 @Component({
   components: { ButtonInvoice, Map, Stop },
@@ -109,6 +109,8 @@ import { Watch } from "vue-property-decorator";
   },
 })
 export default class DetailShipment extends Vue {
+  @Prop({ default: false })
+  sendEmail!: boolean;
   $route: any;
   noContent = "";
   date = "Date";
