@@ -436,29 +436,22 @@
                 <v-container fluid>
                   <!--Títle -->
                   <v-row class="align-center">
-                    <v-col cols="3"></v-col>
-                    <v-col
-                      cols="12"
-                      md="6"
-                      class="align-center"
-                      justify="center"
-                    >
+                    <v-col class="align-center" justify="center">
                       <p class="display-2 white--text">
                         {{ NewShipmentTitle }}
                       </p>
                     </v-col>
-                    <v-col cols="3"></v-col>
                   </v-row>
                   <!--Form 1-->
                   <form>
                     <!--Packages Cost-->
                     <div v-for="(orderPackage, i) in Order.packages" :key="i">
                       <v-row>
-                        <v-col cols="3"></v-col>
-                        <v-col cols="3">
+                        <v-col cols=" 1"></v-col>
+                        <v-col cols>
                           <v-subheader>{{ PackageCostLabel }}</v-subheader>
                         </v-col>
-                        <v-col cols="3">
+                        <v-col cols>
                           <v-text-field
                             class="pa-0 ma-0"
                             solo
@@ -468,15 +461,18 @@
                             :label="orderPackage.cost"
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="3"></v-col>
+                        <v-col cols="1"></v-col>
                       </v-row>
                     </div>
                     <v-divider></v-divider>
                     <v-row>
-                      <v-col cols="3">
-                        <v-subheader>{{ ShipmentCostLabel }}</v-subheader>
+                      <v-col cols="1"></v-col>
+                      <v-col>
+                        <v-subheader class="mt-0">{{
+                          ShipmentCostLabel
+                        }}</v-subheader>
                       </v-col>
-                      <v-col cols="3">
+                      <v-col>
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -486,7 +482,32 @@
                           :label="ShipmentSurcharges.toString()"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="6">
+                      <v-col cols="1"></v-col>
+                    </v-row>
+
+                    <!--Service cost -->
+                    <v-row>
+                      <v-col cols="1"></v-col>
+                      <v-col>
+                        <v-subheader>{{ ServiceCostLabel }}</v-subheader>
+                      </v-col>
+                      <v-col>
+                        <v-text-field
+                          class="pa-0 ma-0"
+                          solo
+                          dense
+                          readonly
+                          suffix="$"
+                          :value="basecost.service"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="1"></v-col>
+                    </v-row>
+
+                    <!--Discounts -->
+                    <v-row>
+                      <v-col cols="1"></v-col>
+                      <v-col>
                         <v-select
                           v-model="Order.discount"
                           solo
@@ -499,34 +520,17 @@
                           v-on="CalculateTotal(Order.discount)"
                         ></v-select>
                       </v-col>
-                    </v-row>
-                    <!--Service cost -->
-                    <v-row>
-                      <v-col cols="2"></v-col>
-                      <v-col cols="3">
-                        <v-subheader>{{ ServiceCostLabel }}</v-subheader>
-                      </v-col>
-                      <v-col cols="4">
-                        <v-text-field
-                          class="pa-0 ma-0"
-                          solo
-                          dense
-                          readonly
-                          suffix="$"
-                          :value="basecost.service"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="3"></v-col>
+                      <v-col cols="1"></v-col>
                     </v-row>
                     <!--Total-->
                     <v-row>
-                      <v-col cols="2"></v-col>
-                      <v-col cols="3">
+                      <v-col cols="1"></v-col>
+                      <v-col>
                         <v-subheader class="title font-weight-black"
                           >TOTAL</v-subheader
                         >
                       </v-col>
-                      <v-col cols="4">
+                      <v-col>
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -536,7 +540,7 @@
                           :value="Order.shipment.total"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="3"></v-col>
+                      <v-col cols="1"></v-col>
                     </v-row>
                   </form>
                 </v-container>
@@ -1025,8 +1029,7 @@ export default class Shipment extends Vue {
   CalculatePackagesTotal() {
     return this.Order.packages
       .reduce(
-        (acc: any, item: { cost: string}) =>
-          acc + parseFloat(item.cost),
+        (acc: any, item: { cost: string }) => acc + parseFloat(item.cost),
         0
       )
       .toFixed(2);
