@@ -16,10 +16,7 @@ Repositorio para el desarrollo del portal del cliente de Mr.Postel.
 1. Seguir los pasos que indica la API REST en su README.md
 2. Iniciar el servidor de la API REST
 3. Agregar un archivo .env en el root del proyecto
-<<<<<<< HEAD
 4. Al probar de forma local, asegurarse de conectar todos los dispositivos que se utilizarán a la misma red
-=======
->>>>>>> 6b3b474e65a4bc6126d2858fb9f88d32ff86360f
 
 > Deberá contactar a los desarrolladores para obtener las llaves necesarias para tener acceso completo a todas las funcionalidades.
 
@@ -45,7 +42,6 @@ npm run serve
 
 ### Dependencias
 
-<<<<<<< HEAD
 - axios: ^0.19.2
 - core-js: ^3.6.5
 - mapbox-gl: ^1.10.1
@@ -60,26 +56,10 @@ npm run serve
 - vue-router: ^3.1.6
 - vuetify: ^2.2.26
 - vuex: ^3.3.0
-=======
-- axios: ^0.19.2,
-- core-js: ^3.6.5,
-- mapbox-gl: ^1.10.1,
-- moment: ^2.26.0,
-- register-service-worker: ^1.7.1,
-- vue: ^2.6.11,
-- vue-class-component: ^7.2.3,
-- vue-easy-jwt: ^2.0.1,
-- vue-html2pdf: ^1.3.4,
-- vue-property-decorator: ^8.4.2,
-- vue-router: ^3.1.6,
-- vuetify: ^2.2.26,
-- vuex: ^3.3.0,
->>>>>>> 6b3b474e65a4bc6126d2858fb9f88d32ff86360f
 - yargs-parser: ^18.1.3
 
 ### Dependencias de desarrollo
 
-<<<<<<< HEAD
 - @types/jest: ^25.2.1
 - @typescript-eslint/eslint-plugin: ^2.30.0
 - @typescript-eslint/parser: ^2.30.0
@@ -103,31 +83,6 @@ npm run serve
 - typescript: ~3.8.3
 - vue-cli-plugin-vuetify: ~2.0.5
 - vue-template-compiler: ^2.6.11
-=======
-- @types/jest: ^25.2.1,
-- @typescript-eslint/eslint-plugin: ^2.30.0,
-- @typescript-eslint/parser: ^2.30.0,
-- @vue/cli-plugin-babel: ~4.3.1,
-- @vue/cli-plugin-eslint: ~4.3.1,
-- @vue/cli-plugin-pwa: ^4.3.1,
-- @vue/cli-plugin-router: ~4.3.1,
-- @vue/cli-plugin-typescript: ~4.3.1,
-- @vue/cli-plugin-unit-jest: ~4.3.1,
-- @vue/cli-plugin-vuex: ~4.3.1,
-- @vue/cli-service: ~4.3.1,
-- @vue/eslint-config-prettier: ^6.0.0,
-- @vue/eslint-config-typescript: ^5.0.2,
-- @vue/test-utils: 1.0.0-beta.33,
-- eslint: ^6.8.0,
-- eslint-plugin-prettier: ^3.1.3,
-- eslint-plugin-vue: ^6.2.2,
-- prettier: ^2.0.5,
-- sass: ^1.26.5,
-- sass-loader: ^8.0.2,
-- typescript: ~3.8.3,
-- vue-cli-plugin-vuetify: ~2.0.5,
-- vue-template-compiler: ^2.6.11,
->>>>>>> 6b3b474e65a4bc6126d2858fb9f88d32ff86360f
 - vuetify-loader: ^1.4.3
 
 ## Developers 👩👩👩
