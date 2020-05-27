@@ -18,7 +18,6 @@
               </v-card-title>
               <v-data-table
                 ref="datatable"
-                @current-items="getCurrentShipments"
                 :items-per-page="5"
                 multi-sort
                 :headers="headers"
@@ -176,9 +175,7 @@ export default class Home extends Vue {
             this.StatusHeader = term.translation;
           } else if (term.name == "generalPurpose") {
             this. PurposeHeader= term.translation;
-          } else if (term.name == "ShipmentOffice") {
-            this.OfficeHeader = term.translation;
-          } 
+          }
         }
       );
   }
