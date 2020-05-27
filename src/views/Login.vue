@@ -283,7 +283,7 @@ export default class Login extends Vue {
     this.errors.splice(0);
     if (this.errors.length == 0) {
       this.$store
-        .dispatch("user/federatedSignUpGoogle", { provider: "google" })
+        .dispatch("user/federatedSignUp", { provider: "google" })
         .then(() => {
           if(this.getErrors.UnexpectedError == false){
               if (this.getStatus.registered == false) {
@@ -295,7 +295,6 @@ export default class Login extends Vue {
                           this.changePage("Home");
                           }, 1000); }
             } else {
-              //this.changePage("Profile");  //ojo
                 this.$router.push({ name: 'Profile', params: {
                 federatedPopUp: true
                 }  
@@ -373,6 +372,8 @@ export default class Login extends Vue {
           } else if (term.name == "loginButton") {
             this.buttonLogin = term.translation;
           } else if (term.name == "loginSnack5") {
+            this.snack5 = term.translation;
+          } else if (term.name == "loginSnack6") {
             this.snack5 = term.translation;
           }
         }

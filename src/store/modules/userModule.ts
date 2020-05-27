@@ -101,7 +101,7 @@ export default {
     disableUser: async function (context: any, user: {}) {
       await userService.disableUser(user);
     },
-    federatedSignUpGoogle: async(context: any, payload: any) =>{
+    federatedSignUp: async(context: any, payload: any) =>{
       let email: string | null | undefined;
       
       const userData: any = {
