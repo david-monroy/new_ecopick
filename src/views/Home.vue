@@ -53,7 +53,7 @@
         ></v-responsive>
       </v-col>
     </v-row>
-    <v-row justify="center" align="center">
+    <v-row justify="center" align="center" class="white">
       <v-col class="hidden-sm-and-down" md="3"></v-col>
       <v-col md="3"
         ><v-card class="mx-auto" color="transparent" elevation="0">

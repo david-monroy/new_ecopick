@@ -907,7 +907,7 @@ export default class Shipment extends Vue {
           setTimeout(() => {
             this.$router.push({
               name: "DetailShipment",
-              params: { id: this.trackingID.trackingid },
+              params: { id: this.trackingID.trackingid, sendEmail: true },
             });
           }, 3000);
         } else {

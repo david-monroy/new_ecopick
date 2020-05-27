@@ -4,7 +4,7 @@
       <v-col class="hidden-sm-and-down"></v-col>
       <v-card class="mx-auto px-8" outlined width="800">
         <v-col justify="center" align="center">
-          <v-row>
+          <v-row v-if="!edit">
             <v-col> </v-col>
             <v-col>
               <v-avatar class="profile" color="teal lighten-2" size="100">
@@ -15,7 +15,6 @@
             <v-col>
               <v-col class="d-flex justify-end align-center">
                 <v-icon
-                  v-if="!edit"
                   class="clickable text-right edit-btn pa-3"
                   color="teal"
                   @click="edit = true"
@@ -25,16 +24,6 @@
             </v-col>
           </v-row>
           <v-form ref="form">
-            <v-row v-if="edit">
-              <v-col>
-                <v-file-input
-                  :placeholder="photoInput"
-                  prepend-icon="mdi-camera"
-                  accept="image/*"
-                  @change="previewImage"
-                ></v-file-input>
-              </v-col>
-            </v-row>
             <v-row v-if="!edit">
               <v-col>
                 <v-text-field
@@ -119,8 +108,7 @@
                   :rules="rules.emailRules"
                   :label="email"
                   :placeholder="email"
-                  readonly
-                  :disabled="edit"
+                  :readonly="!edit"
                 ></v-text-field>
               </v-col>
               <v-col>
@@ -155,8 +143,7 @@
               <v-col class="hidden-sm-and-down"> </v-col>
             </v-row>
             <v-row>
-              <v-col
-                v-if="edit && !updatePassword && userInfo.password !== null"
+              <v-col v-if="edit && !updatePassword"
                 ><v-btn @click="updatePassword = true" color="teal" outlined
                   ><v-icon class="mr-2">mdi-lock</v-icon
                   >{{ updatePasswordText }}</v-btn
@@ -271,9 +258,13 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { Watch } from "vue-property-decorator";
 import { mapState } from "vuex";
+import Translate from "../components/Translate.vue";
 import moment from "moment";
 
 @Component({
+  components: {
+    Translate,
+  },
   computed: {
     ...mapState("user", { userInfo: "userData" }),
   },
@@ -326,7 +317,6 @@ export default class Profile extends Vue {
   snackError = "User update error. Try again";
   snackPassword = "Please confirm password correctly";
   snackDatabase = "This email is already in use. Please verify";
-  photoInput = "Choose your profile picture";
   cancelText = "Cancel";
   saveText = "Save";
   updatePasswordText = "Update Password";
@@ -397,26 +387,6 @@ export default class Profile extends Vue {
 
   cancel() {
     location.reload();
-  }
-
-  previewImage(event: any) {
-    if (event) {
-      const files = event || event.dataTransfer.files;
-      this.userPhoto = files;
-      this.createImage(files);
-      //Files se debe mandar a Firebase cuando lo conectemos
-    } else {
-      this.hasImage = false;
-    }
-  }
-  createImage(file: any) {
-    const reader = new FileReader();
-
-    reader.onload = (e: any) => {
-      this.image = e.target.result;
-    };
-    reader.readAsDataURL(file);
-    this.hasImage = true;
   }
 
   rules: {} = {
@@ -516,8 +486,6 @@ export default class Profile extends Vue {
             this.warningTitle = term.translation;
           } else if (term.name == "warningBody") {
             this.warningBody = term.translation;
-          } else if (term.name == "photoInput") {
-            this.photoInput = term.translation;
           }
         }
       );
