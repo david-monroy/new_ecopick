@@ -117,6 +117,7 @@ export default {
                 charge:  "Client",
                 idLanguage: 1,
                 idStatus: 4,
+                photo: null
       };
 
       const userKey: any = {
@@ -137,7 +138,7 @@ export default {
           googleProfile = result.additionalUserInfo?.profile;
           userData.firstName = googleProfile.given_name;
           userData.lastName = googleProfile.family_name;
-         // userData.userPhoto = googleProfile.picture;
+          userData.photo = googleProfile.picture;
           userData.email = googleProfile.email;
           userEmail.email = googleProfile.email;
           fa.signOut(); }
@@ -145,20 +146,17 @@ export default {
           googleProfile = result.additionalUserInfo?.profile;
           userData.firstName = googleProfile.given_name;
           userData.lastName = googleProfile.family_name;
-         // userData.userPhoto = googleProfile.picture;
+          userData.photo = googleProfile.picture;
           userData.email = googleProfile.email; 
           userEmail.email = googleProfile.email;
           fa.signOut();
           }
-        })
-        .catch((error) => {
-          console.log(error);
         });
       
     if(userData.email!=="") {
 
       await userService.createUserRoute(userData).then((response: any) => {
-        if (response.data.status == 201){ 
+        if (response.status == 201){ 
           context.commit("setStatus", {registered: true});
         } 
       }).catch((error) => {
@@ -167,8 +165,6 @@ export default {
 
       await userService.validateEmail(userEmail).then((response: any) => {
         userKey.userPassword=response.data[0].us_password;
-      }).catch((error) => {
-        console.log(error);
       });
 
       if(userKey.userPassword === null) {

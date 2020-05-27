@@ -8,7 +8,7 @@
             <v-col> </v-col>
             <v-col>
               <v-avatar class="profile" color="teal lighten-2" size="100">
-                <v-img v-if="hasImage" :src="image"></v-img>
+                <v-img v-if="hasImage" :src="userInfo.photo"></v-img>
                 <v-icon v-else dark x-large>mdi-account-circle</v-icon>
               </v-avatar>
             </v-col>
