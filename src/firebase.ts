@@ -4,14 +4,14 @@ import "firebase/auth";
 import "firebase/storage";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCZJI1ZG_oYUfvk_xLn1s9jWgUITeUQTUY",
-    authDomain: "mrpostel-front.firebaseapp.com",
-    databaseURL: "https://mrpostel-front.firebaseio.com",
-    projectId: "mrpostel-front",
-    storageBucket: "mrpostel-front.appspot.com",
-    messagingSenderId: "1012521978561",
-    appId: "1:1012521978561:web:d40e840b0759b4a51c2240",
-    //measurementId: "G-05MT486Z8N",  
+  apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
+  authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.VUE_APP_FIREBASE_DATABASE_URL,
+  projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.VUE_APP_FIREBASE_SENDER_ID,
+  appId: process.env.VUE_APP_FIREBASE_APP_ID,
+  //measurementId: "G-05MT486Z8N",  
   };
 
 const fb = firebase.initializeApp(firebaseConfig);
