@@ -144,9 +144,9 @@ export default {
           fa.signOut(); }
           else if (payload.provider == "facebook") {
           googleProfile = result.additionalUserInfo?.profile;
-          userData.firstName = googleProfile.given_name;
-          userData.lastName = googleProfile.family_name;
-          userData.photo = googleProfile.picture;
+          userData.firstName = googleProfile.first_name;
+          userData.lastName = googleProfile.last_name;
+          userData.photo = googleProfile.picture.data.url;
           userData.email = googleProfile.email; 
           userEmail.email = googleProfile.email;
           fa.signOut();
