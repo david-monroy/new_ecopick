@@ -718,7 +718,6 @@ export default class Shipment extends Vue {
   snackbar2 = false;
   close = "Close";
   discountused = false;
-  directionValidation = false;
   snackbarDirection = false;
 
   characteristics!: {
@@ -890,9 +889,7 @@ export default class Shipment extends Vue {
       .dispatch("NewShipment/verifyDirection", this.Order.direction)
       .then((status: any) => {
         if (status == 200) {
-          this.directionValidation = true;
           this.e1 ++;
-          console.log("hola");
         } else {
           this.snackbarDirection = true;
         }
@@ -920,11 +917,7 @@ export default class Shipment extends Vue {
               this.selectedOptions[i]
             );
           }
-          console.log(this.Order.direction);
           this.verifyDirection();
-        }
-        if (this.directionValidation == true) {
-          this.e1 = page;
         }
       }
     } else if (page == 3) {

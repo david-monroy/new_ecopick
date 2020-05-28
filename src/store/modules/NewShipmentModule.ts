@@ -109,12 +109,10 @@ export default {
           .then((response: any) => {
             if (response.data !== "") {
               context.commit("setVerification", response.data);
-              console.log(response.data);
             }
             resolve(response.status);
           })
           .catch((error: any) => {
-            console.log(error);
             reject(error);
           });
       });
