@@ -22,13 +22,6 @@ export default {
       },
     }); //Aqui van los las llamadas a la API de un módulo determinado, se colocan métodos que devuelvan promesas, por ejemplo: API_URL.get('/ruta')
   },
-  getDiscounts(userID: number) {
-    return API_URL.get(`/discount/${userID}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }); //Aqui van los las llamadas a la API de un módulo determinado, se colocan métodos que devuelvan promesas, por ejemplo: API_URL.get('/ruta')
-  },
   getBaseCost() {
     return API_URL.get("/configuration/basecost", {
       headers: {
