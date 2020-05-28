@@ -43,4 +43,11 @@ export default {
       },
     });
   },
+  verifyDirection(Order: {}) {
+    return API_URL.post(`/direction/verify`, Order, {
+      headers: {
+        Authorization: { "Content-Type": "application/json" },
+      },
+    });
+  },
 };
