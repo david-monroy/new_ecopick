@@ -5,18 +5,82 @@
         <v-row justify="center" align="center">
           <v-col cols="1" class="hidden-sm-and-down"></v-col>
           <v-col cols="6" md="8">
-            <p class="title font-weight-regular mb-0">
-              {{ trackingName + ": " + this.$route.params.id }}
-            </p>
-            <p class="subtitle-1">
-              {{ date + ": " + formatDate(shipment.delivered) }}
-            </p>
+            <p
+              class="title font-weight-regular mb-0"
+            >{{ trackingName + ": " + this.$route.params.id }}</p>
+            <p class="subtitle-1">{{ date + ": " + formatDate(shipment.delivered) }}</p>
           </v-col>
           <v-col>
             <ButtonInvoice />
           </v-col>
           <v-col cols="1" class="hidden-sm-and-down"></v-col>
         </v-row>
+
+        <v-row>
+          <v-col cols="1"></v-col>
+          <v-col cols="10">
+            <v-card>
+              <v-row asign="center" justify="center">
+                <v-col cols="5">
+                  <v-text-field
+                    readonly
+                    :label="DateLabel"
+                    :value="formatDate(this.shipment.delivered)"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="5">
+                  <v-text-field
+                    readonly
+                    :label="ArrivalLabel"
+                    :value="formatDate(this.shipment.arrival)"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row asign="center" justify="center">
+                <v-col cols="5">
+                  <v-text-field readonly dense :label="OfficeLabel" :value="this.shipment.office"></v-text-field>
+                </v-col>
+                <v-col cols="5">
+                  <v-text-field
+                    readonly
+                    dense
+                    :label="DestinationLabel"
+                    :value="this.shipment.direction"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row asign="center" justify="center">
+                <v-col cols="5">
+                  <v-text-field readonly dense :label="UserLabel" :value="this.shipment.user"></v-text-field>
+                </v-col>
+                <v-col cols="5">
+                  <v-text-field
+                    readonly
+                    dense
+                    :label="ReceiverLabel"
+                    :value="this.shipment.receiver"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row asign="center" justify="center">
+                <v-col cols="5" v-if="this.shipment.purpose">
+                  <v-text-field readonly dense :label="PurposeLabel" :value="this.shipment.purpose"></v-text-field>
+                </v-col>
+                <v-col cols="5">
+                  <v-text-field
+                    readonly
+                    dense
+                    suffix="$"
+                    label="Total"
+                    :value="this.shipment.amount"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-col>
+          <v-col cols="1"></v-col>
+        </v-row>
+
         <v-row no-gutters v-if="routeExists">
           <v-col cols="1" order-md="1" class="hidden-sm-and-down"></v-col>
           <v-col cols="12" md="5" order-md="3">
@@ -45,6 +109,7 @@
           </v-col>
           <v-col cols="1" order-md="4" class="hidden-sm-and-down"></v-col>
         </v-row>
+
         <v-row no-gutters class="py-2" align="center" v-else>
           <v-col cols="2" class="hidden-sm-and-down"></v-col>
           <v-col>
@@ -56,16 +121,13 @@
               color="rgba(103,176,49,1)"
               icon="mdi-clock-outline"
             >
-              <p class="subtitle-1 ma-0">
-                {{ waitingRoute }}
-              </p>
-              <p class="title ma-0">
-                {{ shipment.office }}
-              </p>
+              <p class="subtitle-1 ma-0">{{ waitingRoute }}</p>
+              <p class="title ma-0">{{ shipment.office }}</p>
             </v-alert>
           </v-col>
-          <v-col cols="2" class="hidden-sm-and-down"></v-col> </v-row
-      ></v-col>
+          <v-col cols="2" class="hidden-sm-and-down"></v-col>
+        </v-row>
+      </v-col>
     </v-row>
     <v-row
       v-else-if="noContent == 'noContent'"
@@ -81,12 +143,8 @@
         color="teal"
         icon="mdi-emoticon-sad-outline"
       >
-        <p class="subtitle-1 ma-0">
-          {{ noContentText }}
-        </p>
-        <p class="subtitle-1 ma-0">
-          {{ "Tracking ID: " + this.$route.params.id }}
-        </p>
+        <p class="subtitle-1 ma-0">{{ noContentText }}</p>
+        <p class="subtitle-1 ma-0">{{ "Tracking ID: " + this.$route.params.id }}</p>
       </v-alert>
     </v-row>
   </v-container>
@@ -128,10 +186,21 @@ export default class DetailShipment extends Vue {
   loadingMap = true;
   routeExists = true;
   waitingRoute = "Waiting for packages to be delivered to";
+  OfficeLabel = "Origin office";
+  DestinationLabel = "Destination";
+  DateLabel = "Delivered date";
+  ArrivalLabel = "Arrival date";
+  UserLabel = "User";
+  ReceiverLabel = "Receiver";
+  PurposeLabel = "Purpose";
 
-  formatDate(date: string) {
-    return moment(date).format("YYYY-MM-DD HH:mm");
-  }
+ formatDate(date: string) {
+if (date !== null) {
+return moment(date).format("YYYY-MM-DD HH:mm");
+} else {
+return " ";
+}
+}
 
   getRoute(trackingId: string) {
     this.$store
@@ -169,7 +238,11 @@ export default class DetailShipment extends Vue {
     this.translator
       .filter(
         (term: { context: string; name: string; translation: string }) => {
-          return term.context == "route" || term.context == "general";
+          return (
+            term.context == "route" ||
+            term.context == "general" ||
+            term.context == "Shipment"
+          );
         }
       )
       .forEach(
@@ -182,6 +255,20 @@ export default class DetailShipment extends Vue {
             this.date = term.translation;
           } else if (term.name == "generalTrackingID") {
             this.trackingName = term.translation;
+          } else if (term.name == "generalDestination") {
+            this.DestinationLabel = term.translation;
+          } else if (term.name == "generalUser") {
+            this.UserLabel = term.translation;
+          } else if (term.name == "generalReceiver") {
+            this.ReceiverLabel = term.translation;
+          } else if (term.name == "generalDeliveredDate") {
+            this.DateLabel = term.translation;
+          } else if (term.name == "generalArrivalDate") {
+            this.ArrivalLabel = term.translation;
+          } else if (term.name == "generalPurpose") {
+            this.PurposeLabel = term.translation;
+          } else if (term.name == "ShipmentOffice") {
+            this.OfficeLabel = term.translation;
           }
         }
       );

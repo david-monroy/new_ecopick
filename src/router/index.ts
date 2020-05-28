@@ -5,8 +5,10 @@ const jwt = new VueEasyJwt();
 
 //Componentes
 import Home from "../views/Home.vue";
+import NewShipment from "../views/NewShipment.vue";
 import SignUp from "../views/SignUp.vue";
 import DetailShipment from "../views/DetailShipment.vue";
+import Shipments from "../views/Shipments.vue";
 import Profile from "../views/Profile.vue";
 import RecoverPassword from "../views/RecoverPassword.vue";
 import Login from "../views/Login.vue";
@@ -44,7 +46,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/shipments",
     name: "Shipments",
-    // component: Home,
+    component: Shipments,
     meta: {
       requiresAuth: true,
       hideBasicComponents: false,
@@ -62,12 +64,13 @@ const routes: Array<RouteConfig> = [
   {
     path: "/shipment/new",
     name: "NewShipment",
-    // component: Home,
+    component: NewShipment,
     meta: {
       requiresAuth: true,
       hideBasicComponents: false,
     },
   },
+
   {
     path: "/profile",
     name: "Profile",
