@@ -1,14 +1,12 @@
 <template>
-  <v-container fluid full-height class="pa-0 d-flex align-center bg-dis">
-    <v-row class="screen">
+  <v-container fluid class="pa-0 bg">
+    <v-row>
       <v-col class="hidden-sm-and-down"></v-col>
-      <v-col cols="12" sm="8" class="mx-auto px-8 screen">
-        <v-card class="screen my-3">
+      <v-col cols="12" sm="8" class="mx-auto px-8">
+        <v-card class="screen">
           <v-row>
             <v-col class="title text-center font-weight-regular mt-3">
-              {{
-              discountTitle
-              }}
+              {{ discountTitle }}
             </v-col>
           </v-row>
           <v-divider class="mb-3"></v-divider>
@@ -99,5 +97,6 @@ export default class Discounts extends Vue {
 }
 .bg-dis {
   background-color: #f7f7f7;
+  height: 100%;
 }
 </style>
