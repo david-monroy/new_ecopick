@@ -8,7 +8,7 @@
             <v-col> </v-col>
             <v-col>
               <v-avatar class="profile" color="teal lighten-2" size="100">
-                <v-img v-if="hasImage" :src="image"></v-img>
+                <v-img v-if="hasImage" :src="userInfo.photo"></v-img>
                 <v-icon v-else dark x-large>mdi-account-circle</v-icon>
               </v-avatar>
             </v-col>
@@ -261,13 +261,17 @@
       {{ snackDatabase }}
       <v-btn dark text @click="snackbarDatabase = false">Close</v-btn>
     </v-snackbar>
+    <v-snackbar v-model="federatedPopUp" top:timeout="timeout" color="success">
+      {{ snackPopUp }}
+      <v-btn dark text @click="federatedPopUp = false">{{ close }}</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { Watch } from "vue-property-decorator";
+import { Watch, Prop } from "vue-property-decorator";
 import { mapState } from "vuex";
 import Translate from "../components/Translate.vue";
 import moment from "moment";
@@ -286,6 +290,9 @@ export default class Profile extends Vue {
   $refs!: {
     form: any;
   };
+
+  @Prop({default: false}) federatedPopUp!: boolean;
+
   userInfo!: {
     photo: string | null;
     identification: string;
@@ -328,6 +335,7 @@ export default class Profile extends Vue {
   snackError = "User update error. Try again";
   snackPassword = "Please confirm password correctly";
   snackDatabase = "This email is already in use. Please verify";
+  snackPopUp= "Please click on the pencil icon to complete your information. We are going to need it to take your shipping orders";
   photoInput = "Choose your profile picture";
   cancelText = "Cancel";
   saveText = "Save";
@@ -460,6 +468,8 @@ export default class Profile extends Vue {
     return this.$store.state.translate.languageTexts;
   }
 
+  
+
   @Watch("translator")
   translate() {
     this.translator
@@ -524,6 +534,8 @@ export default class Profile extends Vue {
             this.warningBody = term.translation;
           } else if (term.name == "photoInput") {
             this.photoInput = term.translation;
+          } else if (term.name == "profileSnackPopUp") {
+            this.snackPopUp = term.translation;
           }
         }
       );
