@@ -12,6 +12,7 @@ import Shipments from "../views/Shipments.vue";
 import Profile from "../views/Profile.vue";
 import RecoverPassword from "../views/RecoverPassword.vue";
 import Login from "../views/Login.vue";
+import Discounts from "../views/Discounts.vue"
 
 Vue.use(VueRouter);
 
@@ -84,7 +85,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/discounts",
     name: "Discounts",
-    // component: Home,
+    component: Discounts,
     meta: {
       requiresAuth: true,
       hideBasicComponents: false,
