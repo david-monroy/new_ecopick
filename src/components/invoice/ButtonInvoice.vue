@@ -6,7 +6,8 @@
   >
     <VueHtml2pdf
       :show-layout="false"
-      :preview-in-newtab="true"
+      :enable-download="!sendEmail || emailSended"
+      :preview-modal="false"
       :paginate-elements-by-height="1400"
       :filename="'invoice_' + this.$route.params.id"
       :pdf-quality="2"
@@ -35,23 +36,14 @@
       </template>
       <span>{{ conditionText }}</span>
     </v-tooltip>
-    <v-checkbox
-      class="ma-0 caption"
-      color="teal"
-      dense
-      v-model="checkbox"
-      :label="invoiceCheckbox"
-      :disabled="condition"
-    ></v-checkbox>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { Watch } from "vue-property-decorator";
+import { Watch, Prop } from "vue-property-decorator";
 import { mapState } from "vuex";
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import VueHtml2pdf from "vue-html2pdf";
 import Invoice from "../../views/Invoice.vue";
@@ -64,9 +56,11 @@ import Invoice from "../../views/Invoice.vue";
   },
 })
 export default class ButtonInvoice extends Vue {
+  @Prop({ default: false })
+  sendEmail!: boolean;
+  emailSended = false;
   $route: any;
   invoiceDownload = "Download invoice";
-  invoiceCheckbox = "Send copy to email";
   conditionText = "Log In to have access to this functionality";
   condition = true;
   user!: {
@@ -79,12 +73,16 @@ export default class ButtonInvoice extends Vue {
     userid: number;
   };
   loading = false;
-  checkbox = false;
   mounted() {
     if (localStorage.getItem("ID") != null) {
       this.condition = false;
       this.$store.dispatch("invoice/getInvoice", this.$route.params.id);
       this.$store.dispatch("user/getUserData", this.shipment.userid);
+      this.$store.dispatch("NewShipment/getOptions");
+      this.$store.dispatch("NewShipment/getBaseCost");
+    }
+    if (this.sendEmail) {
+      this.downloadInvoice();
     }
   }
   downloadInvoice() {
@@ -94,7 +92,7 @@ export default class ButtonInvoice extends Vue {
   }
   hasGenerated(blobPdf: Blob) {
     this.loading = false;
-    if (this.checkbox) {
+    if (this.sendEmail && !this.emailSended) {
       const filename = "invoice_" + this.$route.params.id + ".pdf";
       const formData = new FormData();
       formData.append("file", blobPdf, filename);
@@ -102,6 +100,7 @@ export default class ButtonInvoice extends Vue {
       formData.append("email", this.user.email);
       formData.append("language", this.user.language.toString());
       this.$store.dispatch("invoice/sendInvoice", formData);
+      this.emailSended = true;
     }
   }
   onProgress(progress: number) {
@@ -122,8 +121,6 @@ export default class ButtonInvoice extends Vue {
         (term: { context: string; name: string; translation: string }) => {
           if (term.name == "invoiceDownload") {
             this.invoiceDownload = term.translation;
-          } else if (term.name == "invoiceCheckbox") {
-            this.invoiceCheckbox = term.translation;
           } else if (term.name == "generalLogInCondition") {
             this.conditionText = term.translation;
           }

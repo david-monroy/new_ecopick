@@ -49,6 +49,5 @@ export default {
         Authorization: { "Content-Type": "application/json" },
       },
     });
-  }
-  
+  },
 };

@@ -109,7 +109,6 @@
                       :label="birthday"
                       :hint="dateHint"
                       persistent-hint
-                      @blur="date = parseDate(dateFormatted)"
                       v-on="on"
                     ></v-text-field>
                   </template>
@@ -194,7 +193,6 @@
                 <v-row align="center" justify="center">
                   <v-col cols="12" sm="10" align="center"
                     ><v-checkbox
-                      v-model="ex4"
                       :label="termCondition"
                       color="success"
                       value="success"
@@ -228,19 +226,19 @@
 
     <v-snackbar v-model="snackbar" top:timeout="timeout" color="success">
       {{ snack1 }}
-      <v-btn dark text @click="snackbar = false">Close</v-btn>
+      <v-btn dark text @click="snackbar = false">{{ close }}</v-btn>
     </v-snackbar>
     <v-snackbar v-model="snackbarError" top:timeout="timeout" color="error">
       {{ snack2 }}
-      <v-btn dark text @click="snackbarError = false">Close</v-btn>
+      <v-btn dark text @click="snackbarError = false">{{ close }}</v-btn>
     </v-snackbar>
     <v-snackbar v-model="snackbarPassword" top:timeout="timeout" color="error">
       {{ snack3 }}
-      <v-btn dark text @click="snackbarPassword = false">Close</v-btn>
+      <v-btn dark text @click="snackbarPassword = false">{{ close }}</v-btn>
     </v-snackbar>
     <v-snackbar v-model="snackbarError2" top:timeout="timeout" color="error">
       {{ snackDatabase }}
-      <v-btn dark text @click="snackbarError2 = false">Close</v-btn>
+      <v-btn dark text @click="snackbarError2 = false">{{ close }}</v-btn>
     </v-snackbar>
   </v-container>
 </template>
@@ -297,6 +295,7 @@ export default class SignUp extends Vue {
   passwordc = "Confirm password";
   phoneNumber = "Phone number";
   languageInput = "Language";
+  close = "Close";
   goBack = "Go back";
   buttonSignup = "Sign up";
   termCondition = "Accept the terms and conditions";
@@ -378,12 +377,6 @@ export default class SignUp extends Vue {
     const [year, month, day] = date.split("-");
     return `${month}/${day}/${year}`;
   }
-  public parseDate(date: string): string {
-    if (!date) return "";
-
-    const [month, day, year] = date.split("/");
-    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-  }
 
   mounted() {
     this.translate();
@@ -451,6 +444,8 @@ export default class SignUp extends Vue {
             this.snackDatabase = term.translation;
           } else if (term.name == "generalTooltipLanguage") {
             this.languageTooltip = term.translation;
+          } else if (term.name == "generalClose") {
+            this.close = term.translation;
           }
         }
       );

@@ -115,8 +115,6 @@ import Translate from "../components/Translate.vue";
 export default class Navbar extends Vue {
   $router: any;
   $store: any;
-  // Atributos
-  // // Textos fijos
   search = "Search your tracking ID";
   buttonShipping = "Shipping";
   buttonProfile = "Profile";
@@ -124,15 +122,12 @@ export default class Navbar extends Vue {
   signUp = "Sign Up";
   signOut = "Sign Out";
   logIn = "Log In";
-  // // Search
   trackingID = "";
-  // // Opciones
   shippingOptions: { name: string; link: string }[] = [
     { name: "Create a Shipping", link: "NewShipment" },
     { name: "My Shipments", link: "Shipments" },
   ];
 
-  // Computed properties
   get activeUser() {
     const name = localStorage.getItem("Name");
     if (name !== null) {
@@ -142,8 +137,6 @@ export default class Navbar extends Vue {
     }
   }
 
-  // Metodos
-  // // Redirección
   changePage(link: string) {
     if (link == "Login") {
       localStorage.clear();
@@ -157,7 +150,7 @@ export default class Navbar extends Vue {
     });
     location.reload();
   }
-  // // Traducción
+
   get translator() {
     return this.$store.state.translate.languageTexts;
   }
@@ -185,6 +178,10 @@ export default class Navbar extends Vue {
             this.signOut = term.translation;
           } else if (term.name == "generalLogIn") {
             this.logIn = term.translation;
+          } else if (term.name == "generalButtonProfile") {
+            this.buttonProfile = term.translation;
+          } else if (term.name == "generalButtonDiscounts") {
+            this.buttonDiscounts = term.translation;
           }
         }
       );

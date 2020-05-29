@@ -15,9 +15,20 @@ export default {
   },
   // -----------------------------------------------------------------
   actions: {
-    getAllShipments: async (context: any, userID:number) => {
+    getAllShipments: async (context: any, userID: number) => {
       await AllShipments.getAllShipments(userID).then((response: any) => {
-        context.commit("setAllShipments", response.data);
+        let shipments;
+        if (response.status == 200) {
+          for (let i = 0; i < response.data.length; i++) {
+            if (response.data[i].status == null) {
+              response.data[i].status = "Out For Delivery";
+            }
+          }
+          shipments = response.data;
+        } else {
+          shipments = [];
+        }
+        context.commit("setAllShipments", shipments);
       });
     },
   },

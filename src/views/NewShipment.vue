@@ -34,13 +34,13 @@
                 <v-container fluid>
                   <!--Títle -->
                   <v-row class="align-center">
-                    <v-col cols="3"></v-col>
+                    <v-col cols="3" class="hidden-sm-and-down"></v-col>
                     <v-col class="align-center" justify="center">
                       <p class="display-2 white--text">
                         {{ NewShipmentTitle }}
                       </p>
                     </v-col>
-                    <v-col cols="3"></v-col>
+                    <v-col cols="3" class="hidden-sm-and-down"></v-col>
                   </v-row>
                   <!--Form 1-->
                   <v-form ref="form1">
@@ -57,7 +57,7 @@
                     </v-row>
                     <!--Receiver -->
                     <v-row>
-                      <v-col cols="4">
+                      <v-col cols="12" sm="4">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -68,7 +68,7 @@
                           required
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="4">
+                      <v-col cols="12" sm="4">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -79,7 +79,7 @@
                           required
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="4">
+                      <v-col cols="12" sm="4">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -93,7 +93,7 @@
                     </v-row>
                     <!--Receiver  2 -->
                     <v-row>
-                      <v-col cols="4">
+                      <v-col cols="12" sm="4">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -106,7 +106,7 @@
                           counter="10"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="8">
+                      <v-col cols="12" sm="8">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -130,7 +130,7 @@
                     </v-row>
                     <!--Direction 3 -->
                     <v-row>
-                      <v-col cols="4">
+                      <v-col cols="12" sm="4">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -143,7 +143,7 @@
                           counter="5"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="4">
+                      <v-col cols="12" sm="4">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -154,7 +154,7 @@
                           required
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="4">
+                      <v-col cols="12" sm="4">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -168,7 +168,7 @@
                     </v-row>
                     <!--Direction 4 -->
                     <v-row>
-                      <v-col cols="6">
+                      <v-col cols="12" sm="6">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -179,7 +179,7 @@
                           required
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="6">
+                      <v-col cols="12" sm="6">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -190,9 +190,20 @@
                         ></v-text-field>
                       </v-col>
                     </v-row>
+                    <!--Title 3 -->
+                    <v-row>
+                      <v-col>
+                        <p
+                          class="body-1 font-weight-light align-center white--text"
+                          justify="center"
+                        >
+                          {{ ShipmentTitle }}
+                        </p>
+                      </v-col>
+                    </v-row>
                     <!--Options-->
                     <v-row>
-                      <v-col cols="6">
+                      <v-col cols="12" sm="6">
                         <v-card color="white" class="ma-0 pa-5">
                           <template v-for="(option, i) in options">
                             <v-checkbox
@@ -207,7 +218,7 @@
                         </v-card>
                       </v-col>
 
-                      <v-col cols="6">
+                      <v-col cols="12" sm="6">
                         <!--Office-->
                         <v-row>
                           <v-select
@@ -251,20 +262,20 @@
                 <v-container fluid>
                   <!--Títle -->
                   <v-row class="align-center">
-                    <v-col cols="3"></v-col>
+                    <v-col cols="3" class="hidden-sm-and-down"></v-col>
                     <v-col class="align-center" justify="center">
                       <p class="display-2 white--text">
                         {{ NewShipmentTitle }}
                       </p>
                     </v-col>
-                    <v-col cols="3"></v-col>
+                    <v-col cols="3" class="hidden-sm-and-down"></v-col>
                   </v-row>
                   <!--Form 1-->
                   <v-form ref="form2">
                     <div>
                       <!--Characteristics-->
                       <v-row>
-                        <v-col cols="3">
+                        <v-col cols="6" sm="3">
                           <v-text-field
                             class="pb-0 mb-0"
                             solo
@@ -277,7 +288,7 @@
                             :label="WidthLabel"
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="3">
+                        <v-col cols="6" sm="3">
                           <v-text-field
                             class="pa-0 ma-0"
                             solo
@@ -290,7 +301,7 @@
                             required
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="3">
+                        <v-col cols="6" sm="3">
                           <v-text-field
                             class="pa-0 ma-0"
                             solo
@@ -303,7 +314,7 @@
                             :label="LengthLabel"
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="3">
+                        <v-col cols="6" sm="3">
                           <v-text-field
                             class="pa-0 ma-0"
                             solo
@@ -319,7 +330,7 @@
                       </v-row>
                       <!--Characteristics2-->
                       <v-row>
-                        <v-col cols="6">
+                        <v-col cols="12" sm="6">
                           <v-select
                             v-model="PackageDetails.characteristics"
                             solo
@@ -331,7 +342,7 @@
                             required
                           ></v-select>
                         </v-col>
-                        <v-col cols="6">
+                        <v-col cols="12" sm="6">
                           <v-text-field
                             class="pa-0 ma-0"
                             solo
@@ -354,37 +365,56 @@
                       class="mt-3"
                     >
                       <v-row align="center">
-                        <v-col cols="4" class="text-start pl-10">
+                        <v-col
+                          cols="6"
+                          sm="4"
+                          class="text-start pl-10"
+                          :class="{
+                            'body-2 pl-0': $vuetify.breakpoint.smAndDown,
+                          }"
+                        >
                           <p class="my-0">
-                            {{ WidthLabel + ": " + orderPackage.width + " cm" }}
+                            <b>{{ WidthLabel }}</b
+                            >: {{ orderPackage.width + " cm" }}
                           </p>
                           <p class="my-0">
-                            {{
-                              HeightLabel + ": " + orderPackage.height + " cm"
-                            }}
+                            <b>{{ HeightLabel }}</b
+                            >: {{ orderPackage.height + " cm" }}
                           </p>
                           <p class="my-0">
-                            {{
-                              LengthLabel + ": " + orderPackage.length + " cm"
-                            }}
+                            <b>{{ LengthLabel }}</b
+                            >:
+                            {{ orderPackage.length + " cm" }}
                           </p>
                           <p class="my-0">
-                            {{
-                              WeightLabel + ": " + orderPackage.weight + " lbs"
-                            }}
+                            <b>{{ WeightLabel }}</b
+                            >:
+                            {{ orderPackage.weight + " lbs" }}
                           </p>
                         </v-col>
-                        <v-col cols="4" class="text-start pl-5">
+                        <v-col
+                          cols="6"
+                          sm="4"
+                          class="text-start pl-5"
+                          :class="{
+                            'body-2 pl-0': $vuetify.breakpoint.smAndDown,
+                          }"
+                        >
                           <p class="my-0">
-                            {{ CharacteristicLabel }}:
+                            <b>{{ CharacteristicLabel }}</b
+                            >:
                             {{
-                              orderPackage.characteristic !== null
-                                ? orderPackage.characteristic
+                              orderPackage.characteristic !== null &&
+                              orderPackage.characteristic !== undefined
+                                ? characteristicName(
+                                    orderPackage.characteristic
+                                  )
                                 : ""
                             }}
                           </p>
                           <p class="my-0">
-                            {{ PackageDescriptionLabel }}:
+                            <b>{{ PackageDescriptionLabel }}</b
+                            >:
                             {{
                               orderPackage.description !== null
                                 ? orderPackage.description
@@ -392,16 +422,11 @@
                             }}
                           </p>
                           <p class="my-0">
-                            {{ "Total: " + orderPackage.cost + " $" }}
+                            <b>Total</b>: {{ orderPackage.cost + " $" }}
                           </p>
                         </v-col>
-                        <v-col cols="4">
-                          <v-btn
-                            small
-                            color="error"
-                            class=".d-none .d-md-flex mr-10"
-                            @click="deletePackage(i)"
-                          >
+                        <v-col cols="12" sm="4">
+                          <v-btn small color="error" @click="deletePackage(i)">
                             <v-icon class="mr-1 mt-0">mdi-delete</v-icon>
                           </v-btn>
                         </v-col>
@@ -411,13 +436,7 @@
                 </v-container>
               </v-card>
               <v-row>
-                <v-col cols="2" align="left" justify="left">
-                  <v-btn text small @click="e1 = 1">
-                    <v-icon class="mr-1 mt-0">mdi-chevron-left</v-icon>
-                    <p class="mt-5 hidden-sm-and-down">{{ GoBack }}</p>
-                  </v-btn>
-                </v-col>
-                <v-col cols="8" class="ml-1" align="center" justify="center">
+                <v-col>
                   <v-btn text @click="changePage('Home')">{{
                     Cancelbtn
                   }}</v-btn>
@@ -425,7 +444,14 @@
                     Continuebtn
                   }}</v-btn>
                 </v-col>
-                <v-col cols="2"></v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="2" align="left" justify="left">
+                  <v-btn text small @click="e1 = 1">
+                    <v-icon class="mr-1 mt-0">mdi-chevron-left</v-icon>
+                    <p class="mt-5">{{ GoBack }}</p>
+                  </v-btn>
+                </v-col>
               </v-row>
             </v-stepper-content>
 
@@ -447,28 +473,27 @@
                     <!--Packages Cost-->
                     <div v-for="(orderPackage, i) in Order.packages" :key="i">
                       <v-row>
-                        <v-col cols="1"></v-col>
-                        <v-col cols>
-                          <v-subheader>{{ PackageCostLabel }}</v-subheader>
+                        <v-col>
+                          <v-subheader dark>
+                            {{ PackageCostLabel }} #{{ i + 1 }}</v-subheader
+                          >
                         </v-col>
-                        <v-col cols>
+                        <v-col>
                           <v-text-field
                             class="pa-0 ma-0"
                             solo
                             dense
                             readonly
                             suffix="$"
-                            :label="orderPackage.cost"
+                            :value="orderPackage.cost"
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="1"></v-col>
                       </v-row>
                     </div>
                     <v-divider></v-divider>
                     <v-row>
-                      <v-col cols="1"></v-col>
                       <v-col>
-                        <v-subheader class="mt-0">{{
+                        <v-subheader class="mt-0" dark>{{
                           ShipmentCostLabel
                         }}</v-subheader>
                       </v-col>
@@ -479,17 +504,15 @@
                           dense
                           readonly
                           suffix="$"
-                          :label="ShipmentSurcharges.toString()"
+                          :value="ShipmentSurcharges.toString()"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="1"></v-col>
                     </v-row>
 
                     <!--Service cost -->
                     <v-row>
-                      <v-col cols="1"></v-col>
                       <v-col>
-                        <v-subheader>{{ ServiceCostLabel }}</v-subheader>
+                        <v-subheader dark>{{ ServiceCostLabel }}</v-subheader>
                       </v-col>
                       <v-col>
                         <v-text-field
@@ -501,32 +524,30 @@
                           :value="basecost.service"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="1"></v-col>
                     </v-row>
 
                     <!--Discounts -->
                     <v-row>
-                      <v-col cols="1"></v-col>
+                      <v-col cols="1" class="hidden-sm-and-down"></v-col>
                       <v-col>
                         <v-select
                           v-model="Order.discount"
                           solo
                           dense
                           :items="discounts"
-                          :disabled="discounts.length == 0 || discountused"
+                          :disabled="discounts.length == 0"
                           item-value="di_id"
                           item-text="discount"
                           :label="DiscountLabel"
                           v-on="CalculateTotal(Order.discount)"
                         ></v-select>
                       </v-col>
-                      <v-col cols="1"></v-col>
+                      <v-col cols="1" class="hidden-sm-and-down"></v-col>
                     </v-row>
                     <!--Total-->
                     <v-row>
-                      <v-col cols="1"></v-col>
                       <v-col>
-                        <v-subheader class="title font-weight-black"
+                        <v-subheader dark class="title font-weight-black"
                           >TOTAL</v-subheader
                         >
                       </v-col>
@@ -540,19 +561,12 @@
                           :value="Order.shipment.total"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="1"></v-col>
                     </v-row>
                   </form>
                 </v-container>
               </v-card>
               <v-row>
-                <v-col cols="2" align="left" justify="left">
-                  <v-btn text small @click="e1 = 2">
-                    <v-icon class="mr-1 mt-0">mdi-chevron-left</v-icon>
-                    <p class="mt-5 hidden-sm-and-down">{{ GoBack }}</p>
-                  </v-btn>
-                </v-col>
-                <v-col cols="8" class="ml-1" align="center" justify="center">
+                <v-col>
                   <v-btn text @click="changePage('Home')">{{
                     Cancelbtn
                   }}</v-btn>
@@ -560,7 +574,14 @@
                     Continuebtn
                   }}</v-btn>
                 </v-col>
-                <v-col cols="2"></v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="2" align="left" justify="left">
+                  <v-btn text small @click="e1 = 2">
+                    <v-icon class="mr-1 mt-0">mdi-chevron-left</v-icon>
+                    <p class="mt-5">{{ GoBack }}</p>
+                  </v-btn>
+                </v-col>
               </v-row>
             </v-stepper-content>
 
@@ -571,13 +592,11 @@
                 <v-container fluid>
                   <!--Títle -->
                   <v-row class="align-center">
-                    <v-col cols="3"></v-col>
                     <v-col class="align-center" justify="center">
                       <p class="display-2 white--text">
                         {{ NewShipmentTitle }}
                       </p>
                     </v-col>
-                    <v-col cols="3"></v-col>
                   </v-row>
                   <!--Form 1-->
                   <form>
@@ -617,7 +636,7 @@
                     </v-row>
                     <!--Direction 3 -->
                     <v-row>
-                      <v-col cols="4">
+                      <v-col cols="12" sm="4">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -625,11 +644,10 @@
                           v-model="Order.direction.zipCode"
                           :value="Order.direction.zipCode"
                           readonly
-                          type="number"
                           counter="5"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="4">
+                      <v-col cols="12" sm="4">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -639,7 +657,7 @@
                           readonly
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="4">
+                      <v-col cols="12" sm="4">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -652,7 +670,7 @@
                     </v-row>
                     <!--Direction 4 -->
                     <v-row>
-                      <v-col cols="6">
+                      <v-col cols="12" sm="6">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
@@ -662,14 +680,31 @@
                           readonly
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="6">
+                      <v-col cols="12" sm="6">
                         <v-text-field
                           class="pa-0 ma-0"
                           solo
                           dense
                           v-model="Order.direction.secondaryLine"
-                          :label="Order.direction.secondaryLine"
+                          :label="DirectionLabel2"
                           readonly
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <v-subheader dark class="title font-weight-black"
+                          >TOTAL</v-subheader
+                        >
+                      </v-col>
+                      <v-col>
+                        <v-text-field
+                          class="pa-0 ma-0"
+                          solo
+                          dense
+                          readonly
+                          suffix="$"
+                          :value="Order.shipment.total"
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -677,13 +712,7 @@
                 </v-container>
               </v-card>
               <v-row>
-                <v-col cols="2" align="left" justify="left">
-                  <v-btn text small @click="e1 = 3">
-                    <v-icon class="mr-1 mt-0">mdi-chevron-left</v-icon>
-                    <p class="mt-5 hidden-sm-and-down">{{ GoBack }}</p>
-                  </v-btn>
-                </v-col>
-                <v-col cols="8" class="ml-1" align="center" justify="center">
+                <v-col>
                   <v-btn text @click="changePage('Home')">{{
                     Cancelbtn
                   }}</v-btn>
@@ -691,7 +720,14 @@
                     Continuebtn
                   }}</v-btn>
                 </v-col>
-                <v-col cols="2"></v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="2" align="left" justify="left">
+                  <v-btn text small @click="e1 = 3">
+                    <v-icon class="mr-1 mt-0">mdi-chevron-left</v-icon>
+                    <p class="mt-5">{{ GoBack }}</p>
+                  </v-btn>
+                </v-col>
               </v-row>
             </v-stepper-content>
           </v-stepper-items>
@@ -735,7 +771,7 @@ import moment from "moment";
     ...mapState("discount", ["discounts"]),
   },
 })
-export default class Shipment extends Vue {
+export default class NewShipment extends Vue {
   $store: any;
   $router: any;
   e1 = 1;
@@ -800,7 +836,7 @@ export default class Shipment extends Vue {
       phoneNumber: string;
     };
     direction: {
-      zipCode: number | null;
+      zipCode: string | null;
       city: string;
       state: string;
       country: string;
@@ -871,6 +907,12 @@ export default class Shipment extends Vue {
     cost: null,
   };
 
+  characteristicName(id: number) {
+    return this.characteristics.filter(
+      (c: { ch_id: number }) => c.ch_id == id
+    )[0].ch_name;
+  }
+
   rules: {} = {
     required: (value: string) =>
       (!!value && value !== "" && value !== undefined) || "Required",
@@ -883,10 +925,7 @@ export default class Shipment extends Vue {
       (v: number) => !!v || this.ItemValidation,
       (v: number) => v > 0.0 || this.ZeroValidation,
     ],
-    ZipCodeRules: [
-      (v: number) => !!v || this.ItemValidation,
-      (v: number) => (v > 9999 && v < 100000) || this.ZipCodeValidation,
-    ],
+    ZipCodeRules: [(v: string) => !!v || this.ItemValidation],
     PhoneRules: [
       (v: number) => !!v || this.ItemValidation,
       (v: number) => (v > 999999999 && v < 9999999999) || this.PhoneValidation,
@@ -913,7 +952,7 @@ export default class Shipment extends Vue {
           setTimeout(() => {
             this.$router.push({
               name: "DetailShipment",
-              params: { id: this.trackingID.trackingid },
+              params: { id: this.trackingID.trackingid, sendEmail: true },
             });
           }, 3000);
         } else {
@@ -1077,6 +1116,7 @@ export default class Shipment extends Vue {
   NewShipmentTitle = "Your Order";
   DestinationTitle = "DESTINATION";
   ReceiverData = "Receiver data";
+  ShipmentTitle = "Shipment data";
   GoBack = "Go to back";
 
   Step1 = "Origin/Destination";
@@ -1153,6 +1193,8 @@ export default class Shipment extends Vue {
             this.DestinationTitle = term.translation;
           } else if (term.name == "ShipmentTitle") {
             this.NewShipmentTitle = term.translation;
+          } else if (term.name == "shipmentTitle") {
+            this.ShipmentTitle = term.translation;
           } else if (term.name == "ShipmentZipCode") {
             this.ZipCodeLabel = term.translation;
           } else if (term.name == "ShipmentCity") {

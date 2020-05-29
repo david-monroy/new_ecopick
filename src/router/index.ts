@@ -12,7 +12,8 @@ import Shipments from "../views/Shipments.vue";
 import Profile from "../views/Profile.vue";
 import RecoverPassword from "../views/RecoverPassword.vue";
 import Login from "../views/Login.vue";
-import Discounts from "../views/Discounts.vue"
+import NotFound from "../views/NotFound.vue";
+import Discounts from "../views/Discounts.vue";
 
 Vue.use(VueRouter);
 
@@ -61,6 +62,7 @@ const routes: Array<RouteConfig> = [
       requiresAuth: false,
       hideBasicComponents: false,
     },
+    props: true,
   },
   {
     path: "/shipment/new",
@@ -100,6 +102,10 @@ const routes: Array<RouteConfig> = [
       hideBasicComponents: true,
     },
   },
+  {
+    path: "*",
+    component: NotFound,
+  },
 ];
 
 const router = new VueRouter({
@@ -111,11 +117,19 @@ router.beforeEach((to, from, next) => {
   to.matched.some((route) => {
     if (route.meta.requiresAuth) {
       const token: any = localStorage.getItem("token");
-      if (jwt.isExpired(token)) {
-        localStorage.clear();
+      if (token == null) {
         next({ path: "/login" });
       } else {
-        next();
+        const decoded: any = jwt.decodeToken(token);
+        const tokenExp: any = new Date(decoded.exp);
+        const actualDate = new Date();
+
+        if (tokenExp <= actualDate || token === null) {
+          localStorage.clear();
+          next({ path: "/login" });
+        } else {
+          next();
+        }
       }
     } else {
       next();

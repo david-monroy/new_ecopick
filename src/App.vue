@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <Navbar v-if="!$route.meta.hideBasicComponents" />
-    <v-content>
+    <v-content class="bg-color">
       <router-view></router-view>
       <FABTelegram v-if="!$route.meta.hideBasicComponents" />
     </v-content>
@@ -25,3 +25,9 @@ import FABTelegram from "./components/FABTelegram.vue";
 })
 export default class App extends Vue {}
 </script>
+
+<style scoped>
+.bg-color {
+  background-color: #f7f7f7;
+}
+</style>

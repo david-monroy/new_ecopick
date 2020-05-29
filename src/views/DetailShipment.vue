@@ -2,23 +2,25 @@
   <v-container fluid class="pa-0 bg">
     <v-row v-if="noContent == 'content'">
       <v-col>
-        <v-row justify="center" align="center">
+        <v-row justify="center" align="center" class="px-1">
           <v-col cols="1" class="hidden-sm-and-down"></v-col>
           <v-col cols="6" md="8">
-            <p
-              class="title font-weight-regular mb-0"
-            >{{ trackingName + ": " + this.$route.params.id }}</p>
-            <p class="subtitle-1">{{ date + ": " + formatDate(shipment.delivered) }}</p>
+            <p class="title font-weight-regular mb-0">
+              {{ trackingName + ": " + this.$route.params.id }}
+            </p>
+            <p class="subtitle-1">
+              {{ date + ": " + formatDate(shipment.delivered) }}
+            </p>
           </v-col>
           <v-col>
-            <ButtonInvoice />
+            <ButtonInvoice :sendEmail="sendEmail" />
           </v-col>
           <v-col cols="1" class="hidden-sm-and-down"></v-col>
         </v-row>
 
         <v-row>
-          <v-col cols="1"></v-col>
-          <v-col cols="10">
+          <v-col cols="1" class="hidden-sm-and-down"></v-col>
+          <v-col>
             <v-card>
               <v-row asign="center" justify="center">
                 <v-col cols="5">
@@ -38,7 +40,12 @@
               </v-row>
               <v-row asign="center" justify="center">
                 <v-col cols="5">
-                  <v-text-field readonly dense :label="OfficeLabel" :value="this.shipment.office"></v-text-field>
+                  <v-text-field
+                    readonly
+                    dense
+                    :label="OfficeLabel"
+                    :value="this.shipment.office"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="5">
                   <v-text-field
@@ -51,7 +58,12 @@
               </v-row>
               <v-row asign="center" justify="center">
                 <v-col cols="5">
-                  <v-text-field readonly dense :label="UserLabel" :value="this.shipment.user"></v-text-field>
+                  <v-text-field
+                    readonly
+                    dense
+                    :label="UserLabel"
+                    :value="this.shipment.user"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="5">
                   <v-text-field
@@ -64,7 +76,12 @@
               </v-row>
               <v-row asign="center" justify="center">
                 <v-col cols="5" v-if="this.shipment.purpose">
-                  <v-text-field readonly dense :label="PurposeLabel" :value="this.shipment.purpose"></v-text-field>
+                  <v-text-field
+                    readonly
+                    dense
+                    :label="PurposeLabel"
+                    :value="this.shipment.purpose"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="5">
                   <v-text-field
@@ -78,7 +95,7 @@
               </v-row>
             </v-card>
           </v-col>
-          <v-col cols="1"></v-col>
+          <v-col cols="1" class="hidden-sm-and-down"></v-col>
         </v-row>
 
         <v-row no-gutters v-if="routeExists">
@@ -144,7 +161,9 @@
         icon="mdi-emoticon-sad-outline"
       >
         <p class="subtitle-1 ma-0">{{ noContentText }}</p>
-        <p class="subtitle-1 ma-0">{{ "Tracking ID: " + this.$route.params.id }}</p>
+        <p class="subtitle-1 ma-0">
+          {{ "Tracking ID: " + this.$route.params.id }}
+        </p>
       </v-alert>
     </v-row>
   </v-container>
@@ -158,7 +177,7 @@ import ButtonInvoice from "../components/invoice/ButtonInvoice.vue";
 import Map from "../components/route/Map.vue";
 import Stop from "../components/route/Stop.vue";
 import { mapState } from "vuex";
-import { Watch } from "vue-property-decorator";
+import { Watch, Prop } from "vue-property-decorator";
 
 @Component({
   components: { ButtonInvoice, Map, Stop },
@@ -167,8 +186,10 @@ import { Watch } from "vue-property-decorator";
   },
 })
 export default class DetailShipment extends Vue {
+  @Prop({ default: false })
+  sendEmail!: boolean;
   $route: any;
-  noContent = "";
+  noContent = "noContent";
   date = "Date";
   trackingName = "Tracking ID";
   noContentText = "We didn't find the route you were looking for";
@@ -194,13 +215,13 @@ export default class DetailShipment extends Vue {
   ReceiverLabel = "Receiver";
   PurposeLabel = "Purpose";
 
- formatDate(date: string) {
-if (date !== null) {
-return moment(date).format("YYYY-MM-DD HH:mm");
-} else {
-return " ";
-}
-}
+  formatDate(date: string) {
+    if (date !== null) {
+      return moment(date).format("YYYY-MM-DD HH:mm");
+    } else {
+      return " ";
+    }
+  }
 
   getRoute(trackingId: string) {
     this.$store
@@ -217,9 +238,13 @@ return " ";
   getShipment() {
     this.$store
       .dispatch("shipment/getShipment", this.$route.params.id)
-      .then(() => {
-        this.getRoute(this.$route.params.id);
-        this.noContent = "content";
+      .then((status) => {
+        if (status == 200) {
+          this.getRoute(this.$route.params.id);
+          this.noContent = "content";
+        } else {
+          this.noContent = "noContent";
+        }
       })
       .catch(() => {
         this.noContent = "noContent";
@@ -228,6 +253,7 @@ return " ";
 
   created() {
     this.getShipment();
+    this.translate();
   }
 
   get translator() {

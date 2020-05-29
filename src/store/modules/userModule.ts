@@ -1,6 +1,6 @@
 import Vue from "vue";
 import userService from "@/services/userService";
-import { fa, fb, providerGoogle, providerFacebook } from "../../firebase";
+import { fa, providerGoogle, providerFacebook } from "../../firebase";
 
 export default {
   namespaced: true,
@@ -47,6 +47,14 @@ export default {
     },
     getUserData: async function (context: any, userId: number) {
       await userService.getUser(userId).then((response: any) => {
+        let birthday;
+        if (response.data[0].us_birthday == null) {
+          birthday = "";
+        } else {
+          birthday = new Date(response.data[0].us_birthday)
+            .toISOString()
+            .substr(0, 10);
+        }
         context.commit("setUserData", {
           photo: response.data[0].us_photo,
           firstname: response.data[0].us_first_name,
@@ -55,7 +63,7 @@ export default {
           secondlastname: response.data[0].us_second_last_name,
           phonenumber: response.data[0].us_phone_number,
           identification: response.data[0].us_identification,
-          birthday: response.data[0].us_birthday,
+          birthday: birthday,
           language: response.data[0].us_fk_language,
           email: response.data[0].us_email,
           password: response.data[0].us_password,
@@ -68,7 +76,6 @@ export default {
           .validateUserRoute(user)
           .then((response: any) => {
             if (response.data !== "") {
-              context.commit("setLoginRoute", response.data);
               localStorage.setItem("token", response.data.token);
               localStorage.setItem(
                 "Name",
@@ -101,23 +108,21 @@ export default {
     disableUser: async function (context: any, user: {}) {
       await userService.disableUser(user);
     },
-    federatedSignUp: async(context: any, payload: any) =>{
-      let email: string | null | undefined;
-      
+    federatedSignUp: async (context: any, payload: any) => {
       const userData: any = {
-                identification: null,
-                firstName: "",
-                secondName: "",
-                lastName: "",
-                secondLastName: "",
-                birthday: null,
-                email: "",
-                password: null,
-                phoneNumber: null,
-                charge:  "Client",
-                idLanguage: 1,
-                idStatus: 4,
-                photo: null
+        identification: null,
+        firstName: "",
+        secondName: "",
+        lastName: "",
+        secondLastName: "",
+        birthday: null,
+        email: "",
+        password: null,
+        phoneNumber: null,
+        charge: "Client",
+        idLanguage: 1,
+        idStatus: 4,
+        photo: null,
       };
 
       const userKey: any = {
@@ -135,73 +140,77 @@ export default {
         )
         .then((result) => {
           if (payload.provider == "google") {
-          googleProfile = result.additionalUserInfo?.profile;
-          userData.firstName = googleProfile.given_name;
-          userData.lastName = googleProfile.family_name;
-          userData.photo = googleProfile.picture;
-          userData.email = googleProfile.email;
-          userEmail.email = googleProfile.email;
-          fa.signOut(); }
-          else if (payload.provider == "facebook") {
-          googleProfile = result.additionalUserInfo?.profile;
-          userData.firstName = googleProfile.first_name;
-          userData.lastName = googleProfile.last_name;
-          userData.photo = googleProfile.picture.data.url;
-          userData.email = googleProfile.email; 
-          userEmail.email = googleProfile.email;
-          fa.signOut();
+            googleProfile = result.additionalUserInfo?.profile;
+            userData.firstName = googleProfile.given_name;
+            userData.lastName = googleProfile.family_name;
+            userData.photo = googleProfile.picture;
+            userData.email = googleProfile.email;
+            userEmail.email = googleProfile.email;
+            fa.signOut();
+          } else if (payload.provider == "facebook") {
+            googleProfile = result.additionalUserInfo?.profile;
+            userData.firstName = googleProfile.first_name;
+            userData.lastName = googleProfile.last_name;
+            userData.photo = googleProfile.picture.data.url;
+            userData.email = googleProfile.email;
+            userEmail.email = googleProfile.email;
+            fa.signOut();
           }
         });
-      
-    if(userData.email!=="") {
 
-      await userService.createUserRoute(userData).then((response: any) => {
-        if (response.status == 201){ 
-          context.commit("setStatus", {registered: true});
-        } 
-      }).catch((error) => {
-          context.commit("setStatus", {registered: false}); //el correo ya esta usado
-      });
-
-      await userService.validateEmail(userEmail).then((response: any) => {
-        userKey.userPassword=response.data[0].us_password;
-      });
-
-      if(userKey.userPassword === null) {
-
-          await userService.validateUserRoute({email: userData.email, password: null}).then((response: any)=>{
-            console.log(response.data);
-            if (response.status == 200) {
-                  localStorage.setItem("token", response.data.token);
-                  localStorage.setItem("Email", response.data.results[0].us_email);
-                  localStorage.setItem(
-                    "Language",
-                    response.data.results[0].us_fk_language
-                  );
-                  localStorage.setItem("ID", response.data.results[0].us_id);
-                  localStorage.setItem(
-                    "Name",
-                    response.data.results[0].us_first_name +
-                      " " +
-                      response.data.results[0].us_last_name
-                  );
-                    if (response.data.results[0].us_fk_language == 1) {
-                    localStorage.setItem("Lang", "en-us");
-                  } else if (response.data.results[0].us_fk_language == 2) {
-                    localStorage.setItem("Lang", "es-ve");
-                  }
-                  context.commit("setIsNotFederated", {NotFederated: false});
-                  context.commit("setErrors", {UnexpectedError: false});
+      if (userData.email !== "") {
+        await userService
+          .createUserRoute(userData)
+          .then((response: any) => {
+            if (response.status == 201) {
+              context.commit("setStatus", { registered: true });
             }
           })
+          .catch(() => {
+            context.commit("setStatus", { registered: false });
+          });
 
-          } else {
-            context.commit("setIsNotFederated", {NotFederated: true});
-            context.commit("setErrors", {UnexpectedError: false});
-          }
+        await userService.validateEmail(userEmail).then((response: any) => {
+          userKey.userPassword = response.data[0].us_password;
+        });
+
+        if (userKey.userPassword === null) {
+          await userService
+            .validateUserRoute({ email: userData.email, password: null })
+            .then((response: any) => {
+              if (response.status == 200) {
+                localStorage.setItem("token", response.data.token);
+                localStorage.setItem(
+                  "Email",
+                  response.data.results[0].us_email
+                );
+                localStorage.setItem(
+                  "Language",
+                  response.data.results[0].us_fk_language
+                );
+                localStorage.setItem("ID", response.data.results[0].us_id);
+                localStorage.setItem(
+                  "Name",
+                  response.data.results[0].us_first_name +
+                    " " +
+                    response.data.results[0].us_last_name
+                );
+                if (response.data.results[0].us_fk_language == 1) {
+                  localStorage.setItem("Lang", "en-us");
+                } else if (response.data.results[0].us_fk_language == 2) {
+                  localStorage.setItem("Lang", "es-ve");
+                }
+                context.commit("setIsNotFederated", { NotFederated: false });
+                context.commit("setErrors", { UnexpectedError: false });
+              }
+            });
+        } else {
+          context.commit("setIsNotFederated", { NotFederated: true });
+          context.commit("setErrors", { UnexpectedError: false });
+        }
       } else {
-        context.commit("setErrors", {UnexpectedError: true});
+        context.commit("setErrors", { UnexpectedError: true });
       }
-   },  //FINAL METODO FEDERADO
+    },
   },
 };

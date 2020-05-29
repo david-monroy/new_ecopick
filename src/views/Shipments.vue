@@ -23,8 +23,8 @@
                 :headers="headers"
                 :items="shipments"
                 :search="search"
-                loading-text="Loading... Please wait"
-                no-data-text="We didn't find shipments... Sorry"
+                loading-text="Loading..."
+                :no-data-text="noDataText"
               >
                 <template v-slot:item.actions="{ item }">
                   <v-icon
@@ -56,8 +56,6 @@ import Component from "vue-class-component";
 import { mapState } from "vuex";
 import moment from "moment";
 import { Watch } from "vue-property-decorator";
-import Translate from "../components/Translate.vue";
-
 
 @Component({
   components: {},
@@ -65,7 +63,7 @@ import Translate from "../components/Translate.vue";
     ...mapState("AllShipments", ["shipments"]),
   },
 })
-export default class Home extends Vue {
+export default class Shipments extends Vue {
   $router: any;
   loading = true;
   shipments!: {
@@ -83,61 +81,67 @@ export default class Home extends Vue {
   TrackingIDHeader = "Tracking ID";
   UserHeader = "User";
   PurposeHeader = "Purpose";
-  OfficeHeader ="Office";
+  OfficeHeader = "Office";
   StatusHeader = "Status";
   DateHeader = "Date";
   PackageHeader = "Packages";
-  DetailHeader ="Detail";
-
-
-  search = "";
-  headers: {}[] = [
-    {
-      text: this.TrackingIDHeader,
-      align: "center",
-      sortable: false,
-      value: "trackingid",
-      class: "teal--text subtitle-1",
-    },
-    {
-      text: this.PurposeHeader,
-      align: "center",
-      value: "purpose",
-      sortable: false,
-      class: "teal--text subtitle-1",
-    },
-    {
-      text: this.StatusHeader,
-      align: "center",
-      value: "status",
-      class: "teal--text subtitle-1",
-    },
-    {
-      text: this.DateHeader,
-      align: "center",
-      value: "date",
-      class: "teal--text subtitle-1",
-    },
-    {
-      text: "Total",
-      align: "center",
-      value: "total",
-      class: "teal--text subtitle-1",
-    },
-    {
-      text: this.DetailHeader,
-      align: "center",
-      class: "teal--text subtitle-1",
-      value: "actions",
-      sortable: false,
-    },
-  ];
-
-  beforeMount() {
-    this.$store
-      .dispatch("AllShipments/getAllShipments", localStorage.getItem("ID"));
+  DetailHeader = "Detail";
+  noData = "We didn't find shipments";
+  get noDataText() {
+    return this.noData;
   }
 
+  search = "";
+  get headers() {
+    return [
+      {
+        text: this.TrackingIDHeader,
+        align: "center",
+        sortable: false,
+        value: "trackingid",
+        class: "teal--text subtitle-1",
+      },
+      {
+        text: this.PurposeHeader,
+        align: "center",
+        value: "purpose",
+        sortable: false,
+        class: "teal--text subtitle-1",
+      },
+      {
+        text: this.StatusHeader,
+        align: "center",
+        value: "status",
+        class: "teal--text subtitle-1",
+      },
+      {
+        text: this.DateHeader,
+        align: "center",
+        value: "date",
+        class: "teal--text subtitle-1",
+      },
+      {
+        text: "Total",
+        align: "center",
+        value: "total",
+        class: "teal--text subtitle-1",
+      },
+      {
+        text: this.DetailHeader,
+        align: "center",
+        class: "teal--text subtitle-1",
+        value: "actions",
+        sortable: false,
+      },
+    ];
+  }
+
+  beforeMount() {
+    this.$store.dispatch(
+      "AllShipments/getAllShipments",
+      localStorage.getItem("ID")
+    );
+  }
 
   formatDate(date: string) {
     return moment(date).format("YYYY-MM-DD");
@@ -147,7 +151,7 @@ export default class Home extends Vue {
     this.$router.push({ name: "DetailShipment", params: { id: trackingId } });
   }
 
-    mounted() {
+  mounted() {
     this.translate();
   }
 
@@ -160,7 +164,12 @@ export default class Home extends Vue {
     this.translator
       .filter(
         (term: { context: string; name: string; translation: string }) => {
-          return term.context == "Shipment" || term.context == "general" || term.context == "route" || term.context == "packages";
+          return (
+            term.context == "Shipment" ||
+            term.context == "general" ||
+            term.context == "route" ||
+            term.context == "packages"
+          );
         }
       )
       .forEach(
@@ -174,7 +183,9 @@ export default class Home extends Vue {
           } else if (term.name == "routeStatus") {
             this.StatusHeader = term.translation;
           } else if (term.name == "generalPurpose") {
-            this. PurposeHeader= term.translation;
+            this.PurposeHeader = term.translation;
+          } else if (term.name == "ShipmentNoData") {
+            this.noData = term.translation;
           }
         }
       );
