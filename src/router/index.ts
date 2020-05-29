@@ -76,6 +76,7 @@ const routes: Array<RouteConfig> = [
     path: "/profile",
     name: "Profile",
     component: Profile,
+    props: true,
     meta: {
       requiresAuth: true,
       hideBasicComponents: false,

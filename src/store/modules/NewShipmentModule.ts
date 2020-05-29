@@ -13,6 +13,7 @@ export default {
     offices: [],
     basecost: {},
     trackingID: [],
+    verification: {},
   },
   // -----------------------------------------------------------------
   getters: {
@@ -35,6 +36,9 @@ export default {
     },
     settrackingID(state: {}, trackingID: []) {
       Vue.set(state, "trackingID", trackingID);
+    },
+    setVerification(state: {}, verification: {}) {
+      Vue.set(state, "verification", verification);
     },
   },
   // -----------------------------------------------------------------
@@ -75,6 +79,20 @@ export default {
           })
           .catch((error: any) => {
             reject(error.response.status);
+          });
+      });
+    },
+    verifyDirection: async function (context: any, Order: {}) {
+      return new Promise((resolve, reject) => {
+        NewShipmentService.verifyDirection(Order)
+          .then((response: any) => {
+            if (response.data !== "") {
+              context.commit("setVerification", response.data);
+            }
+            resolve(response.status);
+          })
+          .catch((error: any) => {
+            reject(error);
           });
       });
     },
