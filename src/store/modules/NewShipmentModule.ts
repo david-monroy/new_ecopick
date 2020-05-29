@@ -1,13 +1,10 @@
 import Vue from "vue";
 import NewShipmentService from "@/services/NewShipmentService";
 
-//Aqui se importan los servicios
-
 export default {
   namespaced: true,
   // -----------------------------------------------------------------
   state: {
-    // Aqui van los atributos
     characteristics: [],
     options: [],
     offices: [],
@@ -16,12 +13,7 @@ export default {
     verification: {},
   },
   // -----------------------------------------------------------------
-  getters: {
-    // getters and computed props
-  },
-  // -----------------------------------------------------------------
   mutations: {
-    // Aqui se setean los atributos del state
     setCharacteristics(state: {}, characteristics: []) {
       Vue.set(state, "characteristics", characteristics);
     },
@@ -43,7 +35,6 @@ export default {
   },
   // -----------------------------------------------------------------
   actions: {
-    // métodos que llamen a un servicio para obtener información y a un mutation para setearla en el state
     getCharacteristics: async (context: any) => {
       await NewShipmentService.getCharacteristics().then((response: any) => {
         context.commit("setCharacteristics", response.data);
@@ -98,5 +89,3 @@ export default {
     },
   },
 };
-
-//this.$store.dispatch("example/nombre_action").then(() => {}); para llamar a un action

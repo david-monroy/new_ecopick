@@ -33,7 +33,6 @@ import { Watch } from "vue-property-decorator";
 @Component({})
 export default class Footer extends Vue {
   $store: any;
-  // // Textos fijos
   networksText = "Get connected with us on social networks!";
   networks: {}[] = [
     { icon: "mdi-instagram", link: "https://www.instagram.com/" },

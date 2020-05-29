@@ -242,7 +242,6 @@ export default class Login extends Vue {
       this.$store
         .dispatch("user/validateUserRoute", this.user)
         .then((status: any) => {
-          //this.cosasdelaBD = this.$store.state.example.route;
           if (status == 200) {
             this.snackbar = true;
             setTimeout(() => {

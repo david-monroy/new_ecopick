@@ -170,7 +170,6 @@ export default {
           await userService
             .validateUserRoute({ email: userData.email, password: null })
             .then((response: any) => {
-              console.log(response.data);
               if (response.status == 200) {
                 localStorage.setItem("token", response.data.token);
                 localStorage.setItem(
@@ -204,6 +203,6 @@ export default {
       } else {
         context.commit("setErrors", { UnexpectedError: true });
       }
-    }, //FINAL METODO FEDERADO
+    },
   },
 };

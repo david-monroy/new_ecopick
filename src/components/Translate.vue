@@ -24,12 +24,11 @@ import Component from "vue-class-component";
 @Component({})
 export default class Translate extends Vue {
   $store: any;
-  // Atributos
   languages: {}[] = [
     { name: "English", value: "en-us" },
     { name: "Español", value: "es-ve" },
   ];
-  // // Traducción
+
   changeLanguage(language: { name: string; value: string }) {
     localStorage.setItem("Lang", language.value);
     this.getTranslate(language.value);
@@ -37,7 +36,7 @@ export default class Translate extends Vue {
   getTranslate(lan: string) {
     this.$store.dispatch("translate/translate", { lang: lan });
   }
-  // // Metodos del componente
+
   created() {
     const lan = localStorage.getItem("Lang");
     if (lan === null) {

@@ -178,7 +178,6 @@ export default class Invoice extends Vue {
   discount!: number;
   shipper!: {};
   shipment!: { delivered: string };
-  // Keywords
   shipperInformation = "Shipper information";
   receiverInformation = "Receiver information";
   shipmentInformation = "Shipment information";
