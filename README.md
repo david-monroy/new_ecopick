@@ -12,6 +12,7 @@ Repositorio para el desarrollo del portal del cliente de Mr.Postel.
 - API: [MrPostel API](https://github.com/albasanchez/mrPostel-API)
 
 > Debe contar con un dispositivo que cuente con la aplicación Telegram y un lector de código QR para probar todas las funcionalidades que ofrece la aplicación
+> Para realizar el registro federado con Facebook se deberá contactar a los desarrolladores e indicar la cuenta de Facebook a usar para registrarse posteriormente en Facebook for developers. Esta funcionalidad solo podrá ser probada en el dispositivo que tenga activo el servidor del proyecto debido a problemas de seguridad
 
 ## Preparación ✔️
 
