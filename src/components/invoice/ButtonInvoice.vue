@@ -78,6 +78,8 @@ export default class ButtonInvoice extends Vue {
       this.condition = false;
       this.$store.dispatch("invoice/getInvoice", this.$route.params.id);
       this.$store.dispatch("user/getUserData", this.shipment.userid);
+      this.$store.dispatch("NewShipment/getOptions");
+      this.$store.dispatch("NewShipment/getBaseCost");
     }
     if (this.sendEmail) {
       this.downloadInvoice();

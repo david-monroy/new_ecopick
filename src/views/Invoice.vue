@@ -84,7 +84,7 @@
       <tr class="item">
         <td colspan="4">
           <p class="cell-title">{{ optionsName }}</p>
-          <p class="cell-description">{{ options.join(", ") }}</p>
+          <p class="cell-description">{{ optionNames.join(", ") }}</p>
         </td>
       </tr>
       <tr class="item">
@@ -124,12 +124,17 @@
       </tr>
       <tr class="total">
         <td colspan="2"></td>
+        <td>{{ serviceCost }}</td>
+        <td>${{ shipmentCharges() }}</td>
+      </tr>
+      <tr class="total">
+        <td colspan="2"></td>
         <td>{{ discountName }}</td>
         <td>{{ discount * 100 }}%</td>
       </tr>
       <tr class="total">
         <td colspan="2"></td>
-        <td>Total + {{ serviceCost }}</td>
+        <td>Total</td>
         <td>${{ shipment.amount }}</td>
       </tr>
     </table>
@@ -149,15 +154,11 @@ import QRCode from "../components/invoice/QRCode.vue";
     QRCode,
   },
   computed: {
-    ...mapState("invoice", [
-      "route",
-      "receiver",
-      "options",
-      "packages",
-      "discount",
-    ]),
+    ...mapState("invoice", ["route", "receiver", "packages", "discount"]),
+    ...mapState("invoice", { optionNames: "options" }),
     ...mapState("user", { shipper: "userData" }),
     ...mapState("shipment", ["shipment"]),
+    ...mapState("NewShipment", ["options", "basecost"]),
   },
 })
 export default class Invoice extends Vue {
@@ -165,7 +166,16 @@ export default class Invoice extends Vue {
   $route: any;
   route!: {};
   receiver!: {};
-  options!: string[];
+  optionNames!: string[];
+  options!: {
+    op_id: number;
+    op_name: string;
+    op_charge: number;
+    op_charge_parameter: string;
+  }[];
+  basecost!: {
+    service: number;
+  };
   packages!: {
     pa_width: number;
     pa_height: number;
@@ -219,6 +229,19 @@ export default class Invoice extends Vue {
         0
       ) / 5000
     ).toFixed(2);
+  }
+
+  shipmentCharges() {
+    let shipmentOption = this.options.filter((opt: { op_name: string }) =>
+      this.optionNames.includes(opt.op_name)
+    );
+    let optionCharges = shipmentOption
+      .reduce(
+        (acc: any, option: { op_charge: number }) => acc + option.op_charge,
+        0
+      )
+      .toFixed(2);
+    return parseFloat(optionCharges) + this.basecost.service;
   }
 
   created() {

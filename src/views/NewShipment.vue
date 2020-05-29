@@ -378,8 +378,11 @@
                           <p class="my-0">
                             {{ CharacteristicLabel }}:
                             {{
-                              orderPackage.characteristic !== null
-                                ? orderPackage.characteristic
+                              orderPackage.characteristic !== null &&
+                              orderPackage.characteristic !== undefined
+                                ? characteristicName(
+                                    orderPackage.characteristic
+                                  )
                                 : ""
                             }}
                           </p>
@@ -449,7 +452,9 @@
                       <v-row>
                         <v-col cols="1"></v-col>
                         <v-col cols>
-                          <v-subheader>{{ PackageCostLabel }}</v-subheader>
+                          <v-subheader
+                            >{{ PackageCostLabel }} #{{ i + 1 }}</v-subheader
+                          >
                         </v-col>
                         <v-col cols>
                           <v-text-field
@@ -458,7 +463,7 @@
                             dense
                             readonly
                             suffix="$"
-                            :label="orderPackage.cost"
+                            :value="orderPackage.cost"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="1"></v-col>
@@ -479,7 +484,7 @@
                           dense
                           readonly
                           suffix="$"
-                          :label="ShipmentSurcharges.toString()"
+                          :value="ShipmentSurcharges.toString()"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="1"></v-col>
@@ -513,7 +518,7 @@
                           solo
                           dense
                           :items="discounts"
-                          :disabled="discounts.length == 0 || discountused"
+                          :disabled="discounts.length == 0"
                           item-value="di_id"
                           item-text="discount"
                           :label="DiscountLabel"
@@ -870,6 +875,12 @@ export default class NewShipment extends Vue {
     description: null,
     cost: null,
   };
+
+  characteristicName(id: number) {
+    return this.characteristics.filter(
+      (c: { ch_id: number }) => c.ch_id == id
+    )[0].ch_name;
+  }
 
   rules: {} = {
     required: (value: string) =>

@@ -109,7 +109,6 @@
                       :label="birthday"
                       :hint="dateHint"
                       persistent-hint
-                      @blur="date = parseDate(dateFormatted)"
                       v-on="on"
                     ></v-text-field>
                   </template>
@@ -194,7 +193,6 @@
                 <v-row align="center" justify="center">
                   <v-col cols="12" sm="10" align="center"
                     ><v-checkbox
-                      v-model="ex4"
                       :label="termCondition"
                       color="success"
                       value="success"
@@ -378,12 +376,6 @@ export default class SignUp extends Vue {
     if (!date) return "";
     const [year, month, day] = date.split("-");
     return `${month}/${day}/${year}`;
-  }
-  public parseDate(date: string): string {
-    if (!date) return "";
-
-    const [month, day, year] = date.split("/");
-    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
   }
 
   mounted() {
