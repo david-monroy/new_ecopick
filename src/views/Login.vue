@@ -311,13 +311,25 @@ export default class Login extends Vue {
     this.errors.splice(0);
     if (this.errors.length == 0) {
       this.$store
-        .dispatch("user/federatedSignUpGoogle", { provider: "facebook" })
+        .dispatch("user/federatedSignUp", { provider: "facebook" })
         .then(() => {
-          if (this.getStatus.registered == false) {
-            this.errors.push("This email is already in use");
-            this.showErrors(this.errors);
+          if(this.getErrors.UnexpectedError == false){
+              if (this.getStatus.registered == false) {
+                    if (this.getIsNotFederated.NotFederated == true) {
+                      this.snackbarFederated=true;
+                    }
+                    else { this.snackbar = true;
+                          setTimeout(() => {
+                          this.changePage("Home");
+                          }, 1000); }
+            } else {
+                this.$router.push({ name: 'Profile', params: {
+                federatedPopUp: true
+                }  
+              });
+            }
           } else {
-            this.$router.push("/");
+            this.snackbarUnexpectedError = true;
           }
         });
     }
