@@ -38,12 +38,9 @@
           </v-row>
           <v-form ref="form">
             <v-row>
-              <v-col cols="12" sm="1">
-                <v-icon class="mt-5" pa-0>mdi-account</v-icon>
-              </v-col>
-
               <v-col>
                 <v-text-field
+                prepend-icon="mdi-account"
                   v-model="user.email"
                   :rules="rules.emailRules"
                   :label="emailForm"

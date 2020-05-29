@@ -2,7 +2,7 @@
   <v-container fluid class="pa-0 bg">
     <v-row v-if="noContent == 'content'">
       <v-col>
-        <v-row justify="center" align="center">
+        <v-row justify="center" align="center" class="px-1">
           <v-col cols="1" class="hidden-sm-and-down"></v-col>
           <v-col cols="6" md="8">
             <p class="title font-weight-regular mb-0">
@@ -19,8 +19,8 @@
         </v-row>
 
         <v-row>
-          <v-col cols="1"></v-col>
-          <v-col cols="10">
+          <v-col cols="1" class="hidden-sm-and-down"></v-col>
+          <v-col>
             <v-card>
               <v-row asign="center" justify="center">
                 <v-col cols="5">
@@ -95,7 +95,7 @@
               </v-row>
             </v-card>
           </v-col>
-          <v-col cols="1"></v-col>
+          <v-col cols="1" class="hidden-sm-and-down"></v-col>
         </v-row>
 
         <v-row no-gutters v-if="routeExists">
