@@ -735,7 +735,7 @@ import moment from "moment";
     ...mapState("discount", ["discounts"]),
   },
 })
-export default class Shipment extends Vue {
+export default class NewShipment extends Vue {
   $store: any;
   $router: any;
   e1 = 1;

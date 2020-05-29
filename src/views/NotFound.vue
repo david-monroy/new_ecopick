@@ -21,7 +21,7 @@ import Component from "vue-class-component";
 import { Watch } from "vue-property-decorator";
 
 @Component({})
-export default class DetailShipment extends Vue {
+export default class NotFound extends Vue {
   notFound = "Sorry. We didn't found the route you were looking for";
   get translator() {
     return this.$store.state.translate.languageTexts;

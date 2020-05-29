@@ -34,7 +34,7 @@ import moment from "moment";
     ...mapState("shipment", { route: "route" }),
   },
 })
-export default class Map extends Vue {
+export default class Stop extends Vue {
   route!: [
     {
       primaryline: string;

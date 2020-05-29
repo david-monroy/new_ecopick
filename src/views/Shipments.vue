@@ -63,7 +63,7 @@ import { Watch } from "vue-property-decorator";
     ...mapState("AllShipments", ["shipments"]),
   },
 })
-export default class Home extends Vue {
+export default class Shipments extends Vue {
   $router: any;
   loading = true;
   shipments!: {
@@ -88,47 +88,49 @@ export default class Home extends Vue {
   DetailHeader = "Detail";
 
   search = "";
-  headers: {}[] = [
-    {
-      text: this.TrackingIDHeader,
-      align: "center",
-      sortable: false,
-      value: "trackingid",
-      class: "teal--text subtitle-1",
-    },
-    {
-      text: this.PurposeHeader,
-      align: "center",
-      value: "purpose",
-      sortable: false,
-      class: "teal--text subtitle-1",
-    },
-    {
-      text: this.StatusHeader,
-      align: "center",
-      value: "status",
-      class: "teal--text subtitle-1",
-    },
-    {
-      text: this.DateHeader,
-      align: "center",
-      value: "date",
-      class: "teal--text subtitle-1",
-    },
-    {
-      text: "Total",
-      align: "center",
-      value: "total",
-      class: "teal--text subtitle-1",
-    },
-    {
-      text: this.DetailHeader,
-      align: "center",
-      class: "teal--text subtitle-1",
-      value: "actions",
-      sortable: false,
-    },
-  ];
+  get headers() {
+    return [
+      {
+        text: this.TrackingIDHeader,
+        align: "center",
+        sortable: false,
+        value: "trackingid",
+        class: "teal--text subtitle-1",
+      },
+      {
+        text: this.PurposeHeader,
+        align: "center",
+        value: "purpose",
+        sortable: false,
+        class: "teal--text subtitle-1",
+      },
+      {
+        text: this.StatusHeader,
+        align: "center",
+        value: "status",
+        class: "teal--text subtitle-1",
+      },
+      {
+        text: this.DateHeader,
+        align: "center",
+        value: "date",
+        class: "teal--text subtitle-1",
+      },
+      {
+        text: "Total",
+        align: "center",
+        value: "total",
+        class: "teal--text subtitle-1",
+      },
+      {
+        text: this.DetailHeader,
+        align: "center",
+        class: "teal--text subtitle-1",
+        value: "actions",
+        sortable: false,
+      },
+    ];
+  }
 
   beforeMount() {
     this.$store.dispatch(
