@@ -24,8 +24,11 @@ export default {
   // -----------------------------------------------------------------
   actions: {
     getShipment: async (context: any, trackingId: string) => {
-      await shipmentService.getShipment(trackingId).then((response: any) => {
-        context.commit("setShipment", response.data[0]);
+      return new Promise((resolve, reject) => {
+        shipmentService.getShipment(trackingId).then((response: any) => {
+          context.commit("setShipment", response.data[0]);
+          resolve(response.status);
+        });
       });
     },
     sleep: async (context: any, ms: number) => {

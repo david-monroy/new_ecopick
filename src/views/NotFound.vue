@@ -23,6 +23,9 @@ import { Watch } from "vue-property-decorator";
 @Component({})
 export default class NotFound extends Vue {
   notFound = "Sorry. We didn't found the route you were looking for";
+  mounted() {
+    this.translate();
+  }
   get translator() {
     return this.$store.state.translate.languageTexts;
   }

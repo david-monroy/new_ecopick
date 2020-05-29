@@ -65,6 +65,7 @@
                   :label="password"
                   type="password"
                   class="input-group--focused"
+                  v-on:keyup.enter="searchRoute()"
                 ></v-text-field>
               </v-col>
             </v-row>

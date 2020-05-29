@@ -189,7 +189,7 @@ export default class DetailShipment extends Vue {
   @Prop({ default: false })
   sendEmail!: boolean;
   $route: any;
-  noContent = "";
+  noContent = "noContent";
   date = "Date";
   trackingName = "Tracking ID";
   noContentText = "We didn't find the route you were looking for";
@@ -238,9 +238,13 @@ export default class DetailShipment extends Vue {
   getShipment() {
     this.$store
       .dispatch("shipment/getShipment", this.$route.params.id)
-      .then(() => {
-        this.getRoute(this.$route.params.id);
-        this.noContent = "content";
+      .then((status) => {
+        if (status == 200) {
+          this.getRoute(this.$route.params.id);
+          this.noContent = "content";
+        } else {
+          this.noContent = "noContent";
+        }
       })
       .catch(() => {
         this.noContent = "noContent";
@@ -249,6 +253,7 @@ export default class DetailShipment extends Vue {
 
   created() {
     this.getShipment();
+    this.translate();
   }
 
   get translator() {

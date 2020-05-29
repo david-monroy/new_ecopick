@@ -23,8 +23,8 @@
                 :headers="headers"
                 :items="shipments"
                 :search="search"
-                loading-text="Loading... Please wait"
-                no-data-text="We didn't find shipments... Sorry"
+                loading-text="Loading..."
+                :no-data-text="noDataText"
               >
                 <template v-slot:item.actions="{ item }">
                   <v-icon
@@ -86,6 +86,10 @@ export default class Shipments extends Vue {
   DateHeader = "Date";
   PackageHeader = "Packages";
   DetailHeader = "Detail";
+  noData = "We didn't find shipments";
+  get noDataText() {
+    return this.noData;
+  }
 
   search = "";
   get headers() {
@@ -180,6 +184,8 @@ export default class Shipments extends Vue {
             this.StatusHeader = term.translation;
           } else if (term.name == "generalPurpose") {
             this.PurposeHeader = term.translation;
+          } else if (term.name == "ShipmentNoData") {
+            this.noData = term.translation;
           }
         }
       );

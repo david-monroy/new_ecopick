@@ -46,7 +46,7 @@ export default class Map extends Vue {
       markers.push({
         type: "Feature",
         properties: {
-          stop: i + 1,
+          stop: this.route.length - i,
           direction: this.route[i].primaryline,
           date: moment(this.route[i].date).format("YYYY-MM-DD HH:mm:ss"),
           status: this.route[i].status,

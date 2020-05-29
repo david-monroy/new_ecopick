@@ -67,6 +67,7 @@
                   v-model="userInfo.identification"
                   :label="identification"
                   :readonly="!edit"
+                  :rules="[rules.required]"
                 ></v-text-field>
               </v-col>
               <v-col>
@@ -143,7 +144,8 @@
               <v-col class="hidden-sm-and-down"> </v-col>
             </v-row>
             <v-row>
-              <v-col v-if="edit && !updatePassword"
+              <v-col
+                v-if="edit && !updatePassword && userInfo.password !== null"
                 ><v-btn @click="updatePassword = true" color="teal" outlined
                   ><v-icon class="mr-2">mdi-lock</v-icon
                   >{{ updatePasswordText }}</v-btn
@@ -236,23 +238,18 @@
     </v-row>
     <v-snackbar v-model="snackbarSuccess" top:timeout="timeout" color="success">
       {{ snackSuccess }}
-      <v-btn dark text @click="snackbar = false">Close</v-btn>
+      <v-btn dark text @click="snackbar = false">{{ close }}</v-btn>
     </v-snackbar>
     <v-snackbar v-model="snackbarError" top:timeout="timeout" color="error">
       {{ snackError }}
-      <v-btn dark text @click="snackbarError = false">Close</v-btn>
+      <v-btn dark text @click="snackbarError = false">{{ close }}</v-btn>
     </v-snackbar>
     <v-snackbar v-model="snackbarPassword" top:timeout="timeout" color="error">
       {{ snackPassword }}
-      <v-btn dark text @click="snackbarPassword = false">Close</v-btn>
-    </v-snackbar>
-    <v-snackbar v-model="snackbarDatabase" top:timeout="timeout" color="error">
-      {{ snackDatabase }}
-      <v-btn dark text @click="snackbarDatabase = false">Close</v-btn>
+      <v-btn dark text @click="snackbarPassword = false">{{ close }}</v-btn>
     </v-snackbar>
     <v-snackbar v-model="federatedPopUp" top:timeout="timeout" color="success">
       {{ snackPopUp }}
-      <v-btn dark text @click="federatedPopUp = false">{{ close }}</v-btn>
     </v-snackbar>
   </v-container>
 </template>
@@ -323,7 +320,6 @@ export default class Profile extends Vue {
   snackSuccess = "User updated successfully";
   snackError = "User update error. Try again";
   snackPassword = "Please confirm password correctly";
-  snackDatabase = "This email is already in use. Please verify";
   snackPopUp =
     "Please click on the pencil icon to complete your information. We are going to need it to take your shipping orders";
   cancelText = "Cancel";
@@ -332,9 +328,9 @@ export default class Profile extends Vue {
   deleteText = "Delete";
   warningTitle = "";
   warningBody = "";
+  close = "Close";
   snackbarSuccess = false;
   snackbarError = false;
-  snackbarDatabase = false;
   snackbarPassword = false;
 
   disable() {
@@ -389,7 +385,7 @@ export default class Profile extends Vue {
               this.hasImage = true;
             }
           })
-          .catch(() => (this.snackbarDatabase = true));
+          .catch(() => (this.snackbarError = true));
       }
     }
   }
@@ -431,6 +427,9 @@ export default class Profile extends Vue {
 
   mounted() {
     this.translate();
+    if (this.federatedPopUp) {
+      this.edit = true;
+    }
   }
 
   get translator() {
@@ -481,8 +480,6 @@ export default class Profile extends Vue {
             this.snackError = term.translation;
           } else if (term.name == "signupSnack3") {
             this.snackPassword = term.translation;
-          } else if (term.name == "profileSnack3") {
-            this.snackDatabase = term.translation;
           } else if (term.name == "generalCancelbutton") {
             this.cancelText = term.translation;
           } else if (term.name == "generalSaveButton") {
@@ -497,6 +494,8 @@ export default class Profile extends Vue {
             this.warningBody = term.translation;
           } else if (term.name == "profileSnackPopUp") {
             this.snackPopUp = term.translation;
+          } else if (term.name == "generalClose") {
+            this.close = term.translation;
           }
         }
       );

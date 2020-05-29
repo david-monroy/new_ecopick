@@ -47,6 +47,14 @@ export default {
     },
     getUserData: async function (context: any, userId: number) {
       await userService.getUser(userId).then((response: any) => {
+        let birthday;
+        if (response.data[0].us_birthday == null) {
+          birthday = "";
+        } else {
+          birthday = new Date(response.data[0].us_birthday)
+            .toISOString()
+            .substr(0, 10);
+        }
         context.commit("setUserData", {
           photo: response.data[0].us_photo,
           firstname: response.data[0].us_first_name,
@@ -55,7 +63,7 @@ export default {
           secondlastname: response.data[0].us_second_last_name,
           phonenumber: response.data[0].us_phone_number,
           identification: response.data[0].us_identification,
-          birthday: response.data[0].us_birthday,
+          birthday: birthday,
           language: response.data[0].us_fk_language,
           email: response.data[0].us_email,
           password: response.data[0].us_password,

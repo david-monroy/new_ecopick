@@ -17,7 +17,13 @@ export default {
   actions: {
     getAllShipments: async (context: any, userID: number) => {
       await AllShipments.getAllShipments(userID).then((response: any) => {
-        context.commit("setAllShipments", response.data);
+        let shipments;
+        if (response.status == 200) {
+          shipments = response.data;
+        } else {
+          shipments = [];
+        }
+        context.commit("setAllShipments", shipments);
       });
     },
   },

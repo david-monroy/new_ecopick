@@ -87,7 +87,7 @@ export default class Home extends Vue {
   trackingID = "";
   search = "Search your tracking ID";
   banner =
-    "Try our new bot, download Telegram and with your tracking ID, you will be able to know your package's delivery history anywhere!";
+    "Try our new bot, download Telegram and with your tracking ID, you will be able to know your package's status!";
   noticeTitle = "Here to deliver for you!";
   noticeText =
     "In these uncertain times, it's important for businesses to help you stay safe! At Mr.Postel we are still delivering to support you in this situation";
