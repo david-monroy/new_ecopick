@@ -43,4 +43,12 @@ export default {
       },
     });
   },
+  validateEmail(user: {}) {
+    return API_URL.post(`/user/validateEmail`, user, {
+      headers: {
+        Authorization: { "Content-Type": "application/json" },
+      },
+    });
+  }
+  
 };

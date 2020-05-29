@@ -104,7 +104,7 @@
           <v-row>
             <v-col> </v-col>
             <v-col>
-              <v-btn rounded color="red accent-4" dark
+              <v-btn rounded color="red accent-4" dark @click="FederatedSignUpGoogle()"
                 ><v-icon class="mr-1" p-0>mdi-google</v-icon>Google</v-btn
               >
             </v-col>
@@ -114,7 +114,7 @@
           <v-row>
             <v-col> </v-col>
             <v-col>
-              <v-btn rounded color="indigo darken-2" dark
+              <v-btn rounded color="indigo darken-2" dark @click="FederatedSignUpFacebook()"
                 ><v-icon class="mr-1" p-0>mdi-facebook</v-icon>Facebook</v-btn
               >
             </v-col>
@@ -167,6 +167,13 @@
       {{ snack4 }}
       <v-btn dark text @click="snackbarError3 = false">{{ close }}</v-btn>
     </v-snackbar>
+    <v-snackbar v-model="snackbarFederated" top:timeout="timeout" color="error">
+      {{ snack5 }}
+    </v-snackbar>
+    <v-snackbar v-model="snackbarUnexpectedError" top:timeout="timeout" color="error">
+      {{ snack6 }}
+      <v-btn dark text @click="snackbarUnexpectedError = false">{{ close }}</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -199,12 +206,16 @@ export default class Login extends Vue {
   snack2 = "Please ingress your email and password";
   snack3 = "Invalid email or password. Try again.";
   snack4 = "This user doesn't have permission to access or it's disabled.";
+  snack5 = "This email is already in use. Please ingress your email and password to continue";
+  snack6 = "An unexpected error has ocurred. Try again.";
   close = "Close";
 
   snackbar = false;
   snackbarError = false;
   snackbarError2 = false;
   snackbarError3 = false;
+  snackbarFederated = false;
+  snackbarUnexpectedError = false;
   timeout = 7000;
 
   $refs!: {
@@ -247,6 +258,84 @@ export default class Login extends Vue {
       (v: string) => /.+@.+\..+/.test(v) || "E-mail is required",
     ],
   };
+
+  //-------------------------------------------------
+
+    errors: string[] = [];
+    showErrors(errors: any) {
+    this.errors = errors;
+    this.snackbarError = true;
+    }
+
+   get getStatus() {
+    return this.$store.getters["user/getLoginStatus"];
+  }
+
+  get getIsNotFederated() {
+    return this.$store.getters["user/getIsNotFederated"];
+  }
+
+  get getErrors() {
+    return this.$store.getters["user/getErrors"];
+  }
+
+  FederatedSignUpGoogle() {
+    this.errors.splice(0);
+    if (this.errors.length == 0) {
+      this.$store
+        .dispatch("user/federatedSignUp", { provider: "google" })
+        .then(() => {
+          if(this.getErrors.UnexpectedError == false){
+              if (this.getStatus.registered == false) {
+                    if (this.getIsNotFederated.NotFederated == true) {
+                      this.snackbarFederated=true;
+                    }
+                    else { this.snackbar = true;
+                          setTimeout(() => {
+                          this.changePage("Home");
+                          }, 1000); }
+            } else {
+                this.$router.push({ name: 'Profile', params: {
+                federatedPopUp: true
+                }  
+              });
+            }
+          } else {
+            this.snackbarUnexpectedError = true;
+          }
+        });
+    }
+  }
+
+   FederatedSignUpFacebook() {
+    this.errors.splice(0);
+    if (this.errors.length == 0) {
+      this.$store
+        .dispatch("user/federatedSignUp", { provider: "facebook" })
+        .then(() => {
+          if(this.getErrors.UnexpectedError == false){
+              if (this.getStatus.registered == false) {
+                    if (this.getIsNotFederated.NotFederated == true) {
+                      this.snackbarFederated=true;
+                    }
+                    else { this.snackbar = true;
+                          setTimeout(() => {
+                          this.changePage("Home");
+                          }, 1000); }
+            } else {
+                this.$router.push({ name: 'Profile', params: {
+                federatedPopUp: true
+                }  
+              });
+            }
+          } else {
+            this.snackbarUnexpectedError = true;
+          }
+        });
+    }
+  }
+
+  //-------------------------------------------------
 
   mounted() {
     this.translate();
@@ -294,6 +383,10 @@ export default class Login extends Vue {
             this.goBack = term.translation;
           } else if (term.name == "loginButton") {
             this.buttonLogin = term.translation;
+          } else if (term.name == "loginSnack5") {
+            this.snack5 = term.translation;
+          } else if (term.name == "loginSnack6") {
+            this.snack5 = term.translation;
           }
         }
       );

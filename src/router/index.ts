@@ -13,6 +13,7 @@ import Profile from "../views/Profile.vue";
 import RecoverPassword from "../views/RecoverPassword.vue";
 import Login from "../views/Login.vue";
 import NotFound from "../views/NotFound.vue";
+import Discounts from "../views/Discounts.vue"
 
 Vue.use(VueRouter);
 
@@ -77,6 +78,7 @@ const routes: Array<RouteConfig> = [
     path: "/profile",
     name: "Profile",
     component: Profile,
+    props: true,
     meta: {
       requiresAuth: true,
       hideBasicComponents: false,
@@ -85,7 +87,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/discounts",
     name: "Discounts",
-    // component: Home,
+    component: Discounts,
     meta: {
       requiresAuth: true,
       hideBasicComponents: false,

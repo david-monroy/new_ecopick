@@ -447,7 +447,7 @@
                     <!--Packages Cost-->
                     <div v-for="(orderPackage, i) in Order.packages" :key="i">
                       <v-row>
-                        <v-col cols=" 1"></v-col>
+                        <v-col cols="1"></v-col>
                         <v-col cols>
                           <v-subheader>{{ PackageCostLabel }}</v-subheader>
                         </v-col>
@@ -707,6 +707,10 @@
       {{ snackRegisterSuccess }}
       <v-btn dark text @click="snackbar2 = false">{{ close }}</v-btn>
     </v-snackbar>
+    <v-snackbar v-model="snackbarDirection" color="red">
+      {{ snackDirection }}
+      <v-btn dark text @click="snackbar = false">{{ close }}</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -724,10 +728,11 @@ import moment from "moment";
       "characteristics",
       "options",
       "offices",
-      "discounts",
       "basecost",
       "trackingID",
+      "verification",
     ]),
+    ...mapState("discount", ["discounts"]),
   },
 })
 export default class Shipment extends Vue {
@@ -751,6 +756,7 @@ export default class Shipment extends Vue {
   snackbar2 = false;
   close = "Close";
   discountused = false;
+  snackbarDirection = false;
 
   characteristics!: {
     ch_id: number;
@@ -916,14 +922,23 @@ export default class Shipment extends Vue {
       });
   }
 
+  verifyDirection() {
+    this.$store
+      .dispatch("NewShipment/verifyDirection", this.Order.direction)
+      .then((status: any) => {
+        if (status == 200) {
+          this.e1++;
+        } else {
+          this.snackbarDirection = true;
+        }
+      });
+  }
+
   beforeMount() {
     this.$store.dispatch("NewShipment/getCharacteristics");
     this.$store.dispatch("NewShipment/getOptions");
     this.$store.dispatch("NewShipment/getOffices");
-    this.$store.dispatch(
-      "NewShipment/getDiscounts",
-      localStorage.getItem("ID")
-    );
+    this.$store.dispatch("discount/getDiscounts", localStorage.getItem("ID"));
     this.$store.dispatch("NewShipment/getBaseCost");
   }
 
@@ -937,8 +952,8 @@ export default class Shipment extends Vue {
               this.selectedOptions[i]
             );
           }
+          this.verifyDirection();
         }
-        this.e1 = page;
       }
     } else if (page == 3) {
       if (this.Order.packages.length > 0) {
@@ -1104,6 +1119,7 @@ export default class Shipment extends Vue {
   Cancelbtn = "Cancel";
   snackRegister = "Ups! There are a problem. Try again";
   snackRegisterSuccess = "The Shipment was register successfully";
+  snackDirection = "The address you entered is incorrect";
 
   mounted() {
     this.translate();
@@ -1197,6 +1213,8 @@ export default class Shipment extends Vue {
             this.snackRegisterSuccess = term.translation;
           } else if (term.name == "generalClose") {
             this.close = term.translation;
+          } else if (term.name == "ShipmentSnackDirection") {
+            this.snackDirection = term.translation;
           }
         }
       );
