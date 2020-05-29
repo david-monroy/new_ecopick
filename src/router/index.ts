@@ -13,7 +13,7 @@ import Profile from "../views/Profile.vue";
 import RecoverPassword from "../views/RecoverPassword.vue";
 import Login from "../views/Login.vue";
 import NotFound from "../views/NotFound.vue";
-import Discounts from "../views/Discounts.vue"
+import Discounts from "../views/Discounts.vue";
 
 Vue.use(VueRouter);
 

@@ -5,10 +5,12 @@
         <v-row justify="center" align="center">
           <v-col cols="1" class="hidden-sm-and-down"></v-col>
           <v-col cols="6" md="8">
-            <p
-              class="title font-weight-regular mb-0"
-            >{{ trackingName + ": " + this.$route.params.id }}</p>
-            <p class="subtitle-1">{{ date + ": " + formatDate(shipment.delivered) }}</p>
+            <p class="title font-weight-regular mb-0">
+              {{ trackingName + ": " + this.$route.params.id }}
+            </p>
+            <p class="subtitle-1">
+              {{ date + ": " + formatDate(shipment.delivered) }}
+            </p>
           </v-col>
           <v-col>
             <ButtonInvoice :sendEmail="sendEmail" />
@@ -38,7 +40,12 @@
               </v-row>
               <v-row asign="center" justify="center">
                 <v-col cols="5">
-                  <v-text-field readonly dense :label="OfficeLabel" :value="this.shipment.office"></v-text-field>
+                  <v-text-field
+                    readonly
+                    dense
+                    :label="OfficeLabel"
+                    :value="this.shipment.office"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="5">
                   <v-text-field
@@ -51,7 +58,12 @@
               </v-row>
               <v-row asign="center" justify="center">
                 <v-col cols="5">
-                  <v-text-field readonly dense :label="UserLabel" :value="this.shipment.user"></v-text-field>
+                  <v-text-field
+                    readonly
+                    dense
+                    :label="UserLabel"
+                    :value="this.shipment.user"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="5">
                   <v-text-field
@@ -64,7 +76,12 @@
               </v-row>
               <v-row asign="center" justify="center">
                 <v-col cols="5" v-if="this.shipment.purpose">
-                  <v-text-field readonly dense :label="PurposeLabel" :value="this.shipment.purpose"></v-text-field>
+                  <v-text-field
+                    readonly
+                    dense
+                    :label="PurposeLabel"
+                    :value="this.shipment.purpose"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="5">
                   <v-text-field
@@ -144,7 +161,9 @@
         icon="mdi-emoticon-sad-outline"
       >
         <p class="subtitle-1 ma-0">{{ noContentText }}</p>
-        <p class="subtitle-1 ma-0">{{ "Tracking ID: " + this.$route.params.id }}</p>
+        <p class="subtitle-1 ma-0">
+          {{ "Tracking ID: " + this.$route.params.id }}
+        </p>
       </v-alert>
     </v-row>
   </v-container>
@@ -196,13 +215,13 @@ export default class DetailShipment extends Vue {
   ReceiverLabel = "Receiver";
   PurposeLabel = "Purpose";
 
- formatDate(date: string) {
-if (date !== null) {
-return moment(date).format("YYYY-MM-DD HH:mm");
-} else {
-return " ";
-}
-}
+  formatDate(date: string) {
+    if (date !== null) {
+      return moment(date).format("YYYY-MM-DD HH:mm");
+    } else {
+      return " ";
+    }
+  }
 
   getRoute(trackingId: string) {
     this.$store

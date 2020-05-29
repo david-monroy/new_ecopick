@@ -104,7 +104,11 @@
           <v-row>
             <v-col> </v-col>
             <v-col>
-              <v-btn rounded color="red accent-4" dark @click="FederatedSignUpGoogle()"
+              <v-btn
+                rounded
+                color="red accent-4"
+                dark
+                @click="FederatedSignUpGoogle()"
                 ><v-icon class="mr-1" p-0>mdi-google</v-icon>Google</v-btn
               >
             </v-col>
@@ -114,7 +118,11 @@
           <v-row>
             <v-col> </v-col>
             <v-col>
-              <v-btn rounded color="indigo darken-2" dark @click="FederatedSignUpFacebook()"
+              <v-btn
+                rounded
+                color="indigo darken-2"
+                dark
+                @click="FederatedSignUpFacebook()"
                 ><v-icon class="mr-1" p-0>mdi-facebook</v-icon>Facebook</v-btn
               >
             </v-col>
@@ -170,9 +178,15 @@
     <v-snackbar v-model="snackbarFederated" top:timeout="timeout" color="error">
       {{ snack5 }}
     </v-snackbar>
-    <v-snackbar v-model="snackbarUnexpectedError" top:timeout="timeout" color="error">
+    <v-snackbar
+      v-model="snackbarUnexpectedError"
+      top:timeout="timeout"
+      color="error"
+    >
       {{ snack6 }}
-      <v-btn dark text @click="snackbarUnexpectedError = false">{{ close }}</v-btn>
+      <v-btn dark text @click="snackbarUnexpectedError = false">{{
+        close
+      }}</v-btn>
     </v-snackbar>
   </v-container>
 </template>
@@ -206,7 +220,8 @@ export default class Login extends Vue {
   snack2 = "Please ingress your email and password";
   snack3 = "Invalid email or password. Try again.";
   snack4 = "This user doesn't have permission to access or it's disabled.";
-  snack5 = "This email is already in use. Please ingress your email and password to continue";
+  snack5 =
+    "This email is already in use. Please ingress your email and password to continue";
   snack6 = "An unexpected error has ocurred. Try again.";
   close = "Close";
 
@@ -261,13 +276,13 @@ export default class Login extends Vue {
 
   //-------------------------------------------------
 
-    errors: string[] = [];
-    showErrors(errors: any) {
+  errors: string[] = [];
+  showErrors(errors: any) {
     this.errors = errors;
     this.snackbarError = true;
-    }
+  }
 
-   get getStatus() {
+  get getStatus() {
     return this.$store.getters["user/getLoginStatus"];
   }
 
@@ -285,19 +300,22 @@ export default class Login extends Vue {
       this.$store
         .dispatch("user/federatedSignUp", { provider: "google" })
         .then(() => {
-          if(this.getErrors.UnexpectedError == false){
-              if (this.getStatus.registered == false) {
-                    if (this.getIsNotFederated.NotFederated == true) {
-                      this.snackbarFederated=true;
-                    }
-                    else { this.snackbar = true;
-                          setTimeout(() => {
-                          this.changePage("Home");
-                          }, 1000); }
+          if (this.getErrors.UnexpectedError == false) {
+            if (this.getStatus.registered == false) {
+              if (this.getIsNotFederated.NotFederated == true) {
+                this.snackbarFederated = true;
+              } else {
+                this.snackbar = true;
+                setTimeout(() => {
+                  this.changePage("Home");
+                }, 1000);
+              }
             } else {
-                this.$router.push({ name: 'Profile', params: {
-                federatedPopUp: true
-                }  
+              this.$router.push({
+                name: "Profile",
+                params: {
+                  federatedPopUp: true,
+                },
               });
             }
           } else {
@@ -307,25 +325,28 @@ export default class Login extends Vue {
     }
   }
 
-   FederatedSignUpFacebook() {
+  FederatedSignUpFacebook() {
     this.errors.splice(0);
     if (this.errors.length == 0) {
       this.$store
         .dispatch("user/federatedSignUp", { provider: "facebook" })
         .then(() => {
-          if(this.getErrors.UnexpectedError == false){
-              if (this.getStatus.registered == false) {
-                    if (this.getIsNotFederated.NotFederated == true) {
-                      this.snackbarFederated=true;
-                    }
-                    else { this.snackbar = true;
-                          setTimeout(() => {
-                          this.changePage("Home");
-                          }, 1000); }
+          if (this.getErrors.UnexpectedError == false) {
+            if (this.getStatus.registered == false) {
+              if (this.getIsNotFederated.NotFederated == true) {
+                this.snackbarFederated = true;
+              } else {
+                this.snackbar = true;
+                setTimeout(() => {
+                  this.changePage("Home");
+                }, 1000);
+              }
             } else {
-                this.$router.push({ name: 'Profile', params: {
-                federatedPopUp: true
-                }  
+              this.$router.push({
+                name: "Profile",
+                params: {
+                  federatedPopUp: true,
+                },
               });
             }
           } else {

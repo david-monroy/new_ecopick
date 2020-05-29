@@ -56,8 +56,6 @@ import Component from "vue-class-component";
 import { mapState } from "vuex";
 import moment from "moment";
 import { Watch } from "vue-property-decorator";
-import Translate from "../components/Translate.vue";
-
 
 @Component({
   components: {},
@@ -83,12 +81,11 @@ export default class Home extends Vue {
   TrackingIDHeader = "Tracking ID";
   UserHeader = "User";
   PurposeHeader = "Purpose";
-  OfficeHeader ="Office";
+  OfficeHeader = "Office";
   StatusHeader = "Status";
   DateHeader = "Date";
   PackageHeader = "Packages";
-  DetailHeader ="Detail";
-
+  DetailHeader = "Detail";
 
   search = "";
   headers: {}[] = [
@@ -134,10 +131,11 @@ export default class Home extends Vue {
   ];
 
   beforeMount() {
-    this.$store
-      .dispatch("AllShipments/getAllShipments", localStorage.getItem("ID"));
+    this.$store.dispatch(
+      "AllShipments/getAllShipments",
+      localStorage.getItem("ID")
+    );
   }
-
 
   formatDate(date: string) {
     return moment(date).format("YYYY-MM-DD");
@@ -147,7 +145,7 @@ export default class Home extends Vue {
     this.$router.push({ name: "DetailShipment", params: { id: trackingId } });
   }
 
-    mounted() {
+  mounted() {
     this.translate();
   }
 
@@ -160,7 +158,12 @@ export default class Home extends Vue {
     this.translator
       .filter(
         (term: { context: string; name: string; translation: string }) => {
-          return term.context == "Shipment" || term.context == "general" || term.context == "route" || term.context == "packages";
+          return (
+            term.context == "Shipment" ||
+            term.context == "general" ||
+            term.context == "route" ||
+            term.context == "packages"
+          );
         }
       )
       .forEach(
@@ -174,7 +177,7 @@ export default class Home extends Vue {
           } else if (term.name == "routeStatus") {
             this.StatusHeader = term.translation;
           } else if (term.name == "generalPurpose") {
-            this. PurposeHeader= term.translation;
+            this.PurposeHeader = term.translation;
           }
         }
       );
