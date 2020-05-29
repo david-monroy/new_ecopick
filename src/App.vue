@@ -1,13 +1,33 @@
 <template>
   <v-app>
-    <router-view></router-view>
+    <Navbar v-if="!$route.meta.hideBasicComponents" />
+    <v-content class="bg-color">
+      <router-view></router-view>
+      <FABTelegram v-if="!$route.meta.hideBasicComponents" />
+    </v-content>
+    <Footer v-if="!$route.meta.hideBasicComponents" />
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import Navbar from "./components/Navbar.vue";
+import Footer from "./components/Footer.vue";
+import FABTelegram from "./components/FABTelegram.vue";
 
-@Component({})
+@Component({
+  components: {
+    Navbar,
+    Footer,
+    FABTelegram,
+  },
+})
 export default class App extends Vue {}
 </script>
+
+<style scoped>
+.bg-color {
+  background-color: #f7f7f7;
+}
+</style>

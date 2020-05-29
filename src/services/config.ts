@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const API_URL = axios.create({
   baseURL: `${process.env.VUE_APP_API_URL}`,
-  withCredentials: false, // This is the default
+  withCredentials: false,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
