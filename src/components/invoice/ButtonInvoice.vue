@@ -42,13 +42,12 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { Watch } from "vue-property-decorator";
 import { mapState } from "vuex";
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-import VueHtml2pdf from "vue-html2pdf";
+
+//import VueHtml2pdf from "vue-html2pdf";
 import Invoice from "../../views/Invoice.vue";
 
 @Component({
-  components: { VueHtml2pdf, Invoice },
+  //components: { VueHtml2pdf, Invoice },
   computed: { ...mapState("user", { user: "userData" }) },
 })
 export default class ButtonInvoice extends Vue {

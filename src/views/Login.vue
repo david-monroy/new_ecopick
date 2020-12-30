@@ -4,7 +4,7 @@
       <v-col cols="12" sm="1"
         ><a style="color: gray;" @click="changePage('Home')">
           <v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon>
-          <h4>{{ goBack }}</h4></a
+          <h4>Ir Atras</h4></a
         ></v-col
       >
       <v-col></v-col>
@@ -49,7 +49,7 @@
                   prepend-icon="mdi-account"
                   v-model="user.email"
                   :rules="rules.emailRules"
-                  :label="email"
+                  label="Correo Electrónico"
                   required
                 ></v-text-field>
               </v-col>
@@ -62,7 +62,7 @@
                   v-model="user.password"
                   :rules="rules.passwordRules"
                   name="input-10-2"
-                  :label="password"
+                  label="Contraseña"
                   type="password"
                   class="input-group--focused"
                 ></v-text-field>
@@ -77,7 +77,7 @@
                     href="#"
                     style="color: #454545;"
                     @click="changePage('RecoverPassword')"
-                    >{{ forgotPassword }}</a
+                    >Olvidó su contraseña?</a
                   >
                 </h4>
               </v-col>
@@ -86,51 +86,24 @@
             <v-row>
               <v-col> </v-col>
               <v-col>
-                <v-btn rounded color="#a9ff4d" dark @click="searchRoute()">{{
-                  buttonLogin
-                }}</v-btn>
+                <v-btn rounded color="#a9ff4d" dark @click="searchRoute()">
+                  Iniciar Sesión
+                </v-btn>
               </v-col>
               <v-col> </v-col>
             </v-row>
           </v-form>
-          <v-row>
-            <v-col> </v-col>
-            <v-col>
-              <h5>{{ loginOr }}</h5>
-            </v-col>
-            <v-col> </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col> </v-col>
-            <v-col>
-              <v-btn rounded color="red accent-4" dark
-                ><v-icon class="mr-1" p-0>mdi-google</v-icon>Google</v-btn
-              >
-            </v-col>
-            <v-col> </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col> </v-col>
-            <v-col>
-              <v-btn rounded color="indigo darken-2" dark
-                ><v-icon class="mr-1" p-0>mdi-facebook</v-icon>Facebook</v-btn
-              >
-            </v-col>
-            <v-col> </v-col>
-          </v-row>
-
+  
+      
           <v-row>
             <v-col> </v-col>
             <v-col cols="12" sm="8">
               <h5 ma-0>
-                {{ noAccount
-                }}<a
+                No tiene cuenta?<a
                   href="#"
                   style="color: #454545;"
                   @click="changePage('SignUp')"
-                  >{{ loginRegister }}</a
+                  >Registrese</a
                 >
               </h5>
             </v-col>
@@ -238,7 +211,7 @@ export default class Login extends Vue {
     this.$router.push({ name: link });
   }
 
-  rules: {} = {
+  rules: unknown = {
     required: (value: string) =>
       (!!value && value !== "" && value !== undefined) || "Required",
     passwordRules: [(v: string) => !!v || "Password is required"],

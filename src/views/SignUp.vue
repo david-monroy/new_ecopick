@@ -4,7 +4,7 @@
       <v-col cols="12" sm="1">
         <a style="color: gray;" @click="changePage('Home')"
           ><v-icon class="mr-1" style="float: left;">mdi-arrow-left</v-icon>
-          <h4>{{ goBack }}</h4></a
+          <h4>Ir Atras</h4></a
         ></v-col
       >
       <v-col></v-col>
@@ -25,7 +25,7 @@
               </a>
             </v-col>
             <v-col>
-              <h3>{{ titlePage }}</h3>
+              <h3>Registrate</h3>
             </v-col>
             <v-col>
               <v-row class="hidden-md-and-up">
@@ -347,7 +347,7 @@ export default class SignUp extends Vue {
     this.$router.push({ name: link });
   }
 
-  rules: {} = {
+  rules: unknown = {
     required: (value: string) =>
       (!!value && value !== "" && value !== undefined) || "Required",
     passwordRules: [(v: string) => !!v || "Password is required"],

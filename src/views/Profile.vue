@@ -421,7 +421,7 @@ export default class Profile extends Vue {
     this.hasImage = true;
   }
 
-  rules: {} = {
+  rules: unknown = {
     required: (value: string) =>
       (!!value && value !== "" && value !== undefined) || "Required",
     passwordRules: [(v: string) => !!v || "Password is required"],

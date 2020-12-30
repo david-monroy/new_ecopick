@@ -165,7 +165,7 @@ export default class RecoverPassword extends Vue {
     this.$router.push({ name: link });
   }
 
-  rules: {} = {
+  rules: unknown = {
     required: (value: string) =>
       (!!value && value !== "" && value !== undefined) || this.requiredRule,
     passwordRules: [(v: string) => !!v || this.passwordRule],

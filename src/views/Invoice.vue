@@ -163,8 +163,8 @@ import QRCode from "../components/invoice/QRCode.vue";
 export default class Invoice extends Vue {
   $store: any;
   $route: any;
-  route!: {};
-  receiver!: {};
+  route!: unknown;
+  receiver!: unknown;
   options!: string[];
   packages!: {
     pa_width: number;
@@ -176,7 +176,7 @@ export default class Invoice extends Vue {
     characteristic: string;
   }[];
   discount!: number;
-  shipper!: {};
+  shipper!: unknown;
   shipment!: { delivered: string };
   // Keywords
   shipperInformation = "Shipper information";
@@ -261,9 +261,7 @@ export default class Invoice extends Vue {
             this.trackingName = term.translation;
           } else if (term.name == "generalName") {
             this.name = term.translation;
-          } else if (term.name == "generalName") {
-            this.name = term.translation;
-          } else if (term.name == "generalIdentification") {
+          }  else if (term.name == "generalIdentification") {
             this.identification = term.translation;
           } else if (term.name == "generalEmail") {
             this.email = term.translation;
